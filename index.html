@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v5.0</title>
+    <title>ATRIL DIGITAL v5.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&display=swap');
         body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; }
         .hidden { display: none !important; }
         .flex { display: flex !important; }
@@ -20,10 +20,29 @@
         .btn-status { font-size: 8.5px; font-weight: 700; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        .horario-grid { display: grid; grid-template-columns: 40px repeat(5, 1fr); gap: 2px; background: #0f172a; border: 2px solid #0f172a; }
-        .horario-cell { min-height: 60px; padding: 2px; background: white; font-size: 8px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; text-transform: uppercase; line-height: 1.1; word-break: break-word; }
+        /* AJUSTES HORARIO v5.1 (Más grande y sin bold excesivo) */
+        .horario-grid { display: grid; grid-template-columns: 40px repeat(5, 1fr); gap: 1px; background: #cbd5e1; border: 1px solid #cbd5e1; }
+        .horario-cell { 
+            min-height: 60px; 
+            padding: 4px; 
+            background: white; 
+            font-size: 10.5px; /* Más grande */
+            font-weight: 600; /* Peso medio, no bold */
+            color: #334155;
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            text-transform: uppercase; 
+            line-height: 1.2; 
+            word-break: break-word; 
+        }
         .horario-header { background: #0f172a; color: white; padding: 8px 0; text-align: center; font-size: 9px; font-weight: 900; text-transform: uppercase; }
-        .input-simetrico { height: 48px; width: 100%; padding: 12px; background-color: #f8fafc; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 700; }
+        
+        /* Clase estándar para inputs (Igual a Estudiantes) */
+        .input-std { width: 100%; padding: 1rem; background-color: #f8fafc; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 700; }
+        
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -40,7 +59,7 @@
             <img src="https://github.com/pandemiaproducciones/Atril-Digital/blob/main/logo.png?raw=true" class="w-24 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-black uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest">v5.0</span>
+                <span class="bg-slate-900 text-white text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest">v5.1</span>
             </div>
             <p class="text-slate-400 text-[10px] mb-8 font-bold tracking-widest uppercase">SISTEMA INTEGRAL DE BANDAS</p>
             <div class="space-y-3">
@@ -108,27 +127,27 @@
             
             <div>
                 <select id="inv-instrumento-select" onchange="checkOtroInst()" class="w-full p-3 bg-slate-50 rounded-lg text-[11px] font-bold uppercase mb-2"></select>
-                <input type="text" id="inv-instrumento-input" placeholder="Escriba el nombre del instrumento..." class="hidden w-full p-3 bg-white border-2 border-slate-200 rounded-lg text-sm font-bold uppercase">
+                <input type="text" id="inv-instrumento-input" placeholder="Escriba el nombre del instrumento..." class="hidden input-std">
             </div>
 
             <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="inv-marca" placeholder="Marca" class="input-simetrico">
-                <input type="text" id="inv-modelo" placeholder="Modelo" class="input-simetrico">
+                <input type="text" id="inv-marca" placeholder="Marca" class="input-std">
+                <input type="text" id="inv-modelo" placeholder="Modelo" class="input-std">
             </div>
             
             <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="inv-serial" placeholder="Serial (Fábrica)" class="input-simetrico border-slate-300">
-                <input type="text" id="inv-codigo" placeholder="Código Interno" class="input-simetrico">
+                <input type="text" id="inv-serial" placeholder="Serial (Fábrica)" class="input-std border-slate-300">
+                <input type="text" id="inv-codigo" placeholder="Código Interno" class="input-std">
             </div>
 
-            <input type="text" id="inv-color" placeholder="Color / Acabado" class="w-full p-4 bg-slate-50 rounded-lg text-sm font-bold">
+            <input type="text" id="inv-color" placeholder="Color / Acabado" class="input-std">
             
             <select id="inv-condicion" class="w-full p-3 bg-slate-50 rounded-lg text-[11px] font-bold uppercase"></select>
             <select id="inv-estado" class="w-full p-3 bg-slate-50 rounded-lg text-[11px] font-bold uppercase"></select>
             <select id="inv-origen" class="w-full p-3 bg-slate-50 rounded-lg text-[11px] font-bold uppercase"></select>
 
-            <textarea id="inv-accesorios" placeholder="Accesorios (Boquilla, Estuche...)" class="w-full p-4 bg-slate-50 rounded-lg text-sm font-bold h-24"></textarea>
-            <textarea id="inv-observaciones" placeholder="Observaciones Generales" class="w-full p-4 bg-slate-50 rounded-lg text-sm font-bold h-24"></textarea>
+            <textarea id="inv-accesorios" placeholder="Accesorios (Boquilla, Estuche...)" class="input-std h-24"></textarea>
+            <textarea id="inv-observaciones" placeholder="Observaciones Generales" class="input-std h-24"></textarea>
 
             <button id="btn-save-inv" onclick="saveInstrument()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-xs mt-2">GUARDAR ACTIVO</button>
         </div>
@@ -154,13 +173,13 @@
         <button onclick="nav('screen-student-menu')" class="text-slate-400 font-black mb-6 text-[11px] uppercase tracking-widest">← VOLVER</button>
         <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
             <h2 id="form-title" class="text-lg font-black uppercase text-slate-900">NUEVO INTEGRANTE</h2>
-            <input type="text" id="add-nombres" placeholder="Nombres" class="w-full p-4 bg-slate-50 rounded-lg text-sm font-bold">
-            <input type="text" id="add-apellidos" placeholder="Apellidos" class="w-full p-4 bg-slate-50 rounded-lg text-sm font-bold">
-            <input type="tel" id="add-telefono" placeholder="Teléfono Estudiante" class="w-full p-4 bg-slate-50 rounded-lg text-sm font-bold">
-            <input type="text" id="add-eps" placeholder="EPS / Salud" class="w-full p-4 bg-slate-50 rounded-lg text-sm font-bold">
+            <input type="text" id="add-nombres" placeholder="Nombres" class="input-std">
+            <input type="text" id="add-apellidos" placeholder="Apellidos" class="input-std">
+            <input type="tel" id="add-telefono" placeholder="Teléfono Estudiante" class="input-std">
+            <input type="text" id="add-eps" placeholder="EPS / Salud" class="input-std">
             <div class="grid grid-cols-2 gap-2">
-                <div class="flex flex-col"><label class="text-[9px] font-black text-slate-400 mb-1 uppercase tracking-tighter">DOCUMENTO</label><input type="tel" id="add-documento" placeholder="Número" class="input-simetrico"></div>
-                <div class="flex flex-col"><label class="text-[9px] font-black text-slate-400 mb-1 uppercase tracking-tighter">FECHA NACIMIENTO</label><input type="date" id="add-fecha_nacimiento" class="input-simetrico"></div>
+                <div class="flex flex-col"><label class="text-[9px] font-black text-slate-400 mb-1 uppercase tracking-tighter">DOCUMENTO</label><input type="tel" id="add-documento" placeholder="Número" class="input-std"></div>
+                <div class="flex flex-col"><label class="text-[9px] font-black text-slate-400 mb-1 uppercase tracking-tighter">FECHA NACIMIENTO</label><input type="date" id="add-fecha_nacimiento" class="input-std"></div>
             </div>
             <select id="add-proceso" class="w-full p-3 bg-slate-50 rounded-lg text-[11px] font-bold uppercase"></select>
             <select id="add-instrumento" class="w-full p-3 bg-slate-50 rounded-lg text-[11px] font-bold uppercase"></select>
@@ -168,8 +187,8 @@
             <button onclick="toggleAcudiente()" class="w-full text-center text-[10px] font-black text-slate-400 uppercase tracking-widest py-2 hover:text-slate-600 transition-colors mt-2">+ ¿AGREGAR ACUDIENTE?</button>
             <div id="acudiente-box" class="hidden space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 fade-in">
                 <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">DATOS DEL ACUDIENTE</p>
-                <input type="text" id="add-acudiente-nombre" placeholder="Nombre Acudiente" class="w-full p-3 bg-white rounded-lg text-sm font-bold">
-                <input type="tel" id="add-acudiente-telefono" placeholder="Teléfono Acudiente" class="w-full p-3 bg-white rounded-lg text-sm font-bold">
+                <input type="text" id="add-acudiente-nombre" placeholder="Nombre Acudiente" class="input-std">
+                <input type="tel" id="add-acudiente-telefono" placeholder="Teléfono Acudiente" class="input-std">
             </div>
             <button id="btn-save-student" onclick="saveStudent()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-xs mt-2">GUARDAR REGISTRO</button>
         </div>
@@ -238,9 +257,9 @@
         // URL v4.1 (Backend Inventario)
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwnOh8ymTnnsDRfSe_0mO0p9BJ26V5z4rpNvJTwnszv1goaQrEJfDyQQtSjx-pNkQex0A/exec";
         
-        // Key v50
-        let session = JSON.parse(localStorage.getItem('atril_v50')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
-        let record = JSON.parse(localStorage.getItem('atril_rec_v50')) || {};
+        // Key v51
+        let session = JSON.parse(localStorage.getItem('atril_v51')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
+        let record = JSON.parse(localStorage.getItem('atril_rec_v51')) || {};
         let editingCell = null;
         let isEditing = false;
         let originalDoc = null;
@@ -272,7 +291,7 @@
 
         function nav(id) {
             session.current = id;
-            localStorage.setItem('atril_v50', JSON.stringify(session));
+            localStorage.setItem('atril_v51', JSON.stringify(session));
             document.querySelectorAll('body > div').forEach(d => {
                 if(d.id !== 'loader') d.classList.add('hidden');
                 d.classList.remove('flex'); 
@@ -328,7 +347,7 @@
                     session.inventario = d.inventario || [];
                     session.config = d.config || {};
                     session.horario = d.horario || [];
-                    localStorage.setItem('atril_v50', JSON.stringify(session));
+                    localStorage.setItem('atril_v51', JSON.stringify(session));
                     restore();
                     nav('screen-menu');
                 } else { alert("ERROR DE DATOS: " + (d.error || 'Desconocido')); restore(); nav('screen-menu'); }
@@ -519,7 +538,6 @@
             loader(false);
         }
 
-
         // --- GESTIÓN ESTUDIANTES (MANTENIDO) ---
         function prepareNewStudent() {
             isEditing = false; originalDoc = null;
@@ -606,7 +624,7 @@
         }
         function openGradoModal() { if (!session.config.grado || session.config.grado.length === 0) return alert("No hay grados configurados"); document.getElementById('modal-grupo').classList.remove('hidden'); let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); document.getElementById('lista-grados-modal').innerHTML = html; }
         function setGrado(v) { const cell = document.getElementById(`cell-${editingCell.h}-${editingCell.d}`); if(v === '') { cell.innerText = ""; } else { if(cell.innerText.trim() !== "") { if(!cell.innerText.includes(v)) cell.innerText += " / " + v; } else { cell.innerText = v; } } document.getElementById('modal-grupo').classList.add('hidden'); }
-        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v50', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
+        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v51', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
 
         // --- ASISTENCIA & REPORTE WA ---
         function prepareProcess() {
@@ -634,14 +652,14 @@
             });
             document.getElementById('counter').innerText = `${Object.keys(record).length} Marcados`;
         }
-        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v50', JSON.stringify(record)); renderList(activeSection); }
+        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v51', JSON.stringify(record)); renderList(activeSection); }
         function getCol(s) { return { 'PRESENTE': 'bg-slate-900 text-white border-slate-900', 'AUSENTE': 'bg-red-50 text-red-600 border-red-100', 'RETARDO': 'bg-amber-50 text-amber-600 border-amber-100', 'EXCUSA': 'bg-blue-50 text-blue-600 border-blue-100'}[s]; }
 
         async function finalize() {
             if(!Object.keys(record).length) return alert("NO HAY MARCACIONES");
             loader(true, "GUARDANDO...");
             const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: session.type, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v50'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
+            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v51'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
             loader(false);
         }
         function generateWAReport() {
