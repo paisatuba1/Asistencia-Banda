@@ -3,49 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v5.3</title>
+    <title>ATRIL DIGITAL v5.4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* Importamos pesos 400, 500, 600 (SemiBold), 700 (Bold) */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
         body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; }
         .hidden { display: none !important; }
         .flex { display: flex !important; }
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* Bajamos peso de la pestaña activa a Bold (700) en vez de Black (900) */
         .active-tab { border-bottom: 3px solid #0f172a; color: #0f172a; font-weight: 700; }
         .dirtab-btn { transition: all 0.2s; }
         
         input, select, textarea { border: 1px solid #e2e8f0 !important; outline: none; appearance: none; }
-        /* Botones estado con letra un poco más grande (9px) y peso 600 */
         .btn-status { font-size: 9px; font-weight: 600; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* HORARIO INTACTO (v5.1 Config) */
+        /* HORARIO */
         .horario-grid { display: grid; grid-template-columns: 40px repeat(5, 1fr); gap: 1px; background: #cbd5e1; border: 1px solid #cbd5e1; }
         .horario-cell { 
-            min-height: 60px; 
-            padding: 4px; 
-            background: white; 
-            font-size: 10.5px; 
-            font-weight: 600; 
-            color: #334155;
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            text-align: center; 
-            line-height: 1.2; 
-            word-break: break-word; 
+            min-height: 60px; padding: 4px; background: white; font-size: 10.5px; font-weight: 600; color: #334155;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; word-break: break-word; 
         }
-        /* Header horario bajó de 900 a 700 para coincidir con el estilo nuevo */
         .horario-header { background: #0f172a; color: white; padding: 8px 0; text-align: center; font-size: 9px; font-weight: 700; text-transform: uppercase; }
         
-        /* Input Standard: Subimos tamaño a 15px y bajamos peso a 600 */
         .input-std { width: 100%; padding: 1rem; background-color: #f8fafc; border-radius: 0.5rem; font-size: 15px; font-weight: 600; }
-        
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -62,7 +45,7 @@
             <img src="https://github.com/pandemiaproducciones/Atril-Digital/blob/main/logo.png?raw=true" class="w-24 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v5.3</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v5.4</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase">SISTEMA INTEGRAL DE BANDAS</p>
             <div class="space-y-3">
@@ -127,31 +110,24 @@
         <button onclick="nav('screen-inventory-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
         <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
             <h2 id="form-inv-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INSTRUMENTO</h2>
-            
             <div>
                 <select id="inv-instrumento-select" onchange="checkOtroInst()" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase mb-2"></select>
                 <input type="text" id="inv-instrumento-input" placeholder="Escriba el nombre del instrumento..." class="hidden input-std">
             </div>
-
             <div class="grid grid-cols-2 gap-2">
                 <input type="text" id="inv-marca" placeholder="Marca" class="input-std">
                 <input type="text" id="inv-modelo" placeholder="Modelo" class="input-std">
             </div>
-            
             <div class="grid grid-cols-2 gap-2">
                 <input type="text" id="inv-serial" placeholder="Serial (Fábrica)" class="input-std border-slate-300">
                 <input type="text" id="inv-codigo" placeholder="Código Interno" class="input-std">
             </div>
-
             <input type="text" id="inv-color" placeholder="Color / Acabado" class="input-std">
-            
             <select id="inv-condicion" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
             <select id="inv-estado" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
             <select id="inv-origen" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-
             <textarea id="inv-accesorios" placeholder="Accesorios (Boquilla, Estuche...)" class="input-std h-24"></textarea>
             <textarea id="inv-observaciones" placeholder="Observaciones Generales" class="input-std h-24"></textarea>
-
             <button id="btn-save-inv" onclick="saveInstrument()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR ACTIVO</button>
         </div>
     </div>
@@ -173,7 +149,7 @@
     </div>
 
     <div id="screen-form-student" class="hidden p-6 max-w-md mx-auto pb-20">
-        <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+        <button id="btn-back-student" onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
         <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
             <h2 id="form-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INTEGRANTE</h2>
             <input type="text" id="add-nombres" placeholder="Nombres" class="input-std">
@@ -257,21 +233,15 @@
     </div>
 
     <script>
-        // URL v4.1 (Backend Inventario)
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwnOh8ymTnnsDRfSe_0mO0p9BJ26V5z4rpNvJTwnszv1goaQrEJfDyQQtSjx-pNkQex0A/exec";
-        
-        // Key v53
-        let session = JSON.parse(localStorage.getItem('atril_v53')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
-        let record = JSON.parse(localStorage.getItem('atril_rec_v53')) || {};
+        let session = JSON.parse(localStorage.getItem('atril_v54')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
+        let record = JSON.parse(localStorage.getItem('atril_rec_v54')) || {};
         let editingCell = null;
         let isEditing = false;
         let originalDoc = null;
         let activeSection = 'TODOS';
         let currentDirSection = 'TODOS';
-        
-        let originalSerial = null;
-        let originalCodigo = null;
-        let originalRasgos = { inst: "", marca: "", modelo: "" };
+        let originalSerial = null; let originalCodigo = null; let originalRasgos = { inst: "", marca: "", modelo: "" };
 
         const DIAS_KEYS = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
         const SECCIONES = {
@@ -283,30 +253,19 @@
         const ORDEN_INST = [...SECCIONES.Maderas, ...SECCIONES.Bronces, ...SECCIONES.Cuerdas, ...SECCIONES.Percusion];
 
         window.onload = async () => { 
-            if(session.user && session.sheetId) {
-                loader(true, "SINCRONIZANDO...");
-                await fetchData();
-            } else {
-                nav('screen-login');
-            }
+            if(session.user && session.sheetId) { loader(true, "SINCRONIZANDO..."); await fetchData(); } else { nav('screen-login'); }
         };
 
         function nav(id) {
             session.current = id;
-            localStorage.setItem('atril_v53', JSON.stringify(session));
-            document.querySelectorAll('body > div').forEach(d => {
-                if(d.id !== 'loader') d.classList.add('hidden');
-                d.classList.remove('flex'); 
-            });
+            localStorage.setItem('atril_v54', JSON.stringify(session));
+            document.querySelectorAll('body > div').forEach(d => { if(d.id !== 'loader') d.classList.add('hidden'); d.classList.remove('flex'); });
             const target = document.getElementById(id);
             target.classList.remove('hidden');
             if(id === 'screen-login') target.classList.add('flex');
-            
             if(id === 'screen-activity') document.getElementById('event-date').value = new Date().toISOString().split('T')[0];
-            
             if(id === 'screen-horario') {
-                if(session.horario && session.horario.length >= 7) document.getElementById('select-horas').value = "7";
-                else document.getElementById('select-horas').value = "6";
+                if(session.horario && session.horario.length >= 7) document.getElementById('select-horas').value = "7"; else document.getElementById('select-horas').value = "6";
                 buildHorarioTable();
             }
             if(id === 'screen-directory') filterDirectory();
@@ -316,8 +275,7 @@
         function loader(v, t) {
             const l = document.getElementById('loader');
             document.getElementById('loader-text').innerText = t || "CARGANDO...";
-            if(v) { l.classList.remove('hidden'); l.classList.add('flex'); } 
-            else { l.classList.add('hidden'); l.classList.remove('flex'); }
+            if(v) { l.classList.remove('hidden'); l.classList.add('flex'); } else { l.classList.add('hidden'); l.classList.remove('flex'); }
         }
 
         async function loginProcess() {
@@ -328,15 +286,8 @@
                 await new Promise(r => setTimeout(r, 100));
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
                 const d = await r.json();
-                if(d.success) {
-                    session.user = u; session.banda = d.banda; session.sheetId = d.sheetId;
-                    loader(true, "DESCARGANDO DATOS...");
-                    await fetchData();
-                } else { 
-                    document.getElementById('login-error').innerText = d.message || "ERROR DE ACCESO";
-                    document.getElementById('login-error').classList.remove('hidden'); 
-                    loader(false); 
-                }
+                if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; loader(true, "DESCARGANDO DATOS..."); await fetchData(); } 
+                else { document.getElementById('login-error').innerText = d.message || "ERROR DE ACCESO"; document.getElementById('login-error').classList.remove('hidden'); loader(false); }
             } catch(e) { alert("ERROR DE CONEXIÓN: " + e.message); loader(false); }
         }
 
@@ -344,15 +295,8 @@
             try {
                 const r = await fetch(`${MOTOR_URL}?action=getDataInicial&sheetId=${session.sheetId}`);
                 const d = await r.json();
-                if (d.success) {
-                    session.master = d.integrantes || [];
-                    session.inventario = d.inventario || [];
-                    session.config = d.config || {};
-                    session.horario = d.horario || [];
-                    localStorage.setItem('atril_v53', JSON.stringify(session));
-                    restore();
-                    nav('screen-menu');
-                } else { alert("ERROR DE DATOS: " + (d.error || 'Desconocido')); restore(); nav('screen-menu'); }
+                if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_v54', JSON.stringify(session)); restore(); nav('screen-menu'); } 
+                else { alert("ERROR DE DATOS: " + (d.error || 'Desconocido')); restore(); nav('screen-menu'); }
             } catch(e) { console.error(e); alert("SIN CONEXIÓN: SE USARÁN DATOS GUARDADOS"); restore(); nav('screen-menu'); }
             loader(false);
         }
@@ -360,194 +304,41 @@
         function restore() {
             if(!session.config) return; 
             document.getElementById('display-band-name').innerText = session.banda || "---";
-            
             if(session.config.proceso && session.config.proceso.length > 0) {
-                // botones proceso en semibold
                 document.getElementById('process-buttons').innerHTML = session.config.proceso.map(p => `<button onclick="initAt('${p}')" class="w-full p-6 bg-white rounded-2xl shadow-sm border font-bold text-left uppercase text-[13px] text-slate-700">${p}</button>`).join('');
                 ['proceso','instrumento','grado'].forEach(k => {
                     const s = document.getElementById(`add-${k}`);
-                    if(s && session.config[k]) {
-                        let opts = `<option disabled selected>${k.toUpperCase()}</option>`;
-                        opts += session.config[k].map(o => `<option value="${o}">${o}</option>`).join('');
-                        s.innerHTML = opts;
-                    }
+                    if(s && session.config[k]) { let opts = `<option disabled selected>${k.toUpperCase()}</option>`; opts += session.config[k].map(o => `<option value="${o}">${o}</option>`).join(''); s.innerHTML = opts; }
                 });
             }
-
             if(session.config.instrumento) {
                 let instOpts = `<option disabled selected>SELECCIONE INSTRUMENTO</option>`;
                 session.config.instrumento.forEach(i => instOpts += `<option value="${i}">${i}</option>`);
                 instOpts += `<option value="OTRO">🔵 OTRO (Escribir manual)...</option>`;
                 document.getElementById('inv-instrumento-select').innerHTML = instOpts;
             }
-
-            const loadSelect = (id, arr, ph) => {
-                let opts = `<option disabled selected>${ph}</option>`;
-                if(arr) arr.forEach(x => opts += `<option value="${x}">${x}</option>`);
-                document.getElementById(id).innerHTML = opts;
-            };
-
+            const loadSelect = (id, arr, ph) => { let opts = `<option disabled selected>${ph}</option>`; if(arr) arr.forEach(x => opts += `<option value="${x}">${x}</option>`); document.getElementById(id).innerHTML = opts; };
             loadSelect('inv-condicion', session.config.condicion, 'CONDICIÓN (FÍSICA)');
             loadSelect('inv-estado', session.config.estado, 'ESTADO (ADMINISTRATIVO)');
             loadSelect('inv-origen', session.config.origen, 'ORIGEN / PROPIEDAD');
         }
 
-        // --- GESTIÓN INVENTARIO ---
-        function prepareNewInstrument() {
-            isEditing = false;
-            originalSerial = null; originalCodigo = null; originalRasgos = {};
-            document.getElementById('form-inv-title').innerText = "NUEVO INSTRUMENTO";
-            document.getElementById('btn-save-inv').innerText = "GUARDAR ACTIVO";
-            document.getElementById('btn-save-inv').classList.replace('bg-blue-600', 'bg-slate-900');
-            
-            document.querySelectorAll('#screen-form-inventory input, #screen-form-inventory textarea').forEach(i => i.value = "");
-            document.querySelectorAll('#screen-form-inventory select').forEach(s => s.selectedIndex = 0);
-            checkOtroInst();
-            nav('screen-form-inventory');
-        }
-
-        function checkOtroInst() {
-            const sel = document.getElementById('inv-instrumento-select').value;
-            const inp = document.getElementById('inv-instrumento-input');
-            if(sel === 'OTRO') inp.classList.remove('hidden');
-            else inp.classList.add('hidden');
-        }
-
-        function openInventoryList() { nav('screen-inventory-list'); }
-
-        function filterInventory() {
-            const q = document.getElementById('search-inv-input').value.toLowerCase();
-            const list = document.getElementById('inventory-list-container');
-            list.innerHTML = "";
-            if(!session.inventario) return;
-
-            let filtered = session.inventario.filter(i => 
-                (i.instrumento + " " + i.marca + " " + i.codigo + " " + i.serial).toLowerCase().includes(q)
-            );
-
-            if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON ACTIVOS</p>`; return; }
-
-            filtered.forEach(i => {
-                const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm cursor-pointer active:scale-95 transition-transform";
-                item.onclick = () => loadInstrumentForEdit(i);
-                
-                let dotColor = "bg-slate-300";
-                if(i.estado.includes("Disponible")) dotColor = "bg-green-500";
-                else if(i.estado.includes("Asignado") || i.estado.includes("Préstamo")) dotColor = "bg-red-500";
-                else if(i.estado.includes("Reparación")) dotColor = "bg-amber-500";
-
-                // Se mantiene el formato visual limpio
-                item.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="font-bold text-[13px] text-slate-900">${i.instrumento}</p>
-                            <p class="text-[10px] font-bold text-slate-500">${i.marca} ${i.modelo}</p>
-                            <p class="text-[9px] font-bold text-slate-300 mt-1 uppercase">S: ${i.serial || 'N/A'} | C: ${i.codigo || 'N/A'}</p>
-                        </div>
-                        <div class="w-3 h-3 rounded-full ${dotColor}"></div>
-                    </div>
-                `;
-                list.appendChild(item);
-            });
-        }
-
-        function loadInstrumentForEdit(i) {
-            isEditing = true;
-            originalSerial = i.serial; originalCodigo = i.codigo;
-            originalRasgos = { inst: i.instrumento, marca: i.marca, modelo: i.modelo };
-
-            document.getElementById('form-inv-title').innerText = "EDITAR INSTRUMENTO";
-            const btn = document.getElementById('btn-save-inv');
-            btn.innerText = "ACTUALIZAR ACTIVO";
-            btn.classList.replace('bg-slate-900', 'bg-blue-600');
-
-            document.getElementById('inv-marca').value = i.marca === "N/A" ? "" : i.marca;
-            document.getElementById('inv-modelo').value = i.modelo === "N/A" ? "" : i.modelo;
-            document.getElementById('inv-serial').value = i.serial === "N/A" ? "" : i.serial;
-            document.getElementById('inv-codigo').value = i.codigo === "N/A" ? "" : i.codigo;
-            document.getElementById('inv-color').value = i.color === "N/A" ? "" : i.color;
-            document.getElementById('inv-accesorios').value = i.accesorios === "N/A" ? "" : i.accesorios;
-            document.getElementById('inv-observaciones').value = i.observaciones === "N/A" ? "" : i.observaciones;
-
-            document.getElementById('inv-condicion').value = i.condicion;
-            document.getElementById('inv-estado').value = i.estado;
-            document.getElementById('inv-origen').value = i.origen;
-
-            const sel = document.getElementById('inv-instrumento-select');
-            const exists = [...sel.options].some(o => o.value === i.instrumento);
-            
-            if(exists) {
-                sel.value = i.instrumento;
-                document.getElementById('inv-instrumento-input').classList.add('hidden');
-            } else {
-                sel.value = "OTRO";
-                document.getElementById('inv-instrumento-input').classList.remove('hidden');
-                document.getElementById('inv-instrumento-input').value = i.instrumento;
-            }
-
-            nav('screen-form-inventory');
-        }
-
-        async function saveInstrument() {
-            let instName = document.getElementById('inv-instrumento-select').value;
-            if (instName === "OTRO") instName = document.getElementById('inv-instrumento-input').value;
-            if (!instName) return alert("Falta el Instrumento");
-
-            const d = {
-                codigo: document.getElementById('inv-codigo').value,
-                instrumento: instName,
-                marca: document.getElementById('inv-marca').value,
-                modelo: document.getElementById('inv-modelo').value,
-                serial: document.getElementById('inv-serial').value,
-                color: document.getElementById('inv-color').value,
-                condicion: document.getElementById('inv-condicion').value,
-                estado: document.getElementById('inv-estado').value,
-                origen: document.getElementById('inv-origen').value,
-                accesorios: document.getElementById('inv-accesorios').value,
-                observaciones: document.getElementById('inv-observaciones').value
-            };
-
-            loader(true, isEditing ? "ACTUALIZANDO..." : "GUARDANDO...");
-            
-            const payload = {
-                action: isEditing ? 'editInstrumento' : 'addInstrumento',
-                sheetId: session.sheetId,
-                datos: d,
-                originalSerial: originalSerial,
-                originalCodigo: originalCodigo,
-                originalInstrumento: originalRasgos.inst,
-                originalMarca: originalRasgos.marca,
-                originalModelo: originalRasgos.modelo
-            };
-
-            try {
-                const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) });
-                const res = await r.json();
-                if(res.success) { 
-                    alert(isEditing ? "ACTIVO ACTUALIZADO" : "ACTIVO GUARDADO"); 
-                    await fetchData(); 
-                    nav('screen-inventory-menu'); 
-                } else {
-                    alert("ERROR: No se pudo guardar/editar");
-                }
-            } catch(e) { alert("ERROR DE CONEXIÓN"); }
-            loader(false);
-        }
-
-        // --- GESTIÓN ESTUDIANTES (MANTENIDO) ---
+        // --- GESTIÓN ESTUDIANTES ---
         function prepareNewStudent() {
             isEditing = false; originalDoc = null;
             document.getElementById('form-title').innerText = "NUEVO INTEGRANTE";
             document.getElementById('btn-save-student').innerText = "GUARDAR REGISTRO";
             document.getElementById('btn-save-student').classList.remove('bg-blue-600');
             document.getElementById('btn-save-student').classList.add('bg-slate-900');
+            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')"); // ATRAS DINAMICO
             document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
             document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
             document.getElementById('acudiente-box').classList.add('hidden');
             nav('screen-form-student');
         }
+
         function openDirectory() { nav('screen-directory'); }
+
         function setDirSection(sec) {
             currentDirSection = sec;
             document.querySelectorAll('.dirtab-btn').forEach(b => { b.classList.remove('active-tab', 'text-slate-900'); b.classList.add('text-slate-300'); });
@@ -555,6 +346,7 @@
             document.getElementById(`dirtab-${sec}`).classList.remove('text-slate-300');
             filterDirectory();
         }
+
         function filterDirectory() {
             const q = document.getElementById('search-input').value.toLowerCase();
             const list = document.getElementById('directory-list');
@@ -568,26 +360,41 @@
                 const item = document.createElement('div');
                 item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform";
                 item.onclick = () => loadStudentForEdit(m);
-                // Ajuste de peso en la lista de estudiantes
                 item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.nombres} ${m.apellidos}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p></div><div class="text-slate-300">✎</div>`;
                 list.appendChild(item);
             });
         }
+
         function loadStudentForEdit(m) {
             isEditing = true; originalDoc = m.documento;
             document.getElementById('form-title').innerText = "EDITAR ESTUDIANTE";
             const btn = document.getElementById('btn-save-student');
             btn.innerText = "ACTUALIZAR DATOS";
             btn.classList.remove('bg-slate-900'); btn.classList.add('bg-blue-600');
+            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-directory')"); // ATRAS DINAMICO
+
             document.getElementById('add-nombres').value = m.nombres; document.getElementById('add-apellidos').value = m.apellidos;
             document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-eps').value = m.eps;
             document.getElementById('add-documento').value = m.documento;
-            if(m.fecha_nacimiento) { let dateVal = m.fecha_nacimiento.replace(/'/g, ''); document.getElementById('add-fecha_nacimiento').value = dateVal.split('T')[0]; }
+            
+            // TRADUCTOR DE FECHAS (DD/MM/YYYY -> YYYY-MM-DD)
+            if(m.fecha_nacimiento) { 
+                let dateStr = m.fecha_nacimiento.replace(/'/g, '').trim();
+                let finalDate = "";
+                if(dateStr.includes('-')) finalDate = dateStr.split('T')[0]; // Ya es ISO
+                else if(dateStr.includes('/')) {
+                    const parts = dateStr.split('/');
+                    if(parts.length === 3) finalDate = `${parts[2]}-${parts[1]}-${parts[0]}`; // DD/MM/YYYY -> YYYY-MM-DD
+                }
+                document.getElementById('add-fecha_nacimiento').value = finalDate;
+            }
+
             document.getElementById('add-proceso').value = m.proceso; document.getElementById('add-instrumento').value = m.instrumento; document.getElementById('add-grado').value = m.grado;
             document.getElementById('add-acudiente-nombre').value = m.acudiente; document.getElementById('add-acudiente-telefono').value = m.telefono_acud;
             if(m.acudiente || m.telefono_acud) document.getElementById('acudiente-box').classList.remove('hidden'); else document.getElementById('acudiente-box').classList.add('hidden');
             nav('screen-form-student');
         }
+
         function toggleAcudiente() { const box = document.getElementById('acudiente-box'); if(box.classList.contains('hidden')) { box.classList.remove('hidden'); } else { box.classList.add('hidden'); document.getElementById('add-acudiente-nombre').value = ''; document.getElementById('add-acudiente-telefono').value = ''; } }
         async function saveStudent() {
             const d = { 
@@ -602,6 +409,86 @@
             loader(true, isEditing ? "ACTUALIZANDO..." : "GUARDANDO...");
             const payload = { action: isEditing ? 'editEstudiante' : 'addEstudiante', sheetId: session.sheetId, datos: d, originalDocumento: originalDoc };
             try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) }); const res = await r.json(); if(res.success) { alert(isEditing ? "DATOS ACTUALIZADOS" : "REGISTRADO CON ÉXITO"); await fetchData(); nav('screen-student-menu'); } else { alert("ERROR: " + (res.error || "No se pudo guardar")); } } catch(e) { alert("ERROR AL GUARDAR"); }
+            loader(false);
+        }
+
+        // --- GESTIÓN INVENTARIO ---
+        function prepareNewInstrument() {
+            isEditing = false; originalSerial = null; originalCodigo = null; originalRasgos = {};
+            document.getElementById('form-inv-title').innerText = "NUEVO INSTRUMENTO";
+            document.getElementById('btn-save-inv').innerText = "GUARDAR ACTIVO";
+            document.getElementById('btn-save-inv').classList.replace('bg-blue-600', 'bg-slate-900');
+            document.querySelectorAll('#screen-form-inventory input, #screen-form-inventory textarea').forEach(i => i.value = "");
+            document.querySelectorAll('#screen-form-inventory select').forEach(s => s.selectedIndex = 0);
+            checkOtroInst();
+            nav('screen-form-inventory');
+        }
+        function checkOtroInst() { const sel = document.getElementById('inv-instrumento-select').value; const inp = document.getElementById('inv-instrumento-input'); if(sel === 'OTRO') inp.classList.remove('hidden'); else inp.classList.add('hidden'); }
+        function openInventoryList() { nav('screen-inventory-list'); }
+        function filterInventory() {
+            const q = document.getElementById('search-inv-input').value.toLowerCase();
+            const list = document.getElementById('inventory-list-container');
+            list.innerHTML = "";
+            if(!session.inventario) return;
+            let filtered = session.inventario.filter(i => (i.instrumento + " " + i.marca + " " + i.codigo + " " + i.serial).toLowerCase().includes(q));
+            if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON ACTIVOS</p>`; return; }
+            filtered.forEach(i => {
+                const item = document.createElement('div');
+                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm cursor-pointer active:scale-95 transition-transform";
+                item.onclick = () => loadInstrumentForEdit(i);
+                let dotColor = "bg-slate-300";
+                if(i.estado.includes("Disponible")) dotColor = "bg-green-500";
+                else if(i.estado.includes("Asignado") || i.estado.includes("Préstamo")) dotColor = "bg-red-500";
+                else if(i.estado.includes("Reparación")) dotColor = "bg-amber-500";
+                item.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-bold text-[13px] text-slate-900">${i.instrumento}</p>
+                            <p class="text-[10px] font-bold text-slate-500">${i.marca} ${i.modelo}</p>
+                            <p class="text-[9px] font-bold text-slate-300 mt-1 uppercase">S: ${i.serial || 'N/A'} | C: ${i.codigo || 'N/A'}</p>
+                        </div>
+                        <div class="w-3 h-3 rounded-full ${dotColor}"></div>
+                    </div>`;
+                list.appendChild(item);
+            });
+        }
+        function loadInstrumentForEdit(i) {
+            isEditing = true; originalSerial = i.serial; originalCodigo = i.codigo; originalRasgos = { inst: i.instrumento, marca: i.marca, modelo: i.modelo };
+            document.getElementById('form-inv-title').innerText = "EDITAR INSTRUMENTO";
+            const btn = document.getElementById('btn-save-inv');
+            btn.innerText = "ACTUALIZAR ACTIVO";
+            btn.classList.replace('bg-slate-900', 'bg-blue-600');
+            document.getElementById('inv-marca').value = i.marca === "N/A" ? "" : i.marca;
+            document.getElementById('inv-modelo').value = i.modelo === "N/A" ? "" : i.modelo;
+            document.getElementById('inv-serial').value = i.serial === "N/A" ? "" : i.serial;
+            document.getElementById('inv-codigo').value = i.codigo === "N/A" ? "" : i.codigo;
+            document.getElementById('inv-color').value = i.color === "N/A" ? "" : i.color;
+            document.getElementById('inv-accesorios').value = i.accesorios === "N/A" ? "" : i.accesorios;
+            document.getElementById('inv-observaciones').value = i.observaciones === "N/A" ? "" : i.observaciones;
+            document.getElementById('inv-condicion').value = i.condicion;
+            document.getElementById('inv-estado').value = i.estado;
+            document.getElementById('inv-origen').value = i.origen;
+            const sel = document.getElementById('inv-instrumento-select');
+            const exists = [...sel.options].some(o => o.value === i.instrumento);
+            if(exists) { sel.value = i.instrumento; document.getElementById('inv-instrumento-input').classList.add('hidden'); } 
+            else { sel.value = "OTRO"; document.getElementById('inv-instrumento-input').classList.remove('hidden'); document.getElementById('inv-instrumento-input').value = i.instrumento; }
+            nav('screen-form-inventory');
+        }
+        async function saveInstrument() {
+            let instName = document.getElementById('inv-instrumento-select').value;
+            if (instName === "OTRO") instName = document.getElementById('inv-instrumento-input').value;
+            if (!instName) return alert("Falta el Instrumento");
+            const d = {
+                codigo: document.getElementById('inv-codigo').value, instrumento: instName,
+                marca: document.getElementById('inv-marca').value, modelo: document.getElementById('inv-modelo').value,
+                serial: document.getElementById('inv-serial').value, color: document.getElementById('inv-color').value,
+                condicion: document.getElementById('inv-condicion').value, estado: document.getElementById('inv-estado').value,
+                origen: document.getElementById('inv-origen').value, accesorios: document.getElementById('inv-accesorios').value,
+                observaciones: document.getElementById('inv-observaciones').value
+            };
+            loader(true, isEditing ? "ACTUALIZANDO..." : "GUARDANDO...");
+            const payload = { action: isEditing ? 'editInstrumento' : 'addInstrumento', sheetId: session.sheetId, datos: d, originalSerial: originalSerial, originalCodigo: originalCodigo, originalInstrumento: originalRasgos.inst, originalMarca: originalRasgos.marca, originalModelo: originalRasgos.modelo };
+            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) }); const res = await r.json(); if(res.success) { alert(isEditing ? "ACTIVO ACTUALIZADO" : "ACTIVO GUARDADO"); await fetchData(); nav('screen-inventory-menu'); } else { alert("ERROR: No se pudo guardar/editar"); } } catch(e) { alert("ERROR DE CONEXIÓN"); }
             loader(false);
         }
 
@@ -622,9 +509,9 @@
         }
         function openGradoModal() { if (!session.config.grado || session.config.grado.length === 0) return alert("No hay grados configurados"); document.getElementById('modal-grupo').classList.remove('hidden'); let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); document.getElementById('lista-grados-modal').innerHTML = html; }
         function setGrado(v) { const cell = document.getElementById(`cell-${editingCell.h}-${editingCell.d}`); if(v === '') { cell.innerText = ""; } else { if(cell.innerText.trim() !== "") { if(!cell.innerText.includes(v)) cell.innerText += " / " + v; } else { cell.innerText = v; } } document.getElementById('modal-grupo').classList.add('hidden'); }
-        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v53', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
+        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v54', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
 
-        // --- ASISTENCIA & REPORTE WA ---
+        // --- ASISTENCIA ---
         function prepareProcess() {
             session.date = document.getElementById('event-date').value;
             session.type = document.getElementById('event-type').value;
@@ -646,20 +533,18 @@
                 const n = `${m.nombres} ${m.apellidos}`; 
                 const s = record[n] || '';
                 const card = document.createElement('div'); card.className = "bg-white p-4 rounded-2xl shadow-sm border";
-                // AJUSTE PESO EN TARJETA ASISTENCIA
                 card.innerHTML = `<div class="mb-3"><p class="font-bold text-[13px] text-slate-800">${n}</p><p class="text-[10px] font-bold text-slate-400 mt-1 uppercase">${m.instrumento} • ${m.grado}</p></div><div class="grid grid-cols-4 gap-1">${['PRESENTE','AUSENTE','RETARDO','EXCUSA'].map(st => `<button onclick="mark('${n}','${st}')" class="btn-status border ${s === st ? getCol(st) : 'bg-slate-50 text-slate-400 border-slate-50'}">${st}</button>`).join('')}</div>`;
                 box.appendChild(card);
             });
             document.getElementById('counter').innerText = `${Object.keys(record).length} Marcados`;
         }
-        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v53', JSON.stringify(record)); renderList(activeSection); }
+        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v54', JSON.stringify(record)); renderList(activeSection); }
         function getCol(s) { return { 'PRESENTE': 'bg-slate-900 text-white border-slate-900', 'AUSENTE': 'bg-red-50 text-red-600 border-red-100', 'RETARDO': 'bg-amber-50 text-amber-600 border-amber-100', 'EXCUSA': 'bg-blue-50 text-blue-600 border-blue-100'}[s]; }
-
         async function finalize() {
             if(!Object.keys(record).length) return alert("NO HAY MARCACIONES");
             loader(true, "GUARDANDO...");
             const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: session.type, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v53'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
+            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v54'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
             loader(false);
         }
         function generateWAReport() {
@@ -679,7 +564,6 @@
             const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
         }
-
         function toggleEventDesc() { document.getElementById('event-desc-box').classList.toggle('hidden', document.getElementById('event-type').value !== 'Presentación'); }
         function logout() { localStorage.clear(); location.reload(); }
     </script>
