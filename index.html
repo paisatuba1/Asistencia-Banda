@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v5.9</title>
+    <title>ATRIL DIGITAL v5.9.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
@@ -13,28 +13,27 @@
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .input-std { width: 100%; height: 54px; padding: 0 1rem; background-color: #f8fafc; border-radius: 0.5rem; font-size: 15px; font-weight: 600; border: 1px solid #e2e8f0; outline: none; }
-        .btn-status { font-size: 9px; font-weight: 600; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .active-tab { border-bottom: 3px solid #0f172a; color: #0f172a; font-weight: 700; }
     </style>
 </head>
 <body>
 
     <div id="loader" class="hidden fixed inset-0 bg-white/95 z-[9999] flex flex-col items-center justify-center">
         <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
-        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">PROCESANDO...</p>
+        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">REESTABLECIENDO...</p>
+        <button id="btn-force-reset" onclick="logout()" class="hidden mt-8 text-[10px] font-bold text-red-500 underline uppercase">Forzar reinicio manual</button>
     </div>
 
     <div id="screen-login" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-sm text-center">
+        <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-sm text-center border border-slate-100">
             <h1 class="text-2xl font-bold uppercase tracking-tighter mb-1">ATRIL DIGITAL</h1>
-            <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v5.9</span>
+            <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v5.9.1</span>
             <div class="space-y-3 mt-8">
                 <input type="text" id="user-input" placeholder="USUARIO" class="input-std uppercase">
                 <input type="password" id="pass-input" placeholder="CONTRASEÑA" class="input-std text-center tracking-widest">
                 <button onclick="loginProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[15px] active:scale-95 transition-transform">INGRESAR</button>
             </div>
-            <p id="login-error" class="text-red-600 text-[11px] mt-4 hidden font-bold uppercase">CREDENCIALES INCORRECTAS</p>
+            <p id="login-error" class="text-red-600 text-[11px] mt-4 hidden font-bold uppercase">CREDENCIALES O CONEXIÓN INCORRECTA</p>
         </div>
     </div>
 
@@ -47,22 +46,22 @@
             <button onclick="logout()" class="text-red-500 text-[11px] font-bold uppercase border-2 border-red-500 px-3 py-1 rounded-lg">SALIR</button>
         </div>
         
-        <button onclick="nav('screen-activity')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center active:scale-95 transition-transform">
+        <button onclick="nav('screen-activity')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
             <span class="font-bold text-[15px] uppercase text-slate-700">ASISTENCIA</span>
             <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-xl">📋</div>
         </button>
 
-        <button onclick="nav('screen-stats-filter')" class="w-full bg-slate-900 text-white p-6 rounded-2xl shadow-lg flex justify-between items-center active:scale-95 transition-transform">
+        <button onclick="nav('screen-stats-filter')" class="w-full bg-slate-900 text-white p-6 rounded-2xl shadow-lg flex justify-between items-center">
             <span class="font-bold text-[15px] uppercase">ESTADÍSTICAS (KARDEX)</span>
             <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-xl">📊</div>
         </button>
 
-        <button onclick="nav('screen-student-menu')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center active:scale-95 transition-transform">
+        <button onclick="nav('screen-student-menu')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
             <span class="font-bold text-[15px] uppercase text-slate-700">GESTIÓN ESTUDIANTES</span>
             <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-xl">👤</div>
         </button>
 
-        <button onclick="nav('screen-inventory-menu')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center active:scale-95 transition-transform">
+        <button onclick="nav('screen-inventory-menu')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
             <span class="font-bold text-[15px] uppercase text-slate-700">GESTIÓN INVENTARIO</span>
             <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-xl">🎷</div>
         </button>
@@ -72,12 +71,10 @@
         <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
         <div class="bg-white p-8 rounded-3xl shadow-xl space-y-6">
             <h2 class="text-lg font-bold uppercase text-slate-900">CONSULTAR KARDEX</h2>
-            
             <div>
                 <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">PROCESO</label>
                 <select id="stat-proceso" class="input-std"></select>
             </div>
-
             <div>
                 <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">MES A CONSULTAR</label>
                 <select id="stat-mes" class="input-std">
@@ -87,7 +84,6 @@
                     <option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
                 </select>
             </div>
-
             <button onclick="getReport()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[14px]">GENERAR REPORTE</button>
         </div>
     </div>
@@ -101,16 +97,24 @@
             <h2 id="report-title-text" class="font-bold text-lg uppercase leading-tight text-slate-900">REPORTE</h2>
             <p id="report-mes-text" class="text-[11px] font-bold text-slate-400 uppercase mt-1">---</p>
         </div>
-        
-        <div id="stats-container" class="p-6 space-y-3">
-            </div>
+        <div id="stats-container" class="p-6 space-y-3"></div>
     </div>
 
     <script>
+        // URL de tu Script de Google
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbz76iFpaIUMCZc8kTTh7JrZxBEN7fWhkqaKoe5CYoRuBylWx5dKfmfS9L3tVTddWk0uHA/exec";
-        
-        let session = JSON.parse(localStorage.getItem('atril_v59')) || { user: "", banda: "", sheetId: "", master: [], config: {} };
-        
+        const APP_VERSION = "5.9.1";
+
+        // LÓGICA DE AUTO-LIMPIEZA PARA v5.9.1
+        let session = JSON.parse(localStorage.getItem('atril_session'));
+        const storedVersion = localStorage.getItem('atril_version');
+
+        if (storedVersion !== APP_VERSION) {
+            localStorage.clear();
+            localStorage.setItem('atril_version', APP_VERSION);
+            session = null;
+        }
+
         const SECCIONES = {
             "Maderas": ["flauta", "oboe", "fagot", "clarinete requinto", "clarinete soprano", "clarinete bajo", "saxofon soprano", "saxofon alto", "saxofon tenor", "saxofon baritono"],
             "Bronces": ["trompeta", "corno", "trombon", "eufonio", "tuba"],
@@ -119,16 +123,21 @@
         };
         const ORDEN_INST = [...SECCIONES.Maderas, ...SECCIONES.Bronces, ...SECCIONES.Cuerdas, ...SECCIONES.Percusion];
 
-        window.onload = async () => { if(session.user) { loader(true, "SINCRONIZANDO..."); await fetchData(); } else { nav('screen-login'); } };
+        window.onload = async () => {
+            if (session && session.user) {
+                loader(true, "SINCRONIZANDO...");
+                // Timeout de seguridad: si en 15 seg no carga, muestra botón de reset
+                setTimeout(() => { document.getElementById('btn-force-reset').classList.remove('hidden'); }, 15000);
+                await fetchData();
+            } else {
+                nav('screen-login');
+            }
+        };
 
         function nav(id) {
             document.querySelectorAll('body > div').forEach(d => { if(d.id !== 'loader') d.classList.add('hidden'); });
             document.getElementById(id).classList.remove('hidden');
-            if(id === 'screen-stats-filter') {
-                const sel = document.getElementById('stat-proceso');
-                sel.innerHTML = session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
-                document.getElementById('stat-mes').value = new Date().getMonth() + 1;
-            }
+            if(id === 'screen-stats-filter') restoreStatsFilter();
         }
 
         function loader(v, t) {
@@ -144,18 +153,41 @@
             try {
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
                 const d = await r.json();
-                if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; await fetchData(); } 
-                else { document.getElementById('login-error').classList.remove('hidden'); loader(false); }
-            } catch(e) { alert("Error de conexión"); loader(false); }
+                if(d.success) {
+                    session = { user: u, banda: d.banda, sheetId: d.sheetId };
+                    localStorage.setItem('atril_session', JSON.stringify(session));
+                    await fetchData();
+                } else {
+                    document.getElementById('login-error').classList.remove('hidden');
+                    loader(false);
+                }
+            } catch(e) { 
+                alert("Error de conexión con el servidor"); 
+                loader(false); 
+            }
         }
 
         async function fetchData() {
             try {
                 const r = await fetch(`${MOTOR_URL}?action=getDataInicial&sheetId=${session.sheetId}`);
                 const d = await r.json();
-                if(d.success) { session.master = d.integrantes; session.config = d.config; localStorage.setItem('atril_v59', JSON.stringify(session)); document.getElementById('display-band-name').innerText = session.banda; nav('screen-menu'); }
-            } catch(e) { console.error(e); }
+                if(d.success) {
+                    session.master = d.integrantes;
+                    session.config = d.config;
+                    localStorage.setItem('atril_session', JSON.stringify(session));
+                    document.getElementById('display-band-name').innerText = session.banda;
+                    nav('screen-menu');
+                }
+            } catch(e) { console.error("Error al obtener datos iniciales", e); }
             loader(false);
+        }
+
+        function restoreStatsFilter() {
+            const sel = document.getElementById('stat-proceso');
+            if (session.config && session.config.proceso) {
+                sel.innerHTML = session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
+            }
+            document.getElementById('stat-mes').value = new Date().getMonth() + 1;
         }
 
         async function getReport() {
@@ -171,18 +203,17 @@
                     document.getElementById('report-title-text').innerText = proc;
                     document.getElementById('report-mes-text').innerText = mesNombre;
                     document.getElementById('report-events-count').innerText = `${d.totalEventos} EVENTOS`;
-                    renderReport(d.stats, d.totalEventos, proc);
+                    renderReportCards(d.stats, d.totalEventos, proc);
                     nav('screen-stats-report');
                 }
-            } catch(e) { alert("Error al obtener estadísticas"); }
+            } catch(e) { alert("Error al conectar con el reporte"); }
             loader(false);
         }
 
-        function renderReport(stats, total, proc) {
+        function renderReportCards(stats, total, proc) {
             const box = document.getElementById('stats-container'); box.innerHTML = "";
             let filtrados = session.master.filter(m => String(m.proceso) === String(proc));
             
-            // Orden de Score
             filtrados.sort((a, b) => {
                 const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
                 const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
@@ -190,17 +221,15 @@
             });
 
             if(filtrados.length === 0) {
-                box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">No hay estudiantes en este proceso</p>`;
+                box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">No hay integrantes en este proceso</p>`;
                 return;
             }
 
             filtrados.forEach(m => {
-                const nombreCompleto = `${m.nombres} ${m.apellidos}`;
-                const s = stats[nombreCompleto] || { P: 0, A: 0, R: 0, E: 0 };
-                
-                // Cálculo: Presentes + Retardos
-                const asistenciasEfectivas = parseInt(s.P) + parseInt(s.R);
-                const pct = total > 0 ? Math.round((asistenciasEfectivas / total) * 100) : 0;
+                const nombreFull = `${m.nombres} ${m.apellidos}`;
+                const s = stats[nombreFull] || { P: 0, A: 0, R: 0, E: 0 };
+                const asistenciaEfectiva = parseInt(s.P) + parseInt(s.R);
+                const pct = total > 0 ? Math.round((asistenciaEfectivas / total) * 100) : 0;
                 
                 let colorPct = "text-slate-400";
                 if(pct >= 85) colorPct = "text-green-600";
@@ -211,7 +240,7 @@
                 card.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex justify-between items-center";
                 card.innerHTML = `
                     <div class="flex-1">
-                        <p class="font-bold text-[14px] text-slate-800">${nombreCompleto}</p>
+                        <p class="font-bold text-[14px] text-slate-800">${nombreFull}</p>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">${m.instrumento}</p>
                         <div class="flex gap-3 mt-3 text-[11px] font-black">
                             <span class="text-slate-900 bg-slate-50 px-2 py-1 rounded-md">P: ${s.P}</span>
