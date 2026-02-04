@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v6.5</title>
+    <title>ATRIL DIGITAL v6.6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -55,7 +55,7 @@
             <img src="https://github.com/pandemiaproducciones/Atril-Digital/blob/main/logo.png?raw=true" class="w-24 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v6.5</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v6.6</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase">SISTEMA INTEGRAL DE BANDAS</p>
             <div class="space-y-3">
@@ -127,14 +127,13 @@
             <span class="text-2xl">📂</span>
         </button>
 
-        <!-- NUEVO BOTÓN: LISTAS POR GRADOS -->
         <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center">
             <span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span>
             <span class="text-2xl">🎓</span>
         </button>
     </div>
 
-    <!-- PANTALLA LISTAS POR GRADOS (NUEVO MÓDULO) -->
+    <!-- PANTALLA LISTAS POR GRADOS -->
     <div id="screen-grade-list" class="hidden p-6 max-w-md mx-auto pb-32">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
             <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
@@ -148,7 +147,6 @@
 
         <div id="grade-list-container" class="space-y-3"></div>
 
-        <!-- BOTÓN WHATSAPP FLOTANTE -->
         <div id="btn-grade-wa" class="fixed bottom-0 left-0 w-full p-6 bg-white/90 border-t hidden">
             <button onclick="generateGradeWA()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[12px] shadow-lg active:scale-95 transition-transform">
                 ENVIAR LISTA POR WHATSAPP 📲
@@ -174,7 +172,7 @@
         </div>
     </div>
 
-    <!-- REPORTE ESTADÍSTICAS -->
+    <!-- REPORTE ESTADÍSTICAS (ACTUALIZADO SIN %) -->
     <div id="screen-stats-report" class="hidden min-h-screen pb-20">
         <div class="bg-white p-6 sticky top-0 z-20 shadow-sm border-b">
             <div class="flex justify-between items-center mb-4">
@@ -335,8 +333,8 @@
     <script>
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwpdHttIY9SWkliI5PVzsw-jS5b8-t6_IyS55hcmBWm2I4J1dJUCm1Iwm4EvrctlDRz7g/exec";
         
-        let session = JSON.parse(localStorage.getItem('atril_v65')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
-        let record = JSON.parse(localStorage.getItem('atril_rec_v65')) || {};
+        let session = JSON.parse(localStorage.getItem('atril_v66')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
+        let record = JSON.parse(localStorage.getItem('atril_rec_v66')) || {};
         let editingCell = null;
         let isEditing = false;
         let originalDoc = null;
@@ -359,7 +357,7 @@
 
         function nav(id) {
             session.current = id;
-            localStorage.setItem('atril_v65', JSON.stringify(session));
+            localStorage.setItem('atril_v66', JSON.stringify(session));
             document.querySelectorAll('body > div').forEach(d => { if(d.id !== 'loader') d.classList.add('hidden'); d.classList.remove('flex'); });
             const target = document.getElementById(id);
             target.classList.remove('hidden');
@@ -372,7 +370,7 @@
             if(id === 'screen-directory') filterDirectory();
             if(id === 'screen-inventory-list') filterInventory();
             if(id === 'screen-stats-filter') restoreStatsFilter();
-            if(id === 'screen-grade-list') openGradeList(); // Abre la lista de grados
+            if(id === 'screen-grade-list') openGradeList();
         }
 
         function loader(v, t) {
@@ -398,7 +396,7 @@
             try {
                 const r = await fetch(`${MOTOR_URL}?action=getDataInicial&sheetId=${session.sheetId}`);
                 const d = await r.json();
-                if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_v65', JSON.stringify(session)); restore(); nav('screen-menu'); } 
+                if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_v66', JSON.stringify(session)); restore(); nav('screen-menu'); } 
                 else { alert("ERROR DE DATOS: " + (d.error || 'Desconocido')); restore(); nav('screen-menu'); }
             } catch(e) { console.error(e); alert("SIN CONEXIÓN: SE USARÁN DATOS GUARDADOS"); restore(); nav('screen-menu'); }
             loader(false);
@@ -413,8 +411,6 @@
                     const s = document.getElementById(`add-${k}`);
                     if(s && session.config[k]) { let opts = `<option disabled selected>${k.toUpperCase()}</option>`; opts += session.config[k].map(o => `<option value="${o}">${o}</option>`).join(''); s.innerHTML = opts; }
                 });
-                
-                // RESTORE STATS & GRADES
                 const sel = document.getElementById('stat-proceso');
                 if (sel) sel.innerHTML = session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
                 const mSel = document.getElementById('stat-mes');
@@ -443,10 +439,8 @@
             document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')");
             document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
             document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
-            
             let df = document.getElementById('add-fecha_nacimiento');
             df.type = 'text'; 
-            
             document.getElementById('acudiente-box').classList.add('hidden');
             nav('screen-form-student');
         }
@@ -485,19 +479,15 @@
             const btn = document.getElementById('btn-save-student');
             btn.innerText = "ACTUALIZAR DATOS";
             btn.classList.remove('bg-slate-900'); btn.classList.add('bg-blue-600');
-            document.getElementById('btn-del-student').classList.remove('hidden'); // SHOW DELETE BUTTON
+            document.getElementById('btn-del-student').classList.remove('hidden'); 
             document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-directory')");
-
             document.getElementById('add-nombres').value = m.nombres; document.getElementById('add-apellidos').value = m.apellidos;
             document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-eps').value = m.eps;
             document.getElementById('add-documento').value = m.documento;
-            
             let df = document.getElementById('add-fecha_nacimiento');
             let rawDate = m.fecha_nacimiento ? String(m.fecha_nacimiento).replace(/'/g, '').trim() : "";
             if(rawDate.includes('T') && rawDate.length > 10) rawDate = rawDate.split('T')[0];
-            df.type = 'text'; 
-            df.value = rawDate;
-
+            df.type = 'text'; df.value = rawDate;
             document.getElementById('add-proceso').value = m.proceso; document.getElementById('add-instrumento').value = m.instrumento; document.getElementById('add-grado').value = m.grado;
             document.getElementById('add-acudiente-nombre').value = m.acudiente; document.getElementById('add-acudiente-telefono').value = m.telefono_acud;
             if(m.acudiente || m.telefono_acud) document.getElementById('acudiente-box').classList.remove('hidden'); else document.getElementById('acudiente-box').classList.add('hidden');
@@ -534,14 +524,14 @@
             loader(false);
         }
 
-        // --- NUEVO: LISTAS POR GRADOS (FILTRO ESCOLAR) ---
+        // --- LISTAS POR GRADOS ---
         function openGradeList() {
             const sel = document.getElementById('filter-grado-select');
             if(session.config.grado) {
                 sel.innerHTML = `<option disabled selected>SELECCIONE...</option>` + session.config.grado.map(g => `<option value="${g}">${g}</option>`).join('');
             }
             document.getElementById('grade-list-container').innerHTML = "";
-            document.getElementById('btn-grade-wa').classList.add('hidden'); // Ocultar boton WA al inicio
+            document.getElementById('btn-grade-wa').classList.add('hidden');
         }
 
         function renderGradeList() {
@@ -549,55 +539,36 @@
             const box = document.getElementById('grade-list-container');
             const btnWA = document.getElementById('btn-grade-wa');
             box.innerHTML = "";
-            
             if(!session.master) return;
             let filtered = session.master.filter(m => m.grado === grado);
-            
-            // ORDEN ALFABÉTICO POR APELLIDO (Formato Académico)
             filtered.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', {sensitivity: 'base'}));
-
             if(filtered.length === 0) {
                 box.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-10 font-bold uppercase">NO HAY ESTUDIANTES EN ${grado}</p>`;
                 btnWA.classList.add('hidden');
                 return;
             }
-
             filtered.forEach(m => {
                 const item = document.createElement('div');
                 item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
-                item.innerHTML = `
-                    <div>
-                        <p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p>
-                        <p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p>
-                    </div>
-                    <div class="bg-slate-100 text-slate-500 text-[9px] font-bold px-2 py-1 rounded-lg uppercase">${m.grado}</div>
-                `;
+                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p></div><div class="bg-slate-100 text-slate-500 text-[9px] font-bold px-2 py-1 rounded-lg uppercase">${m.grado}</div>`;
                 box.appendChild(item);
             });
-
-            btnWA.classList.remove('hidden'); // Mostrar boton WA si hay alumnos
+            btnWA.classList.remove('hidden');
         }
 
         function generateGradeWA() {
             const grado = document.getElementById('filter-grado-select').value;
             if(!grado) return;
-            
             let filtered = session.master.filter(m => m.grado === grado);
-            // Orden Alfabético por apellido para el reporte
             filtered.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', {sensitivity: 'base'}));
-
             if(filtered.length === 0) return alert("Lista vacía");
-
             let msg = `🎓 *LISTADO GRADO ${grado}* \n${session.banda.toUpperCase()}\n\n`;
-            filtered.forEach((m, i) => {
-                msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`;
-            });
-
+            filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`; });
             const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
         }
 
-        // --- GESTIÓN INVENTARIO (CÓDIGO v5.7 EXACTO) ---
+        // --- GESTIÓN INVENTARIO ---
         function prepareNewInstrument() {
             isEditing = false; originalSerial = null; originalCodigo = null; originalRasgos = {};
             document.getElementById('form-inv-title').innerText = "NUEVO INSTRUMENTO";
@@ -644,7 +615,7 @@
             const btn = document.getElementById('btn-save-inv');
             btn.innerText = "ACTUALIZAR ACTIVO";
             btn.classList.replace('bg-slate-900', 'bg-blue-600');
-            document.getElementById('btn-del-inv').classList.remove('hidden'); // SHOW DELETE BUTTON
+            document.getElementById('btn-del-inv').classList.remove('hidden'); 
             document.getElementById('inv-marca').value = i.marca === "N/A" ? "" : i.marca;
             document.getElementById('inv-modelo').value = i.modelo === "N/A" ? "" : i.modelo;
             document.getElementById('inv-serial').value = i.serial === "N/A" ? "" : i.serial;
@@ -710,9 +681,9 @@
         }
         function openGradoModal() { if (!session.config.grado || session.config.grado.length === 0) return alert("No hay grados configurados"); document.getElementById('modal-grupo').classList.remove('hidden'); let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); document.getElementById('lista-grados-modal').innerHTML = html; }
         function setGrado(v) { const cell = document.getElementById(`cell-${editingCell.h}-${editingCell.d}`); if(v === '') { cell.innerText = ""; } else { if(cell.innerText.trim() !== "") { if(!cell.innerText.includes(v)) cell.innerText += " / " + v; } else { cell.innerText = v; } } document.getElementById('modal-grupo').classList.add('hidden'); }
-        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v65', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
+        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v66', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
 
-        // --- ASISTENCIA ---
+        // --- ASISTENCIA & ESTADÍSTICAS ---
         function restoreStatsFilter() {
             const sel = document.getElementById('stat-proceso');
             if (session.config && session.config.proceso) {
@@ -744,50 +715,29 @@
         function renderReportCards(stats, total, proc) {
             const box = document.getElementById('stats-container'); box.innerHTML = "";
             let filtrados = session.master.filter(m => String(m.proceso) === String(proc));
-            
-            // Orden de Score
             filtrados.sort((a, b) => {
                 const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
                 const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
                 return idxA - idxB;
             });
-
-            if(filtrados.length === 0) {
-                box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">No hay estudiantes en este proceso</p>`;
-                return;
-            }
-
+            if(filtrados.length === 0) { box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">No hay estudiantes en este proceso</p>`; return; }
+            
             filtrados.forEach(m => {
                 const nombreCompleto = `${m.nombres} ${m.apellidos}`;
                 const s = stats[nombreCompleto] || { P: 0, A: 0, R: 0, E: 0 };
-                
-                // Cálculo: Presentes + Retardos
-                const asistenciasEfectivas = parseInt(s.P) + parseInt(s.R);
-                const pct = total > 0 ? Math.round((asistenciasEfectivas / total) * 100) : 0;
-                
-                let colorPct = "text-slate-400";
-                if(pct >= 85) colorPct = "text-green-600";
-                else if(pct >= 70) colorPct = "text-amber-500";
-                else if(total > 0) colorPct = "text-red-600";
-
                 const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex justify-between items-center";
+                card.className = "bg-white p-5 rounded-2xl border border-slate-100 shadow-sm"; 
                 card.innerHTML = `
-                    <div class="flex-1">
+                    <div class="mb-3 border-b border-slate-50 pb-2">
                         <p class="font-bold text-[14px] text-slate-800">${nombreCompleto}</p>
                         <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">${m.instrumento}</p>
-                        <div class="flex gap-3 mt-3 text-[11px] font-black">
-                            <span class="text-slate-900 bg-slate-50 px-2 py-1 rounded-md">P: ${s.P}</span>
-                            <span class="text-red-600 bg-red-50 px-2 py-1 rounded-md">A: ${s.A}</span>
-                            <span class="text-amber-600 bg-amber-50 px-2 py-1 rounded-md">R: ${s.R}</span>
-                            <span class="text-blue-600 bg-blue-50 px-2 py-1 rounded-md">E: ${s.E}</span>
-                        </div>
                     </div>
-                    <div class="text-right ml-4">
-                        <p class="text-[9px] font-black text-slate-300 uppercase">CALIF.</p>
-                        <p class="text-2xl font-black ${colorPct}">${pct}%</p>
-                    </div>
-                `;
+                    <div class="grid grid-cols-2 gap-3 text-[11px] font-bold">
+                        <div class="bg-slate-50 text-slate-900 px-3 py-2 rounded-lg flex justify-between items-center"><span>PRESENTE</span> <span class="text-[14px]">${s.P}</span></div>
+                        <div class="bg-red-50 text-red-600 px-3 py-2 rounded-lg flex justify-between items-center"><span>AUSENTE</span> <span class="text-[14px]">${s.A}</span></div>
+                        <div class="bg-amber-50 text-amber-600 px-3 py-2 rounded-lg flex justify-between items-center"><span>RETARDO</span> <span class="text-[14px]">${s.R}</span></div>
+                        <div class="bg-blue-50 text-blue-600 px-3 py-2 rounded-lg flex justify-between items-center"><span>EXCUSA</span> <span class="text-[14px]">${s.E}</span></div>
+                    </div>`;
                 box.appendChild(card);
             });
         }
@@ -818,13 +768,13 @@
             });
             document.getElementById('counter').innerText = `${Object.keys(record).length} Marcados`;
         }
-        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v65', JSON.stringify(record)); renderList(activeSection); }
+        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v66', JSON.stringify(record)); renderList(activeSection); }
         function getCol(s) { return { 'PRESENTE': 'bg-slate-900 text-white border-slate-900', 'AUSENTE': 'bg-red-50 text-red-600 border-red-100', 'RETARDO': 'bg-amber-50 text-amber-600 border-amber-100', 'EXCUSA': 'bg-blue-50 text-blue-600 border-blue-100'}[s]; }
         async function finalize() {
             if(!Object.keys(record).length) return alert("NO HAY MARCACIONES");
             loader(true, "GUARDANDO...");
             const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: session.type, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v65'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
+            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v66'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
             loader(false);
         }
         function generateWAReport() {
