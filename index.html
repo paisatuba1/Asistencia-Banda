@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v6.0</title>
+    <title>ATRIL DIGITAL v6.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
         body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; }
@@ -14,34 +13,13 @@
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .active-tab { border-bottom: 3px solid #0f172a; color: #0f172a; font-weight: 700; }
-        .dirtab-btn { transition: all 0.2s; }
-        
         input, select, textarea { border: 1px solid #e2e8f0 !important; outline: none; appearance: none; }
         .btn-status { font-size: 9px; font-weight: 600; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        
         .horario-grid { display: grid; grid-template-columns: 40px repeat(5, 1fr); gap: 1px; background: #cbd5e1; border: 1px solid #cbd5e1; }
-        .horario-cell { 
-            min-height: 60px; padding: 4px; background: white; font-size: 10.5px; font-weight: 600; color: #334155;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; word-break: break-word; 
-        }
+        .horario-cell { min-height: 60px; padding: 4px; background: white; font-size: 10.5px; font-weight: 600; color: #334155; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; }
         .horario-header { background: #0f172a; color: white; padding: 8px 0; text-align: center; font-size: 9px; font-weight: 700; text-transform: uppercase; }
-        
-        .input-std { 
-            width: 100%; 
-            height: 54px; 
-            padding: 0 1rem; 
-            background-color: #f8fafc; 
-            border-radius: 0.5rem; 
-            font-size: 15px; 
-            font-weight: 600; 
-            display: flex;
-            align-items: center;
-        }
-        textarea.input-std { height: auto; padding: 1rem; }
-
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .input-std { width: 100%; height: 54px; padding: 0 1rem; background-color: #f8fafc; border-radius: 0.5rem; font-size: 15px; font-weight: 600; display: flex; align-items: center; }
     </style>
 </head>
 <body>
@@ -52,11 +30,11 @@
     </div>
 
     <div id="screen-login" class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-sm text-center border border-slate-100">
+        <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-sm text-center border border-slate-100">
             <img src="https://github.com/pandemiaproducciones/Atril-Digital/blob/main/logo.png?raw=true" class="w-24 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v6.0</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v6.1</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase">SISTEMA INTEGRAL DE BANDAS</p>
             <div class="space-y-3">
@@ -76,13 +54,9 @@
             </div>
             <button onclick="logout()" class="border-2 border-red-500 text-red-500 px-4 py-2 rounded-xl text-[11px] font-bold uppercase">SALIR</button>
         </div>
-        <button onclick="nav('screen-activity')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
+        <button onclick="nav('screen-activity-menu')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
             <span class="font-bold text-[15px] uppercase text-slate-700">ASISTENCIA</span>
             <div class="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-xl">📋</div>
-        </button>
-        <button onclick="nav('screen-stats-filter')" class="w-full bg-slate-900 text-white p-6 rounded-2xl shadow-lg flex justify-between items-center">
-            <span class="font-bold text-[15px] uppercase">ESTADÍSTICAS</span>
-            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-xl">📊</div>
         </button>
         <button onclick="nav('screen-student-menu')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
             <span class="font-bold text-[15px] uppercase text-slate-700">GESTIÓN ESTUDIANTES</span>
@@ -98,168 +72,57 @@
         </button>
     </div>
 
+    <div id="screen-activity-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">ASISTENCIA</h2>
+        <button onclick="nav('screen-activity-form')" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center">
+            <span class="font-bold text-[15px] uppercase">TOMAR ASISTENCIA +</span><span class="text-2xl">📋</span>
+        </button>
+        <button onclick="nav('screen-stats-filter')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center">
+            <span class="font-bold text-[15px] uppercase text-slate-700">ESTADÍSTICAS DE ASISTENCIA</span><span class="text-2xl">📊</span>
+        </button>
+    </div>
+
+    <div id="screen-activity-form" class="hidden p-6 max-w-md mx-auto">
+        <button onclick="nav('screen-activity-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-6">
+            <h2 class="text-lg font-bold uppercase text-slate-900">DATOS DE LA JORNADA</h2>
+            <input type="date" id="event-date" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px]">
+            <select id="event-type" onchange="toggleEventDesc()" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase">
+                <option value="Ensayo">ENSAYO</option>
+                <option value="Presentación">PRESENTACIÓN</option>
+            </select>
+            <div id="event-desc-box" class="hidden"><input type="text" id="event-desc" placeholder="NOMBRE DEL EVENTO" class="w-full p-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"></div>
+            <button onclick="prepareProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px]">CONTINUAR</button>
+        </div>
+    </div>
+
     <div id="screen-stats-filter" class="hidden p-6 max-w-md mx-auto">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+        <button onclick="nav('screen-activity-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
         <div class="bg-white p-8 rounded-3xl shadow-xl space-y-6">
-            <h2 class="text-lg font-bold uppercase text-slate-900">CONSULTAR KARDEX</h2>
-            <div>
-                <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">PROCESO</label>
-                <select id="stat-proceso" class="input-std"></select>
-            </div>
-            <div>
-                <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">MES A CONSULTAR</label>
-                <select id="stat-mes" class="input-std">
-                    <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option>
-                    <option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
-                    <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option>
-                    <option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
-                </select>
-            </div>
+            <h2 class="text-lg font-bold uppercase text-slate-900">FILTRAR REPORTE</h2>
+            <select id="stat-proceso" class="input-std"></select>
+            <select id="stat-mes" class="input-std">
+                <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option>
+                <option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
+                <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option>
+                <option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
+            </select>
             <button onclick="getReport()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[14px]">GENERAR REPORTE</button>
         </div>
     </div>
 
     <div id="screen-stats-report" class="hidden min-h-screen pb-20">
         <div class="bg-white p-6 sticky top-0 z-20 shadow-sm border-b">
-            <div class="flex justify-between items-center mb-4">
-                <button onclick="nav('screen-stats-filter')" class="text-slate-400 font-bold text-[12px] uppercase">← ATRÁS</button>
-                <span id="report-events-count" class="text-[10px] bg-slate-100 text-slate-500 px-3 py-1 rounded-full font-bold uppercase">0 EVENTOS</span>
-            </div>
+            <button onclick="nav('screen-stats-filter')" class="text-slate-400 font-bold text-[12px] uppercase mb-4 block">← ATRÁS</button>
             <h2 id="report-title-text" class="font-bold text-lg uppercase leading-tight text-slate-900">REPORTE</h2>
-            <p id="report-mes-text" class="text-[11px] font-bold text-slate-400 uppercase mt-1">---</p>
+            <p id="report-info-text" class="text-[11px] font-bold text-slate-400 uppercase mt-1">---</p>
         </div>
         <div id="stats-container" class="p-6 space-y-3"></div>
     </div>
 
-    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">ESTUDIANTES</h2>
-        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
-        <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
-    </div>
-
-    <div id="screen-inventory-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">INVENTARIO</h2>
-        <button onclick="prepareNewInstrument()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR INSTRUMENTO +</span><span class="text-2xl">🎺</span></button>
-        <button onclick="openInventoryList()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">VER INVENTARIO</span><span class="text-2xl">📦</span></button>
-    </div>
-
-    <div id="screen-inventory-list" class="hidden p-6 max-w-md mx-auto pb-20">
-        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
-            <button onclick="nav('screen-inventory-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
-            <h2 class="text-lg font-bold uppercase text-slate-900 mb-4">BUSCAR ACTIVO</h2>
-            <input type="text" id="search-inv-input" onkeyup="filterInventory()" placeholder="Instrumento, Serial, Código..." class="w-full bg-white border border-slate-200 rounded-xl font-semibold text-[15px] shadow-sm p-4">
-        </div>
-        <div id="inventory-list-container" class="space-y-3 mt-2"></div>
-    </div>
-
-    <div id="screen-form-inventory" class="hidden p-6 max-w-md mx-auto pb-20">
-        <button onclick="nav('screen-inventory-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
-        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
-            <h2 id="form-inv-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INSTRUMENTO</h2>
-            <div>
-                <select id="inv-instrumento-select" onchange="checkOtroInst()" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase mb-2"></select>
-                <input type="text" id="inv-instrumento-input" placeholder="Escriba el nombre del instrumento..." class="hidden input-std">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="inv-marca" placeholder="Marca" class="input-std">
-                <input type="text" id="inv-modelo" placeholder="Modelo" class="input-std">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="inv-serial" placeholder="Serial (Fábrica)" class="input-std border-slate-300">
-                <input type="text" id="inv-codigo" placeholder="Código Interno" class="input-std">
-            </div>
-            <input type="text" id="inv-color" placeholder="Color / Acabado" class="input-std">
-            <select id="inv-condicion" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <select id="inv-estado" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <select id="inv-origen" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <textarea id="inv-accesorios" placeholder="Accesorios (Boquilla, Estuche...)" class="input-std h-24"></textarea>
-            <textarea id="inv-observaciones" placeholder="Observaciones Generales" class="input-std h-24"></textarea>
-            <button id="btn-save-inv" onclick="saveInstrument()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR ACTIVO</button>
-            <button id="btn-del-inv" onclick="deleteInstrument()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ACTIVO 🗑️</button>
-        </div>
-    </div>
-
-    <div id="screen-directory" class="hidden p-6 max-w-md mx-auto pb-20">
-        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2">
-            <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
-            <h2 class="text-lg font-bold uppercase text-slate-900 mb-4">BUSCAR ESTUDIANTE</h2>
-            <input type="text" id="search-input" onkeyup="filterDirectory()" placeholder="Nombre o Instrumento..." class="w-full bg-white border border-slate-200 rounded-xl font-semibold text-[15px] shadow-sm mb-4 p-4">
-            <div class="flex gap-4 overflow-x-auto no-scrollbar text-[12px] font-bold uppercase border-b pb-2 mb-2">
-                <button onclick="setDirSection('TODOS')" id="dirtab-TODOS" class="dirtab-btn active-tab whitespace-nowrap">TODOS</button>
-                <button onclick="setDirSection('Maderas')" id="dirtab-Maderas" class="dirtab-btn text-slate-300 whitespace-nowrap">Maderas</button>
-                <button onclick="setDirSection('Bronces')" id="dirtab-Bronces" class="dirtab-btn text-slate-300 whitespace-nowrap">Bronces</button>
-                <button onclick="setDirSection('Cuerdas')" id="dirtab-Cuerdas" class="dirtab-btn text-slate-300 whitespace-nowrap">Cuerdas</button>
-                <button onclick="setDirSection('Percusion')" id="dirtab-Percusion" class="dirtab-btn text-slate-300 whitespace-nowrap">Percusión</button>
-            </div>
-        </div>
-        <div id="directory-list" class="space-y-3 mt-2"></div>
-    </div>
-
-    <div id="screen-form-student" class="hidden p-6 max-w-md mx-auto pb-20">
-        <button id="btn-back-student" onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
-        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
-            <h2 id="form-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INTEGRANTE</h2>
-            <input type="text" id="add-nombres" placeholder="Nombres" class="input-std">
-            <input type="text" id="add-apellidos" placeholder="Apellidos" class="input-std">
-            <input type="tel" id="add-telefono" placeholder="Teléfono Estudiante" class="input-std">
-            <input type="text" id="add-eps" placeholder="EPS / Salud" class="input-std">
-            <div class="grid grid-cols-2 gap-2">
-                <div class="flex flex-col"><label class="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-tighter">DOCUMENTO</label><input type="tel" id="add-documento" placeholder="Número" class="input-std"></div>
-                <div class="flex flex-col">
-                    <label class="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-tighter">FECHA NACIMIENTO</label>
-                    <input type="text" id="add-fecha_nacimiento" placeholder="dd/mm/aaaa" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" class="input-std uppercase">
-                </div>
-            </div>
-            <select id="add-proceso" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <select id="add-instrumento" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <select id="add-grado" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <button onclick="toggleAcudiente()" class="w-full text-center text-[11px] font-bold text-slate-400 uppercase tracking-widest py-2 hover:text-slate-600 transition-colors mt-2">+ ¿AGREGAR ACUDIENTE?</button>
-            <div id="acudiente-box" class="hidden space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 fade-in">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">DATOS DEL ACUDIENTE</p>
-                <input type="text" id="add-acudiente-nombre" placeholder="Nombre Acudiente" class="input-std">
-                <input type="tel" id="add-acudiente-telefono" placeholder="Teléfono Acudiente" class="input-std">
-            </div>
-            <button id="btn-save-student" onclick="saveStudent()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR REGISTRO</button>
-            <button id="btn-del-student" onclick="deleteStudent()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ESTUDIANTE 🗑️</button>
-        </div>
-    </div>
-
-    <div id="screen-horario" class="hidden p-4 max-w-xl mx-auto pb-32">
-        <div class="flex justify-between items-center mb-6">
-            <button onclick="nav('screen-menu')" class="text-slate-400 font-bold text-[12px] uppercase tracking-widest">← VOLVER</button>
-            <select id="select-horas" onchange="buildHorarioTable()" class="bg-white border p-2 rounded-lg text-[11px] font-semibold uppercase"><option value="6">6 HORAS</option><option value="7">7 HORAS</option></select>
-        </div>
-        <div id="capture-area" class="bg-white p-4 rounded-xl">
-            <div class="horario-grid"><div class="horario-header">H</div><div class="horario-header">LUN</div><div class="horario-header">MAR</div><div class="horario-header">MIE</div><div class="horario-header">JUE</div><div class="horario-header">VIE</div><div id="horario-body" class="contents"></div></div>
-        </div>
-        <div class="fixed bottom-0 left-0 w-full p-6 bg-white/90 border-t flex gap-2">
-            <button onclick="saveHorario()" class="flex-[2] bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[11px]">GUARDAR HORARIO</button>
-        </div>
-    </div>
-
-    <div id="screen-activity" class="hidden p-6 max-w-md mx-auto">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
-        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-6">
-            <h2 class="text-lg font-bold uppercase text-slate-900">DATOS DE LA JORNADA</h2>
-            <input type="date" id="event-date" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px]">
-            <select id="event-type" onchange="toggleEventDesc()" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"><option value="Ensayo">ENSAYO</option><option value="Presentación">PRESENTACIÓN</option></select>
-            <div id="event-desc-box" class="hidden"><input type="text" id="event-desc" placeholder="NOMBRE DEL EVENTO" class="w-full p-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"></div>
-            <button onclick="prepareProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px]">TOMAR ASISTENCIA</button>
-        </div>
-    </div>
-
-    <div id="modal-grupo" class="hidden fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-6 text-center">
-        <div class="bg-white w-full max-w-xs rounded-3xl p-6">
-            <h3 class="font-bold uppercase text-sm mb-4">ASIGNAR GRADO</h3>
-            <div id="lista-grados-modal" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
-            <button onclick="document.getElementById('modal-grupo').classList.add('hidden')" class="w-full mt-6 bg-slate-100 p-3 rounded-xl font-bold text-xs uppercase text-slate-500">CANCELAR</button>
-        </div>
-    </div>
-
     <div id="screen-process" class="hidden p-6 max-w-md mx-auto space-y-3">
-        <button onclick="nav('screen-activity')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
+        <button onclick="nav('screen-activity-form')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
         <div id="process-buttons" class="space-y-3"></div>
     </div>
 
@@ -280,23 +143,72 @@
         </div>
         <div id="musicos-box" class="p-6 space-y-3"></div>
         <div class="fixed bottom-0 bg-white/90 w-full p-4 border-t flex gap-2">
-            <button onclick="generateWAReport()" class="flex-1 bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[11px] active:scale-95 transition-transform">REPORTE WHATSAPP</button>
-            <button onclick="finalize()" class="flex-1 bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[11px] active:scale-95 transition-transform">GUARDAR ASISTENCIA</button>
+            <button onclick="generateWAReport()" class="flex-1 bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[11px]">REPORTE WA</button>
+            <button onclick="finalize()" class="flex-1 bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[11px]">GUARDAR</button>
         </div>
     </div>
 
-    <script>
-        // URL SCRIPT v6.0
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbxKtINcispR-j_ziTlIFK63R4cEHjaTDXU07dj6lAcJzSG91m3Y24dtr6qMHzcw6XmZAA/exec";
-        
-        let session = JSON.parse(localStorage.getItem('atril_v60')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
-        let record = JSON.parse(localStorage.getItem('atril_rec_v60')) || {};
-        
-        let editingCell = null; let isEditing = false; let originalDoc = null;
-        let activeSection = 'TODOS'; let currentDirSection = 'TODOS';
-        let originalSerial = null; let originalCodigo = null; let originalRasgos = { inst: "", marca: "", modelo: "" };
+    <div id="screen-directory" class="hidden p-6 max-w-md mx-auto pb-20">
+        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
+            <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
+            <h2 class="text-lg font-bold uppercase text-slate-900 mb-4">BUSCAR ESTUDIANTE</h2>
+            <input type="text" id="search-input" onkeyup="filterDirectory()" placeholder="Nombre o Instrumento..." class="w-full bg-white border border-slate-200 rounded-xl font-semibold text-[15px] shadow-sm p-4">
+        </div>
+        <div id="directory-list" class="space-y-3 mt-2"></div>
+    </div>
 
-        const DIAS_KEYS = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'];
+    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
+        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
+        <button onclick="nav('screen-directory')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
+    </div>
+
+    <div id="screen-form-student" class="hidden p-6 max-w-md mx-auto pb-20">
+        <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
+            <h2 id="form-title" class="text-lg font-bold uppercase text-slate-900">ESTUDIANTE</h2>
+            <input type="text" id="add-nombres" placeholder="Nombres" class="input-std">
+            <input type="text" id="add-apellidos" placeholder="Apellidos" class="input-std">
+            <input type="tel" id="add-telefono" placeholder="Teléfono" class="input-std">
+            <div class="grid grid-cols-2 gap-2">
+                <input type="tel" id="add-documento" placeholder="Documento" class="input-std">
+                <input type="text" id="add-fecha_nacimiento" placeholder="dd/mm/aaaa" class="input-std uppercase">
+            </div>
+            <select id="add-proceso" class="input-std"></select>
+            <select id="add-instrumento" class="input-std"></select>
+            <select id="add-grado" class="input-std"></select>
+            <button onclick="saveStudent()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR CAMBIOS</button>
+            <button id="btn-del-student" onclick="deleteStudent()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ESTUDIANTE 🗑️</button>
+        </div>
+    </div>
+
+    <div id="screen-horario" class="hidden p-4 max-w-xl mx-auto pb-32">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold text-[12px] uppercase tracking-widest mb-6 block">← VOLVER</button>
+        <div class="horario-grid">
+            <div class="horario-header">H</div><div class="horario-header">LUN</div><div class="horario-header">MAR</div><div class="horario-header">MIE</div><div class="horario-header">JUE</div><div class="horario-header">VIE</div>
+            <div id="horario-body" class="contents"></div>
+        </div>
+        <div class="fixed bottom-0 left-0 w-full p-6 bg-white/90 border-t">
+            <button onclick="saveHorario()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[11px]">GUARDAR HORARIO</button>
+        </div>
+    </div>
+
+    <div id="screen-inventory-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">INVENTARIO</h2>
+        <button onclick="prepareNewInstrument()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ACTIVO +</span><span class="text-2xl">🎺</span></button>
+        <button onclick="openInventoryList()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">VER INVENTARIO</span><span class="text-2xl">📦</span></button>
+    </div>
+
+    <script>
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwpdHttIY9SWkliI5PVzsw-jS5b8-t6_IyS55hcmBWm2I4J1dJUCm1Iwm4EvrctlDRz7g/exec";
+        
+        let session = JSON.parse(localStorage.getItem('atril_v61')) || { user: "", banda: "", sheetId: "", master: [], config: {}, horario: [] };
+        let record = {};
+        let isEditing = false;
+        let originalDoc = null;
+
         const SECCIONES = {
             "Maderas": ["flauta", "oboe", "fagot", "clarinete requinto", "clarinete soprano", "clarinete bajo", "saxofon soprano", "saxofon alto", "saxofon tenor", "saxofon baritono"],
             "Bronces": ["trompeta", "corno", "trombon", "eufonio", "tuba"],
@@ -305,31 +217,21 @@
         };
         const ORDEN_INST = [...SECCIONES.Maderas, ...SECCIONES.Bronces, ...SECCIONES.Cuerdas, ...SECCIONES.Percusion];
 
-        window.onload = async () => { 
-            if(session.user && session.sheetId) { loader(true, "SINCRONIZANDO..."); await fetchData(); } else { nav('screen-login'); }
-        };
+        window.onload = async () => { if(session.user) { loader(true, "SINCRONIZANDO..."); await fetchData(); } else { nav('screen-login'); } };
 
         function nav(id) {
-            session.current = id;
-            localStorage.setItem('atril_v60', JSON.stringify(session));
             document.querySelectorAll('body > div').forEach(d => { if(d.id !== 'loader') d.classList.add('hidden'); d.classList.remove('flex'); });
-            const target = document.getElementById(id);
-            target.classList.remove('hidden');
-            if(id === 'screen-login') target.classList.add('flex');
-            if(id === 'screen-activity') document.getElementById('event-date').value = new Date().toISOString().split('T')[0];
-            if(id === 'screen-horario') {
-                if(session.horario && session.horario.length >= 7) document.getElementById('select-horas').value = "7"; else document.getElementById('select-horas').value = "6";
-                buildHorarioTable();
-            }
+            document.getElementById(id).classList.remove('hidden');
+            if(id === 'screen-login') document.getElementById(id).classList.add('flex');
             if(id === 'screen-stats-filter') restoreStatsFilter();
+            if(id === 'screen-horario') buildHorarioTable();
             if(id === 'screen-directory') filterDirectory();
-            if(id === 'screen-inventory-list') filterInventory();
         }
 
         function loader(v, t) {
-            const l = document.getElementById('loader');
             document.getElementById('loader-text').innerText = t || "CARGANDO...";
-            if(v) { l.classList.remove('hidden'); l.classList.add('flex'); } else { l.classList.add('hidden'); l.classList.remove('flex'); }
+            document.getElementById('loader').classList.toggle('hidden', !v);
+            document.getElementById('loader').classList.toggle('flex', v);
         }
 
         async function loginProcess() {
@@ -341,169 +243,133 @@
                 const d = await r.json();
                 if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; await fetchData(); } 
                 else { document.getElementById('login-error').classList.remove('hidden'); loader(false); }
-            } catch(e) { alert("Error: " + e.message); loader(false); }
+            } catch(e) { alert("Error de conexión"); loader(false); }
         }
 
         async function fetchData() {
             try {
                 const r = await fetch(`${MOTOR_URL}?action=getDataInicial&sheetId=${session.sheetId}`);
                 const d = await r.json();
-                if (d.success) { session.master = d.integrantes; session.inventario = d.inventario; session.config = d.config; session.horario = d.horario; localStorage.setItem('atril_v60', JSON.stringify(session)); restore(); nav('screen-menu'); } 
+                if (d.success) { 
+                    session.master = d.integrantes; 
+                    session.config = d.config; 
+                    session.horario = d.horario; 
+                    localStorage.setItem('atril_v61', JSON.stringify(session));
+                    document.getElementById('display-band-name').innerText = session.banda;
+                    restoreFormOptions();
+                    nav('screen-menu'); 
+                } 
             } catch(e) { console.error(e); nav('screen-menu'); }
             loader(false);
         }
 
-        function restore() {
-            if(!session.config) return;
-            document.getElementById('display-band-name').innerText = session.banda;
-            if(session.config.proceso) {
-                document.getElementById('process-buttons').innerHTML = session.config.proceso.map(p => `<button onclick="initAt('${p}')" class="w-full p-6 bg-white rounded-2xl shadow-sm border font-bold text-left uppercase text-[13px] text-slate-700">${p}</button>`).join('');
-                ['proceso','instrumento','grado'].forEach(k => {
-                    const s = document.getElementById(`add-${k}`);
-                    if(s && session.config[k]) s.innerHTML = `<option disabled selected>${k.toUpperCase()}</option>` + session.config[k].map(o => `<option value="${o}">${o}</option>`).join('');
-                });
-            }
-            if(session.config.instrumento) {
-                document.getElementById('inv-instrumento-select').innerHTML = `<option disabled selected>SELECCIONE INSTRUMENTO</option>` + session.config.instrumento.map(i => `<option value="${i}">${i}</option>`).join('') + `<option value="OTRO">OTRO...</option>`;
-            }
-            ['inv-condicion', 'inv-estado', 'inv-origen'].forEach((id, idx) => {
-                const keys = ['condicion', 'estado', 'origen'];
-                document.getElementById(id).innerHTML = `<option disabled selected>${keys[idx].toUpperCase()}</option>` + session.config[keys[idx]].map(x => `<option value="${x}">${x}</option>`).join('');
+        function restoreFormOptions() {
+            if(!session.config.proceso) return;
+            ['proceso','instrumento','grado'].forEach(k => {
+                const s = document.getElementById(`add-${k}`);
+                if(s) s.innerHTML = `<option disabled selected>${k.toUpperCase()}</option>` + session.config[k].map(o => `<option value="${o}">${o}</option>`).join('');
             });
+            document.getElementById('process-buttons').innerHTML = session.config.proceso.map(p => `<button onclick="initAt('${p}')" class="w-full p-6 bg-white rounded-2xl shadow-sm border font-bold text-left uppercase text-[13px] text-slate-700">${p}</button>`).join('');
+        }
+
+        // --- ASISTENCIA ---
+        function toggleEventDesc() { document.getElementById('event-desc-box').classList.toggle('hidden', document.getElementById('event-type').value !== 'Presentación'); }
+        function prepareProcess() {
+            session.date = document.getElementById('event-date').value;
+            session.act = (document.getElementById('event-type').value === 'Ensayo' ? 'ENSAYO' : document.getElementById('event-desc').value).toUpperCase();
+            if(!session.date || !session.act) return alert("Faltan datos");
+            nav('screen-process');
+        }
+        function initAt(p) { session.process = p; document.getElementById('info-header').innerText = `${p} • ${session.act}`; nav('screen-list'); renderList('TODOS'); }
+        function renderList(secc) {
+            const box = document.getElementById('musicos-box'); box.innerHTML = "";
+            let filtrados = session.master.filter(m => m.proceso === session.process);
+            if(secc !== 'TODOS') filtrados = filtrados.filter(m => SECCIONES[secc].includes(m.instrumento.toLowerCase()));
+            filtrados.sort((a,b) => ORDEN_INST.indexOf(a.instrumento.toLowerCase()) - ORDEN_INST.indexOf(b.instrumento.toLowerCase()));
+            filtrados.forEach(m => {
+                const n = `${m.nombres} ${m.apellidos}`;
+                const st = record[n] || '';
+                const card = document.createElement('div'); card.className = "bg-white p-4 rounded-2xl shadow-sm border";
+                card.innerHTML = `<div class="mb-3"><p class="font-bold text-[13px]">${n}</p><p class="text-[10px] font-bold text-slate-400 uppercase">${m.instrumento}</p></div>
+                    <div class="grid grid-cols-4 gap-1">${['PRESENTE','AUSENTE','RETARDO','EXCUSA'].map(s => `<button onclick="mark('${n}','${s}')" class="btn-status border ${st === s ? getCol(s) : 'bg-slate-50 text-slate-400 border-slate-50'}">${s}</button>`).join('')}</div>`;
+                box.appendChild(card);
+            });
+        }
+        function mark(n, s) { if(record[n] === s) delete record[n]; else record[n] = s; document.getElementById('counter').innerText = `${Object.keys(record).length} Marcados`; renderList('TODOS'); }
+        function getCol(s) { return {'PRESENTE':'bg-slate-900 text-white','AUSENTE':'bg-red-50 text-red-600','RETARDO':'bg-amber-50 text-amber-600','EXCUSA':'bg-blue-50 text-blue-600'}[s]; }
+        async function finalize() {
+            if(!Object.keys(record).length) return;
+            loader(true, "GUARDANDO...");
+            const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: document.getElementById('event-type').value, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
+            const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data }) });
+            if((await r.json()).success) { alert("¡Guardado!"); record = {}; nav('screen-menu'); }
+            loader(false);
         }
 
         // --- ESTADÍSTICAS ---
         function restoreStatsFilter() {
-            const sel = document.getElementById('stat-proceso');
-            if (session.config && session.config.proceso) {
-                sel.innerHTML = session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
-            }
+            document.getElementById('stat-proceso').innerHTML = session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
             document.getElementById('stat-mes').value = new Date().getMonth() + 1;
         }
-
         async function getReport() {
-            const proc = document.getElementById('stat-proceso').value;
-            const mes = document.getElementById('stat-mes').value;
-            loader(true, "CONSULTANDO KARDEX...");
-            try {
-                const r = await fetch(`${MOTOR_URL}?action=getEstadisticas&sheetId=${session.sheetId}&proceso=${encodeURIComponent(proc)}&mes=${mes}`);
-                const d = await r.json();
-                if(d.success) {
-                    document.getElementById('report-title-text').innerText = proc;
-                    document.getElementById('report-mes-text').innerText = document.getElementById('stat-mes').options[document.getElementById('stat-mes').selectedIndex].text;
-                    document.getElementById('report-events-count').innerText = `${d.totalEventos} EVENTOS`;
-                    renderStats(d.stats, d.totalEventos, proc);
-                    nav('screen-stats-report');
-                }
-            } catch(e) { alert("Error al conectar"); }
+            const proc = document.getElementById('stat-proceso').value, mes = document.getElementById('stat-mes').value;
+            loader(true, "CONSULTANDO...");
+            const r = await fetch(`${MOTOR_URL}?action=getEstadisticas&sheetId=${session.sheetId}&proceso=${encodeURIComponent(proc)}&mes=${mes}`);
+            const d = await r.json();
+            if(d.success) {
+                document.getElementById('report-title-text').innerText = proc;
+                document.getElementById('report-info-text').innerText = `${document.getElementById('stat-mes').options[mes-1].text} • ${d.totalEventos} EVENTOS`;
+                const box = document.getElementById('stats-container'); box.innerHTML = "";
+                let masterProc = session.master.filter(m => m.proceso === proc).sort((a,b) => ORDEN_INST.indexOf(a.instrumento.toLowerCase()) - ORDEN_INST.indexOf(b.instrumento.toLowerCase()));
+                masterProc.forEach(m => {
+                    const n = `${m.nombres} ${m.apellidos}`, s = d.stats[n] || {P:0, A:0, R:0, E:0};
+                    const pct = d.totalEventos > 0 ? Math.round(((parseInt(s.P)+parseInt(s.R))/d.totalEventos)*100) : 0;
+                    const card = document.createElement('div'); card.className = "bg-white p-4 rounded-2xl border flex justify-between items-center";
+                    card.innerHTML = `<div><p class="font-bold text-[13px]">${n}</p><p class="text-[9px] font-bold text-slate-400 uppercase">${m.instrumento}</p>
+                        <div class="flex gap-2 mt-2 text-[10px] font-black"><span class="text-slate-900">P:${s.P}</span><span class="text-red-600">A:${s.A}</span><span class="text-amber-500">R:${s.R}</span></div></div>
+                        <div class="text-right"><p class="text-xl font-black ${pct>=85?'text-green-600':(pct>=70?'text-amber-500':'text-red-600')}">${pct}%</p></div>`;
+                    box.appendChild(card);
+                });
+                nav('screen-stats-report');
+            }
             loader(false);
         }
 
-        function renderStats(stats, total, proc) {
-            const box = document.getElementById('stats-container'); box.innerHTML = "";
-            let filtered = session.master.filter(m => String(m.proceso) === String(proc));
-            filtered.sort((a, b) => ORDEN_INST.indexOf(String(a.instrumento).toLowerCase()) - ORDEN_INST.indexOf(String(b.instrumento).toLowerCase()));
-
-            filtered.forEach(m => {
-                const n = `${m.nombres} ${m.apellidos}`;
-                const s = stats[n] || { P: 0, A: 0, R: 0, E: 0 };
-                const asis = parseInt(s.P) + parseInt(s.R);
-                const pct = total > 0 ? Math.round((asis / total) * 100) : 0;
-                let color = pct >= 85 ? "text-green-600" : (pct >= 70 ? "text-amber-500" : "text-red-600");
-
-                const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-3xl border shadow-sm flex justify-between items-center";
-                card.innerHTML = `<div class="flex-1"><p class="font-bold text-[14px]">${n}</p><p class="text-[9px] font-bold text-slate-400 uppercase">${m.instrumento}</p>
-                    <div class="flex gap-2 mt-2 text-[10px] font-black">
-                        <span class="bg-slate-100 px-2 py-1 rounded">P:${s.P}</span><span class="bg-red-50 text-red-600 px-2 py-1 rounded">A:${s.A}</span>
-                        <span class="bg-amber-50 text-amber-600 px-2 py-1 rounded">R:${s.R}</span><span class="bg-blue-50 text-blue-600 px-2 py-1 rounded">E:${s.E}</span>
-                    </div></div><div class="text-right ml-4"><p class="text-[8px] font-black text-slate-300 uppercase">CALIF.</p><p class="text-2xl font-black ${color}">${pct}%</p></div>`;
-                box.appendChild(card);
-            });
-        }
-
-        // --- GESTIÓN ESTUDIANTES ---
-        function prepareNewStudent() {
-            isEditing = false; originalDoc = null;
-            document.getElementById('form-title').innerText = "NUEVO INTEGRANTE";
-            document.getElementById('btn-save-student').innerText = "GUARDAR REGISTRO";
-            document.getElementById('btn-del-student').classList.add('hidden');
-            document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
-            nav('screen-form-student');
-        }
-
-        function loadStudentForEdit(m) {
-            isEditing = true; originalDoc = m.documento;
-            document.getElementById('form-title').innerText = "EDITAR ESTUDIANTE";
-            document.getElementById('btn-save-student').innerText = "ACTUALIZAR DATOS";
-            document.getElementById('btn-del-student').classList.remove('hidden');
-            document.getElementById('add-nombres').value = m.nombres; document.getElementById('add-apellidos').value = m.apellidos;
-            document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-eps').value = m.eps;
-            document.getElementById('add-documento').value = m.documento;
-            document.getElementById('add-fecha_nacimiento').value = m.fecha_nacimiento;
-            document.getElementById('add-proceso').value = m.proceso; document.getElementById('add-instrumento').value = m.instrumento; document.getElementById('add-grado').value = m.grado;
-            nav('screen-form-student');
-        }
-
-        async function saveStudent() {
-            const d = { nombres: document.getElementById('add-nombres').value, apellidos: document.getElementById('add-apellidos').value, telefono: document.getElementById('add-telefono').value, documento: document.getElementById('add-documento').value, fecha_nacimiento: document.getElementById('add-fecha_nacimiento').value, proceso: document.getElementById('add-proceso').value, instrumento: document.getElementById('add-instrumento').value, grado: document.getElementById('add-grado').value, eps: document.getElementById('add-eps').value, acudiente: document.getElementById('add-acudiente-nombre').value, telefono_acud: document.getElementById('add-acudiente-telefono').value };
-            loader(true, "GUARDANDO...");
-            const res = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: isEditing ? 'editEstudiante' : 'addEstudiante', sheetId: session.sheetId, datos: d, originalDocumento: originalDoc }) });
-            if((await res.json()).success) { await fetchData(); nav('screen-student-menu'); }
-            loader(false);
-        }
-
-        async function deleteStudent() {
-            if(!confirm("¿BORRAR ESTUDIANTE?")) return;
-            loader(true, "BORRANDO...");
-            const res = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEstudiante', sheetId: session.sheetId, documento: originalDoc }) });
-            if((await res.json()).success) { await fetchData(); nav('screen-directory'); }
-            loader(false);
-        }
-
-        // --- GESTIÓN INVENTARIO ---
-        function prepareNewInstrument() {
-            isEditing = false;
-            document.getElementById('form-inv-title').innerText = "NUEVO INSTRUMENTO";
-            document.getElementById('btn-del-inv').classList.add('hidden');
-            document.querySelectorAll('#screen-form-inventory input').forEach(i => i.value = "");
-            nav('screen-form-inventory');
-        }
-
-        function loadInstrumentForEdit(i) {
-            isEditing = true; originalSerial = i.serial; originalCodigo = i.codigo; originalRasgos = { inst: i.instrumento, marca: i.marca, modelo: i.modelo };
-            document.getElementById('form-inv-title').innerText = "EDITAR ACTIVO";
-            document.getElementById('btn-del-inv').classList.remove('hidden');
-            document.getElementById('inv-instrumento-select').value = i.instrumento;
-            document.getElementById('inv-marca').value = i.marca; document.getElementById('inv-modelo').value = i.modelo;
-            document.getElementById('inv-serial').value = i.serial; document.getElementById('inv-codigo').value = i.codigo;
-            nav('screen-form-inventory');
-        }
-
-        async function deleteInstrument() {
-            if(!confirm("¿BORRAR ACTIVO?")) return;
-            loader(true, "BORRANDO...");
-            const res = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteInstrumento', sheetId: session.sheetId, serial: originalSerial, codigo: originalCodigo, instrumento: originalRasgos.inst }) });
-            if((await res.json()).success) { await fetchData(); nav('screen-inventory-list'); }
-            loader(false);
-        }
-
-        // --- MÁS FUNCIONES (IGUALES A v5.7) ---
+        // --- DIRECTORIO ---
         function filterDirectory() {
             const q = document.getElementById('search-input').value.toLowerCase();
-            const list = document.getElementById('directory-list'); list.innerHTML = "";
-            let filtered = session.master.filter(m => (m.nombres + " " + m.apellidos).toLowerCase().includes(q));
-            filtered.forEach(m => {
-                const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border shadow-sm flex justify-between items-center cursor-pointer";
-                item.onclick = () => loadStudentForEdit(m);
-                item.innerHTML = `<div><p class="font-bold text-[13px]">${m.nombres} ${m.apellidos}</p><p class="text-[10px] text-slate-400 font-bold uppercase">${m.instrumento}</p></div><div class="text-slate-300">✎</div>`;
-                list.appendChild(item);
+            const box = document.getElementById('directory-list'); box.innerHTML = "";
+            session.master.filter(m => (m.nombres + " " + m.apellidos).toLowerCase().includes(q)).forEach(m => {
+                const item = document.createElement('div'); item.className = "bg-white p-4 rounded-xl border flex justify-between items-center cursor-pointer";
+                item.onclick = () => loadStudent(m);
+                item.innerHTML = `<div><p class="font-bold text-[13px]">${m.nombres} ${m.apellidos}</p><p class="text-[10px] text-slate-400 uppercase font-bold">${m.instrumento}</p></div><div class="text-slate-300">✎</div>`;
+                box.appendChild(item);
             });
         }
-        function toggleAcudiente() { document.getElementById('acudiente-box').classList.toggle('hidden'); }
+        function loadStudent(m) {
+            isEditing = true; originalDoc = m.documento;
+            document.getElementById('add-nombres').value = m.nombres; document.getElementById('add-apellidos').value = m.apellidos;
+            document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-documento').value = m.documento;
+            document.getElementById('add-fecha_nacimiento').value = m.fecha_nacimiento; document.getElementById('add-proceso').value = m.proceso;
+            document.getElementById('add-instrumento').value = m.instrumento; document.getElementById('add-grado').value = m.grado;
+            document.getElementById('btn-del-student').classList.remove('hidden'); nav('screen-form-student');
+        }
+
+        // --- HORARIO ---
+        function buildHorarioTable() {
+            const body = document.getElementById('horario-body'); body.innerHTML = "";
+            for(let h=1; h<=7; h++) {
+                const rowHead = document.createElement('div'); rowHead.className="horario-header"; rowHead.innerText=h; body.appendChild(rowHead);
+                for(let d=1; d<=5; d++) {
+                    const cell = document.createElement('div'); cell.className="horario-cell";
+                    const dayKey = ['lunes','martes','miercoles','jueves','viernes'][d-1];
+                    if(session.horario[h-1] && session.horario[h-1][dayKey]) cell.innerText = session.horario[h-1][dayKey];
+                    body.appendChild(cell);
+                }
+            }
+        }
+
         function logout() { localStorage.clear(); location.reload(); }
-        // (El resto de funciones de asistencia e inventario se mantienen idénticas para asegurar estabilidad)
     </script>
 </body>
 </html>
