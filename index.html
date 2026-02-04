@@ -256,8 +256,8 @@
     </div>
 
     <script>
-        // --- URL ACTUALIZADA v5.8 ---
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbzBrCoO2k7obQIWkptkxnc3olLQS-5YqsrkbLYZGxth4KLiH74ZgZap4B_J3fYpjFIpWg/exec";
+        // --- NUEVA URL DE BACKEND CONECTADO A CEREBRO ---
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbxlqVSdgynBGHSHp1PT2hT9GC361ehxiNG9G1e_NrGIGS1bVanueCnMdbs957Y1-HnmNw/exec";
         
         let session = JSON.parse(localStorage.getItem('atril_v58')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_v58')) || {};
@@ -356,14 +356,12 @@
             document.getElementById('btn-save-student').classList.remove('bg-blue-600');
             document.getElementById('btn-save-student').classList.add('bg-slate-900');
             
-            // Ocultar botón borrar
             document.getElementById('btn-del-student').classList.add('hidden');
             
             document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')");
             document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
             document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
             
-            // RESETEAR INPUT FECHA A TEXTO
             let df = document.getElementById('add-fecha_nacimiento');
             df.type = 'text'; 
             
@@ -406,7 +404,6 @@
             btn.innerText = "ACTUALIZAR DATOS";
             btn.classList.remove('bg-slate-900'); btn.classList.add('bg-blue-600');
             
-            // Mostrar botón borrar
             document.getElementById('btn-del-student').classList.remove('hidden');
 
             document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-directory')");
@@ -467,7 +464,6 @@
             document.getElementById('btn-save-inv').innerText = "GUARDAR ACTIVO";
             document.getElementById('btn-save-inv').classList.replace('bg-blue-600', 'bg-slate-900');
             
-            // Ocultar botón borrar
             document.getElementById('btn-del-inv').classList.add('hidden');
             
             document.querySelectorAll('#screen-form-inventory input, #screen-form-inventory textarea').forEach(i => i.value = "");
@@ -511,7 +507,6 @@
             btn.innerText = "ACTUALIZAR ACTIVO";
             btn.classList.replace('bg-slate-900', 'bg-blue-600');
             
-            // Mostrar botón borrar
             document.getElementById('btn-del-inv').classList.remove('hidden');
             
             document.getElementById('inv-marca').value = i.marca === "N/A" ? "" : i.marca;
