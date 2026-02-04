@@ -3,37 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v5.9.1</title>
+    <title>ATRIL DIGITAL v5.9.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-        body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
         .hidden { display: none !important; }
         .flex { display: flex !important; }
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .input-std { width: 100%; height: 54px; padding: 0 1rem; background-color: #f8fafc; border-radius: 0.5rem; font-size: 15px; font-weight: 600; border: 1px solid #e2e8f0; outline: none; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="loader" class="hidden fixed inset-0 bg-white/95 z-[9999] flex flex-col items-center justify-center">
+    <div id="loader" class="fixed inset-0 bg-white/95 z-[9999] flex flex-col items-center justify-center">
         <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
-        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">REESTABLECIENDO...</p>
-        <button id="btn-force-reset" onclick="logout()" class="hidden mt-8 text-[10px] font-bold text-red-500 underline uppercase">Forzar reinicio manual</button>
+        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">CARGANDO v5.9.2...</p>
+        <button id="btn-emergency" onclick="emergencyReset()" class="hidden mt-8 text-[10px] font-bold text-red-500 underline uppercase">Reiniciar Aplicación</button>
     </div>
 
-    <div id="screen-login" class="flex items-center justify-center min-h-screen p-4">
+    <div id="screen-login" class="hidden items-center justify-center min-h-screen p-4">
         <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-sm text-center border border-slate-100">
             <h1 class="text-2xl font-bold uppercase tracking-tighter mb-1">ATRIL DIGITAL</h1>
-            <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v5.9.1</span>
+            <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase">v5.9.2</span>
             <div class="space-y-3 mt-8">
                 <input type="text" id="user-input" placeholder="USUARIO" class="input-std uppercase">
                 <input type="password" id="pass-input" placeholder="CONTRASEÑA" class="input-std text-center tracking-widest">
                 <button onclick="loginProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[15px] active:scale-95 transition-transform">INGRESAR</button>
             </div>
-            <p id="login-error" class="text-red-600 text-[11px] mt-4 hidden font-bold uppercase">CREDENCIALES O CONEXIÓN INCORRECTA</p>
+            <p id="login-error" class="text-red-600 text-[11px] mt-4 hidden font-bold uppercase">DATOS INCORRECTOS O SIN CONEXIÓN</p>
         </div>
     </div>
 
@@ -43,7 +42,7 @@
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">BANDA SINFÓNICA</p>
                 <h2 id="display-band-name" class="text-xl font-bold uppercase leading-none">---</h2>
             </div>
-            <button onclick="logout()" class="text-red-500 text-[11px] font-bold uppercase border-2 border-red-500 px-3 py-1 rounded-lg">SALIR</button>
+            <button onclick="emergencyReset()" class="text-red-500 text-[11px] font-bold uppercase border-2 border-red-500 px-3 py-1 rounded-lg">SALIR</button>
         </div>
         
         <button onclick="nav('screen-activity')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
@@ -76,7 +75,7 @@
                 <select id="stat-proceso" class="input-std"></select>
             </div>
             <div>
-                <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">MES A CONSULTAR</label>
+                <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">MES</label>
                 <select id="stat-mes" class="input-std">
                     <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option>
                     <option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
@@ -84,16 +83,13 @@
                     <option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
                 </select>
             </div>
-            <button onclick="getReport()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[14px]">GENERAR REPORTE</button>
+            <button onclick="getReport()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[14px]">VER REPORTE</button>
         </div>
     </div>
 
     <div id="screen-stats-report" class="hidden min-h-screen pb-20">
         <div class="bg-white p-6 sticky top-0 z-20 shadow-sm border-b">
-            <div class="flex justify-between items-center mb-4">
-                <button onclick="nav('screen-stats-filter')" class="text-slate-400 font-bold text-[12px] uppercase">← ATRÁS</button>
-                <span id="report-events-count" class="text-[10px] bg-slate-100 text-slate-500 px-3 py-1 rounded-full font-bold uppercase">0 EVENTOS</span>
-            </div>
+            <button onclick="nav('screen-stats-filter')" class="text-slate-400 font-bold text-[12px] uppercase mb-4 block">← ATRÁS</button>
             <h2 id="report-title-text" class="font-bold text-lg uppercase leading-tight text-slate-900">REPORTE</h2>
             <p id="report-mes-text" class="text-[11px] font-bold text-slate-400 uppercase mt-1">---</p>
         </div>
@@ -101,19 +97,10 @@
     </div>
 
     <script>
-        // URL de tu Script de Google
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbz76iFpaIUMCZc8kTTh7JrZxBEN7fWhkqaKoe5CYoRuBylWx5dKfmfS9L3tVTddWk0uHA/exec";
-        const APP_VERSION = "5.9.1";
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbxKtINcispR-j_ziTlIFK63R4cEHjaTDXU07dj6lAcJzSG91m3Y24dtr6qMHzcw6XmZAA/exec";
+        const VERSION = "5.9.2";
 
-        // LÓGICA DE AUTO-LIMPIEZA PARA v5.9.1
-        let session = JSON.parse(localStorage.getItem('atril_session'));
-        const storedVersion = localStorage.getItem('atril_version');
-
-        if (storedVersion !== APP_VERSION) {
-            localStorage.clear();
-            localStorage.setItem('atril_version', APP_VERSION);
-            session = null;
-        }
+        let session = null;
 
         const SECCIONES = {
             "Maderas": ["flauta", "oboe", "fagot", "clarinete requinto", "clarinete soprano", "clarinete bajo", "saxofon soprano", "saxofon alto", "saxofon tenor", "saxofon baritono"],
@@ -124,31 +111,47 @@
         const ORDEN_INST = [...SECCIONES.Maderas, ...SECCIONES.Bronces, ...SECCIONES.Cuerdas, ...SECCIONES.Percusion];
 
         window.onload = async () => {
-            if (session && session.user) {
+            // Limpieza automática por cambio de versión
+            const storedVer = localStorage.getItem('atril_version');
+            if (storedVer !== VERSION) {
+                localStorage.clear();
+                localStorage.setItem('atril_version', VERSION);
+            }
+
+            const storedSession = localStorage.getItem('atril_session');
+            if (storedSession) {
+                session = JSON.parse(storedSession);
                 loader(true, "SINCRONIZANDO...");
-                // Timeout de seguridad: si en 15 seg no carga, muestra botón de reset
-                setTimeout(() => { document.getElementById('btn-force-reset').classList.remove('hidden'); }, 15000);
+                setTimeout(() => { document.getElementById('btn-emergency').classList.remove('hidden'); }, 10000);
                 await fetchData();
             } else {
+                loader(false);
                 nav('screen-login');
             }
         };
 
         function nav(id) {
             document.querySelectorAll('body > div').forEach(d => { if(d.id !== 'loader') d.classList.add('hidden'); });
-            document.getElementById(id).classList.remove('hidden');
-            if(id === 'screen-stats-filter') restoreStatsFilter();
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.remove('hidden');
+                if(id === 'screen-login') target.classList.add('flex');
+            }
+            if(id === 'screen-stats-filter') restoreFilter();
         }
 
         function loader(v, t) {
-            document.getElementById('loader-text').innerText = t || "PROCESANDO...";
-            document.getElementById('loader').classList.toggle('hidden', !v);
-            document.getElementById('loader').classList.toggle('flex', v);
+            document.getElementById('loader-text').innerText = t || "CARGANDO...";
+            const l = document.getElementById('loader');
+            l.classList.toggle('hidden', !v);
+            l.classList.toggle('flex', v);
         }
 
         async function loginProcess() {
-            const u = document.getElementById('user-input').value.trim(), p = document.getElementById('pass-input').value.trim();
+            const u = document.getElementById('user-input').value.trim();
+            const p = document.getElementById('pass-input').value.trim();
             if(!u || !p) return;
+            
             loader(true, "VERIFICANDO...");
             try {
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
@@ -162,8 +165,8 @@
                     loader(false);
                 }
             } catch(e) { 
-                alert("Error de conexión con el servidor"); 
-                loader(false); 
+                alert("Error de conexión. Revisa el despliegue del Script.");
+                loader(false);
             }
         }
 
@@ -177,14 +180,21 @@
                     localStorage.setItem('atril_session', JSON.stringify(session));
                     document.getElementById('display-band-name').innerText = session.banda;
                     nav('screen-menu');
+                } else {
+                    alert("Error al cargar datos: " + (d.error || 'Desconocido'));
+                    emergencyReset();
                 }
-            } catch(e) { console.error("Error al obtener datos iniciales", e); }
+            } catch(e) { 
+                console.error(e);
+                alert("Error de red al sincronizar.");
+                emergencyReset();
+            }
             loader(false);
         }
 
-        function restoreStatsFilter() {
+        function restoreFilter() {
             const sel = document.getElementById('stat-proceso');
-            if (session.config && session.config.proceso) {
+            if(session.config && session.config.proceso) {
                 sel.innerHTML = session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
             }
             document.getElementById('stat-mes').value = new Date().getMonth() + 1;
@@ -195,22 +205,21 @@
             const mes = document.getElementById('stat-mes').value;
             const mesNombre = document.getElementById('stat-mes').options[document.getElementById('stat-mes').selectedIndex].text;
             
-            loader(true, "CALCULANDO KARDEX...");
+            loader(true, "CALCULANDO...");
             try {
                 const r = await fetch(`${MOTOR_URL}?action=getEstadisticas&sheetId=${session.sheetId}&proceso=${encodeURIComponent(proc)}&mes=${mes}`);
                 const d = await r.json();
                 if(d.success) {
                     document.getElementById('report-title-text').innerText = proc;
-                    document.getElementById('report-mes-text').innerText = mesNombre;
-                    document.getElementById('report-events-count').innerText = `${d.totalEventos} EVENTOS`;
-                    renderReportCards(d.stats, d.totalEventos, proc);
+                    document.getElementById('report-mes-text').innerText = mesNombre + " • " + d.totalEventos + " EVENTOS";
+                    renderCards(d.stats, d.totalEventos, proc);
                     nav('screen-stats-report');
                 }
-            } catch(e) { alert("Error al conectar con el reporte"); }
+            } catch(e) { alert("Error al generar reporte."); }
             loader(false);
         }
 
-        function renderReportCards(stats, total, proc) {
+        function renderCards(stats, total, proc) {
             const box = document.getElementById('stats-container'); box.innerHTML = "";
             let filtrados = session.master.filter(m => String(m.proceso) === String(proc));
             
@@ -221,44 +230,43 @@
             });
 
             if(filtrados.length === 0) {
-                box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">No hay integrantes en este proceso</p>`;
+                box.innerHTML = `<p class="text-center py-10 font-bold uppercase text-slate-400">Sin integrantes</p>`;
                 return;
             }
 
             filtrados.forEach(m => {
-                const nombreFull = `${m.nombres} ${m.apellidos}`;
-                const s = stats[nombreFull] || { P: 0, A: 0, R: 0, E: 0 };
-                const asistenciaEfectiva = parseInt(s.P) + parseInt(s.R);
-                const pct = total > 0 ? Math.round((asistenciaEfectivas / total) * 100) : 0;
+                const nombre = `${m.nombres} ${m.apellidos}`;
+                const s = stats[nombre] || { P: 0, A: 0, R: 0, E: 0 };
+                const asistencia = parseInt(s.P) + parseInt(s.R);
+                const pct = total > 0 ? Math.round((asistencia / total) * 100) : 0;
                 
-                let colorPct = "text-slate-400";
-                if(pct >= 85) colorPct = "text-green-600";
-                else if(pct >= 70) colorPct = "text-amber-500";
-                else if(total > 0) colorPct = "text-red-600";
+                let color = "text-slate-400";
+                if(pct >= 85) color = "text-green-600";
+                else if(pct >= 70) color = "text-amber-500";
+                else if(total > 0) color = "text-red-600";
 
                 const card = document.createElement('div');
                 card.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex justify-between items-center";
                 card.innerHTML = `
                     <div class="flex-1">
-                        <p class="font-bold text-[14px] text-slate-800">${nombreFull}</p>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">${m.instrumento}</p>
-                        <div class="flex gap-3 mt-3 text-[11px] font-black">
-                            <span class="text-slate-900 bg-slate-50 px-2 py-1 rounded-md">P: ${s.P}</span>
-                            <span class="text-red-600 bg-red-50 px-2 py-1 rounded-md">A: ${s.A}</span>
-                            <span class="text-amber-600 bg-amber-50 px-2 py-1 rounded-md">R: ${s.R}</span>
-                            <span class="text-blue-600 bg-blue-50 px-2 py-1 rounded-md">E: ${s.E}</span>
+                        <p class="font-bold text-[14px]">${nombre}</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">${m.instrumento}</p>
+                        <div class="flex gap-2 mt-3 text-[10px] font-black">
+                            <span class="bg-slate-50 p-1 px-2 rounded text-slate-800">P:${s.P}</span>
+                            <span class="bg-red-50 p-1 px-2 rounded text-red-600">A:${s.A}</span>
+                            <span class="bg-amber-50 p-1 px-2 rounded text-amber-600">R:${s.R}</span>
+                            <span class="bg-blue-50 p-1 px-2 rounded text-blue-600">E:${s.E}</span>
                         </div>
                     </div>
-                    <div class="text-right ml-4">
+                    <div class="text-right ml-2">
                         <p class="text-[9px] font-black text-slate-300 uppercase">CALIF.</p>
-                        <p class="text-2xl font-black ${colorPct}">${pct}%</p>
-                    </div>
-                `;
+                        <p class="text-2xl font-black ${color}">${pct}%</p>
+                    </div>`;
                 box.appendChild(card);
             });
         }
 
-        function logout() { localStorage.clear(); location.reload(); }
+        function emergencyReset() { localStorage.clear(); location.reload(); }
     </script>
 </body>
 </html>
