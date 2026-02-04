@@ -256,8 +256,8 @@
     </div>
 
     <script>
-        // --- NUEVA URL DE BACKEND CONECTADO A CEREBRO ---
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbxlqVSdgynBGHSHp1PT2hT9GC361ehxiNG9G1e_NrGIGS1bVanueCnMdbs957Y1-HnmNw/exec";
+        // --- MOTOR ACTUALIZADO v5.8 ---
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwkZSPUGSRcdF_9FDuGbtdHfNTVTlEzIylBCkRTod19w-YgTacj89eP2WHe1R6ZCDc/exec";
         
         let session = JSON.parse(localStorage.getItem('atril_v58')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_v58')) || {};
@@ -412,7 +412,6 @@
             document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-eps').value = m.eps;
             document.getElementById('add-documento').value = m.documento;
             
-            // LOGICA HIBRIDA DE FECHA
             let df = document.getElementById('add-fecha_nacimiento');
             let rawDate = m.fecha_nacimiento ? String(m.fecha_nacimiento).replace(/'/g, '').trim() : "";
             if(rawDate.includes('T') && rawDate.length > 10) rawDate = rawDate.split('T')[0];
@@ -442,11 +441,9 @@
             loader(false);
         }
 
-        // --- FUNCION BORRAR ESTUDIANTE ---
         async function deleteStudent() {
             if(!isEditing || !originalDoc) return;
             if(!confirm("⚠️ ¿ESTÁS SEGURO?\n\nEsta acción eliminará permanentemente al estudiante y no se puede deshacer.")) return;
-            
             loader(true, "ELIMINANDO...");
             try {
                 const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEstudiante', sheetId: session.sheetId, documento: originalDoc }) });
@@ -543,11 +540,9 @@
             loader(false);
         }
 
-        // --- FUNCION BORRAR INSTRUMENTO ---
         async function deleteInstrument() {
             if(!isEditing) return;
             if(!confirm("⚠️ ¿ESTÁS SEGURO?\n\nEsta acción eliminará el instrumento del inventario y no se puede deshacer.")) return;
-            
             loader(true, "ELIMINANDO...");
             try {
                 const payload = { 
