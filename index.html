@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v5.7</title>
+    <title>ATRIL DIGITAL v5.8</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -56,7 +56,7 @@
             <img src="https://github.com/pandemiaproducciones/Atril-Digital/blob/main/logo.png?raw=true" class="w-24 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v5.7</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v5.8</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase">SISTEMA INTEGRAL DE BANDAS</p>
             <div class="space-y-3">
@@ -139,7 +139,10 @@
             <select id="inv-origen" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
             <textarea id="inv-accesorios" placeholder="Accesorios (Boquilla, Estuche...)" class="input-std h-24"></textarea>
             <textarea id="inv-observaciones" placeholder="Observaciones Generales" class="input-std h-24"></textarea>
+            
             <button id="btn-save-inv" onclick="saveInstrument()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR ACTIVO</button>
+            
+            <button id="btn-del-inv" onclick="deleteInstrument()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ACTIVO 🗑️</button>
         </div>
     </div>
 
@@ -188,6 +191,8 @@
                 <input type="tel" id="add-acudiente-telefono" placeholder="Teléfono Acudiente" class="input-std">
             </div>
             <button id="btn-save-student" onclick="saveStudent()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR REGISTRO</button>
+            
+            <button id="btn-del-student" onclick="deleteStudent()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ESTUDIANTE 🗑️</button>
         </div>
     </div>
 
@@ -251,9 +256,11 @@
     </div>
 
     <script>
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwnOh8ymTnnsDRfSe_0mO0p9BJ26V5z4rpNvJTwnszv1goaQrEJfDyQQtSjx-pNkQex0A/exec";
-        let session = JSON.parse(localStorage.getItem('atril_v57')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
-        let record = JSON.parse(localStorage.getItem('atril_rec_v57')) || {};
+        // --- URL ACTUALIZADA v5.8 ---
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbzBrCoO2k7obQIWkptkxnc3olLQS-5YqsrkbLYZGxth4KLiH74ZgZap4B_J3fYpjFIpWg/exec";
+        
+        let session = JSON.parse(localStorage.getItem('atril_v58')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
+        let record = JSON.parse(localStorage.getItem('atril_rec_v58')) || {};
         let editingCell = null;
         let isEditing = false;
         let originalDoc = null;
@@ -276,7 +283,7 @@
 
         function nav(id) {
             session.current = id;
-            localStorage.setItem('atril_v57', JSON.stringify(session));
+            localStorage.setItem('atril_v58', JSON.stringify(session));
             document.querySelectorAll('body > div').forEach(d => { if(d.id !== 'loader') d.classList.add('hidden'); d.classList.remove('flex'); });
             const target = document.getElementById(id);
             target.classList.remove('hidden');
@@ -313,7 +320,7 @@
             try {
                 const r = await fetch(`${MOTOR_URL}?action=getDataInicial&sheetId=${session.sheetId}`);
                 const d = await r.json();
-                if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_v57', JSON.stringify(session)); restore(); nav('screen-menu'); } 
+                if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_v58', JSON.stringify(session)); restore(); nav('screen-menu'); } 
                 else { alert("ERROR DE DATOS: " + (d.error || 'Desconocido')); restore(); nav('screen-menu'); }
             } catch(e) { console.error(e); alert("SIN CONEXIÓN: SE USARÁN DATOS GUARDADOS"); restore(); nav('screen-menu'); }
             loader(false);
@@ -348,6 +355,10 @@
             document.getElementById('btn-save-student').innerText = "GUARDAR REGISTRO";
             document.getElementById('btn-save-student').classList.remove('bg-blue-600');
             document.getElementById('btn-save-student').classList.add('bg-slate-900');
+            
+            // Ocultar botón borrar
+            document.getElementById('btn-del-student').classList.add('hidden');
+            
             document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')");
             document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
             document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
@@ -394,21 +405,22 @@
             const btn = document.getElementById('btn-save-student');
             btn.innerText = "ACTUALIZAR DATOS";
             btn.classList.remove('bg-slate-900'); btn.classList.add('bg-blue-600');
+            
+            // Mostrar botón borrar
+            document.getElementById('btn-del-student').classList.remove('hidden');
+
             document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-directory')");
 
             document.getElementById('add-nombres').value = m.nombres; document.getElementById('add-apellidos').value = m.apellidos;
             document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-eps').value = m.eps;
             document.getElementById('add-documento').value = m.documento;
             
-            // LOGICA HIBRIDA DE FECHA: CARGAMOS COMO TEXTO CRUDO
+            // LOGICA HIBRIDA DE FECHA
             let df = document.getElementById('add-fecha_nacimiento');
             let rawDate = m.fecha_nacimiento ? String(m.fecha_nacimiento).replace(/'/g, '').trim() : "";
-            
-            // Si es formato ISO largo, lo limpiamos para que no se vea feo
             if(rawDate.includes('T') && rawDate.length > 10) rawDate = rawDate.split('T')[0];
-            
-            df.type = 'text'; // Forzamos texto primero
-            df.value = rawDate; // Mostramos exactamente lo que viene
+            df.type = 'text'; 
+            df.value = rawDate;
 
             document.getElementById('add-proceso').value = m.proceso; document.getElementById('add-instrumento').value = m.instrumento; document.getElementById('add-grado').value = m.grado;
             document.getElementById('add-acudiente-nombre').value = m.acudiente; document.getElementById('add-acudiente-telefono').value = m.telefono_acud;
@@ -433,12 +445,31 @@
             loader(false);
         }
 
+        // --- FUNCION BORRAR ESTUDIANTE ---
+        async function deleteStudent() {
+            if(!isEditing || !originalDoc) return;
+            if(!confirm("⚠️ ¿ESTÁS SEGURO?\n\nEsta acción eliminará permanentemente al estudiante y no se puede deshacer.")) return;
+            
+            loader(true, "ELIMINANDO...");
+            try {
+                const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'deleteEstudiante', sheetId: session.sheetId, documento: originalDoc }) });
+                const res = await r.json();
+                if(res.success) { alert("ESTUDIANTE ELIMINADO"); await fetchData(); nav('screen-directory'); } 
+                else { alert("ERROR AL ELIMINAR: " + res.error); }
+            } catch(e) { alert("ERROR DE CONEXIÓN"); }
+            loader(false);
+        }
+
         // --- GESTIÓN INVENTARIO ---
         function prepareNewInstrument() {
             isEditing = false; originalSerial = null; originalCodigo = null; originalRasgos = {};
             document.getElementById('form-inv-title').innerText = "NUEVO INSTRUMENTO";
             document.getElementById('btn-save-inv').innerText = "GUARDAR ACTIVO";
             document.getElementById('btn-save-inv').classList.replace('bg-blue-600', 'bg-slate-900');
+            
+            // Ocultar botón borrar
+            document.getElementById('btn-del-inv').classList.add('hidden');
+            
             document.querySelectorAll('#screen-form-inventory input, #screen-form-inventory textarea').forEach(i => i.value = "");
             document.querySelectorAll('#screen-form-inventory select').forEach(s => s.selectedIndex = 0);
             checkOtroInst();
@@ -479,6 +510,10 @@
             const btn = document.getElementById('btn-save-inv');
             btn.innerText = "ACTUALIZAR ACTIVO";
             btn.classList.replace('bg-slate-900', 'bg-blue-600');
+            
+            // Mostrar botón borrar
+            document.getElementById('btn-del-inv').classList.remove('hidden');
+            
             document.getElementById('inv-marca').value = i.marca === "N/A" ? "" : i.marca;
             document.getElementById('inv-modelo').value = i.modelo === "N/A" ? "" : i.modelo;
             document.getElementById('inv-serial').value = i.serial === "N/A" ? "" : i.serial;
@@ -513,6 +548,28 @@
             loader(false);
         }
 
+        // --- FUNCION BORRAR INSTRUMENTO ---
+        async function deleteInstrument() {
+            if(!isEditing) return;
+            if(!confirm("⚠️ ¿ESTÁS SEGURO?\n\nEsta acción eliminará el instrumento del inventario y no se puede deshacer.")) return;
+            
+            loader(true, "ELIMINANDO...");
+            try {
+                const payload = { 
+                    action: 'deleteInstrumento', 
+                    sheetId: session.sheetId, 
+                    serial: originalSerial, 
+                    codigo: originalCodigo, 
+                    instrumento: originalRasgos.inst 
+                };
+                const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) });
+                const res = await r.json();
+                if(res.success) { alert("ACTIVO ELIMINADO"); await fetchData(); nav('screen-inventory-list'); } 
+                else { alert("ERROR AL ELIMINAR: " + res.error); }
+            } catch(e) { alert("ERROR DE CONEXIÓN"); }
+            loader(false);
+        }
+
         // --- HORARIO ---
         function buildHorarioTable() {
             const hBox = document.getElementById('horario-body'); hBox.innerHTML = "";
@@ -530,7 +587,7 @@
         }
         function openGradoModal() { if (!session.config.grado || session.config.grado.length === 0) return alert("No hay grados configurados"); document.getElementById('modal-grupo').classList.remove('hidden'); let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); document.getElementById('lista-grados-modal').innerHTML = html; }
         function setGrado(v) { const cell = document.getElementById(`cell-${editingCell.h}-${editingCell.d}`); if(v === '') { cell.innerText = ""; } else { if(cell.innerText.trim() !== "") { if(!cell.innerText.includes(v)) cell.innerText += " / " + v; } else { cell.innerText = v; } } document.getElementById('modal-grupo').classList.add('hidden'); }
-        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v57', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
+        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v58', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
 
         // --- ASISTENCIA ---
         function prepareProcess() {
@@ -559,13 +616,13 @@
             });
             document.getElementById('counter').innerText = `${Object.keys(record).length} Marcados`;
         }
-        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v57', JSON.stringify(record)); renderList(activeSection); }
+        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v58', JSON.stringify(record)); renderList(activeSection); }
         function getCol(s) { return { 'PRESENTE': 'bg-slate-900 text-white border-slate-900', 'AUSENTE': 'bg-red-50 text-red-600 border-red-100', 'RETARDO': 'bg-amber-50 text-amber-600 border-amber-100', 'EXCUSA': 'bg-blue-50 text-blue-600 border-blue-100'}[s]; }
         async function finalize() {
             if(!Object.keys(record).length) return alert("NO HAY MARCACIONES");
             loader(true, "GUARDANDO...");
             const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: session.type, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v57'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
+            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v58'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
             loader(false);
         }
         function generateWAReport() {
