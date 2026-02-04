@@ -48,7 +48,7 @@
 
     <div id="loader" class="hidden fixed inset-0 bg-white/95 z-[9999] flex flex-col items-center justify-center text-center">
         <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
-        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">INICIANDO...</p>
+        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">CONECTANDO...</p>
     </div>
 
     <div id="screen-login" class="flex items-center justify-center min-h-screen p-4">
@@ -257,7 +257,7 @@
 
     <script>
         // --- MOTOR ACTUALIZADO v5.8 ---
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwkZSPUGSRcdF_9FDuGbtdHfNTVTlEzIylBCkRTod19w-YgTacj89eP2WHe1R6ZCDc/exec";
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwrQ2skHcS8wKfbT-Q90u6zvuY939VMf3OSpFLNpChAyLC-Xi9kzLAvDKR0JExy41RCbw/exec";
         
         let session = JSON.parse(localStorage.getItem('atril_v58')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_v58')) || {};
