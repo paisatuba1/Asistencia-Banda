@@ -19,6 +19,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
         body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; -webkit-tap-highlight-color: transparent; }
         .hidden { display: none !important; }
+        /* FORZAR CENTRADO DEL CARGADOR */
+        #loader { display: flex; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: rgba(255,255,255,0.95); }
         .flex { display: flex !important; }
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -52,8 +54,8 @@
 </head>
 <body>
 
-    <!-- CARGADOR -->
-    <div id="loader" class="hidden fixed inset-0 bg-white/95 z-[9999] flex flex-col items-center justify-center text-center">
+    <!-- CARGADOR (CSS PURO APLICADO PARA CENTRAR) -->
+    <div id="loader" class="hidden">
         <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
         <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">INICIANDO...</p>
     </div>
@@ -64,11 +66,10 @@
             <img src="https://github.com/pandemiaproducciones/atril-app/blob/main/logo.png?raw=true" class="w-40 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v8.5</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v8.6</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase text-balance">SISTEMA INTEGRAL DE AGRUPACIONES</p>
             <div class="space-y-3">
-                <!-- Se eliminó 'uppercase' para permitir escritura normal -->
                 <input type="text" id="user-input" placeholder="USUARIO" class="w-full p-4 bg-slate-50 rounded-xl font-semibold text-[15px]">
                 <input type="password" id="pass-input" placeholder="CONTRASEÑA" class="w-full p-4 bg-slate-50 rounded-xl text-2xl tracking-widest text-center">
                 <button onclick="loginProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[15px] active:scale-95 transition-transform">INGRESAR</button>
@@ -121,6 +122,22 @@
         </div>
     </div>
 
+    <!-- PANTALLA LISTAS POR PROCESO (NUEVO v8.6) -->
+    <div id="screen-process-list" class="hidden p-6 max-w-md mx-auto pb-32">
+        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
+            <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+            <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">LISTAS POR PROCESO</h2>
+            <div class="bg-white p-6 rounded-3xl shadow-sm border mb-4">
+                 <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block tracking-widest">SELECCIONE EL PROCESO</label>
+                 <select id="filter-proceso-list-select" onchange="renderProcessList()" class="input-std"></select>
+            </div>
+        </div>
+        <div id="process-list-container" class="space-y-3"></div>
+        <div id="btn-process-wa" class="fixed bottom-0 left-0 w-full p-6 bg-white/90 border-t hidden">
+            <button onclick="generateProcessWA()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[12px] shadow-lg active:scale-95 transition-transform">ENVIAR LISTA POR WHATSAPP 📲</button>
+        </div>
+    </div>
+
     <!-- PANTALLA FILTRO ESTADÍSTICAS -->
     <div id="screen-stats-filter" class="hidden p-6 max-w-md mx-auto">
         <button onclick="nav('screen-activity-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
@@ -164,6 +181,7 @@
         <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
         <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
         <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
+        <button onclick="openProcessList()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR PROCESO</span><span class="text-2xl">🎼</span></button>
         <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span><span class="text-2xl">🎓</span></button>
     </div>
 
@@ -204,7 +222,7 @@
         </div>
     </div>
 
-    <!-- PANTALLA DIRECTORIO (MODIFICADA v8.5) -->
+    <!-- PANTALLA DIRECTORIO -->
     <div id="screen-directory" class="hidden p-6 max-w-md mx-auto pb-20">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2">
             <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
@@ -325,7 +343,7 @@
 
     <script>
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwRViK2PrI5uUDCMmY-yMk5HYK2NrnWTi0NJnh9yA5MdYwOtt8S4S8yLgGgaePJHQbGrA/exec";
-        const VER = "v8.5"; // VERSIÓN ACTUALIZADA
+        const VER = "v8.6"; // ACTUALIZADO PARA V8.6
         
         let session = JSON.parse(localStorage.getItem('atril_' + VER)) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_' + VER)) || {};
@@ -365,6 +383,7 @@
             if(id === 'screen-inventory-list') filterInventory();
             if(id === 'screen-stats-filter') restoreStatsFilter();
             if(id === 'screen-grade-list') openGradeList();
+            if(id === 'screen-process-list') openProcessList();
         }
 
         function loader(v, t) {
@@ -378,6 +397,7 @@
             if(!u || !p) return;
             loader(true, "VERIFICANDO...");
             try {
+                await new Promise(r => setTimeout(r, 100));
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
                 const d = await r.json();
                 if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; loader(true, "DESCARGANDO DATOS..."); await fetchData(); } 
@@ -398,7 +418,7 @@
         function restore() {
             if(!session.config) return; 
             
-            // LÓGICA DINAMISMO VISUAL (MANTENIDA DE TU VERSIÓN ESTABLE)
+            // LÓGICA DINAMISMO VISUAL NOMBRE AGRUPACIÓN
             const nombre = session.banda || "---";
             const palabras = nombre.split(" ");
             let htmlName = "";
@@ -435,7 +455,33 @@
             loadSelect('inv-origen', session.config.origen, 'ORIGEN / PROPIEDAD');
         }
 
-        // --- DIRECTORIO MEJORADO (NUEVO v8.5) ---
+        // --- GESTIÓN ESTUDIANTES ---
+        function prepareNewStudent() {
+            isEditing = false; originalDoc = null;
+            document.getElementById('form-title').innerText = "NUEVO INTEGRANTE";
+            document.getElementById('btn-save-student').innerText = "GUARDAR REGISTRO";
+            document.getElementById('btn-save-student').classList.remove('bg-blue-600');
+            document.getElementById('btn-save-student').classList.add('bg-slate-900');
+            document.getElementById('btn-del-student').classList.add('hidden');
+            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')");
+            document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
+            document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
+            let df = document.getElementById('add-fecha_nacimiento');
+            df.type = 'text'; 
+            document.getElementById('acudiente-box').classList.add('hidden');
+            nav('screen-form-student');
+        }
+
+        function openDirectory() { nav('screen-directory'); }
+
+        function setDirSection(sec) {
+            currentDirSection = sec;
+            document.querySelectorAll('.dirtab-btn').forEach(b => { b.classList.remove('active-tab', 'text-slate-900'); b.classList.add('text-slate-300'); });
+            document.getElementById(`dirtab-${sec}`).classList.add('active-tab', 'text-slate-900');
+            document.getElementById(`dirtab-${sec}`).classList.remove('text-slate-300');
+            filterDirectory();
+        }
+
         function filterDirectory() {
             const q = document.getElementById('search-input').value.toLowerCase();
             const list = document.getElementById('directory-list');
@@ -445,11 +491,11 @@
             if (currentDirSection !== 'TODOS') { filtered = filtered.filter(m => { const miFamilia = Object.keys(SECCIONES).find(key => SECCIONES[key].includes(String(m.instrumento).toLowerCase())); return miFamilia === currentDirSection; }); }
             filtered.sort((a, b) => { const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase()); const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase()); if (idxA !== -1 && idxB !== -1) { if (idxA !== idxB) return idxA - idxB; return a.nombres.localeCompare(b.nombres); } if (idxA === -1) return 1; if (idxB === -1) return -1; });
             if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON RESULTADOS</p>`; return; }
-            
             filtered.forEach(m => {
                 const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
-                // ESTRUCTURA DE TARJETA CON DOBLE BOTÓN
+                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform";
+                item.onclick = () => loadStudentForEdit(m);
+                // DIRECTORIO: Botones diferenciados
                 item.innerHTML = `
                     <div class="flex-1">
                         <p class="font-bold text-[13px] text-slate-800">${m.nombres} ${m.apellidos}</p>
@@ -457,21 +503,23 @@
                     </div>
                     <div class="flex gap-2">
                         <button onclick="shareStudentWA(event, ${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-green-50 text-green-600 rounded-xl border border-green-100 active:scale-90 transition-transform">📲</button>
-                        <button onclick="loadStudentForEdit(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl border border-slate-100 active:scale-90 transition-transform">✎</button>
+                        <div class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl border border-slate-100">✎</div>
                     </div>`;
                 list.appendChild(item);
             });
         }
 
-        // --- NUEVA FUNCIÓN WHATSAPP ---
         function shareStudentWA(event, m) {
             event.stopPropagation();
             const text = `👤 *FICHA TÉCNICA - ATRIL DIGITAL*\n\n` +
-                `*ESTUDIANTE:* ${m.nombres} ${m.apellidos}\n` +
+                `*NOMBRES:* ${m.nombres}\n` +
+                `*APELLIDOS:* ${m.apellidos}\n` +
                 `*DOCUMENTO:* ${m.documento}\n` +
                 `*TELÉFONO:* ${m.telefono}\n` +
                 `*INSTRUMENTO:* ${m.instrumento}\n` +
+                `*PROCESO:* ${m.proceso}\n` +
                 `*GRADO:* ${m.grado}\n` +
+                `*FECHA NAC:* ${m.fecha_nacimiento}\n` +
                 `*EPS:* ${m.eps}\n\n` +
                 `👨‍👩‍👧 *DATOS ACUDIENTE*\n` +
                 `*NOMBRE:* ${m.acudiente || 'N/A'}\n` +
@@ -499,33 +547,6 @@
             document.getElementById('add-acudiente-nombre').value = m.acudiente; document.getElementById('add-acudiente-telefono').value = m.telefono_acud;
             if(m.acudiente || m.telefono_acud) document.getElementById('acudiente-box').classList.remove('hidden'); else document.getElementById('acudiente-box').classList.add('hidden');
             nav('screen-form-student');
-        }
-
-        // --- (RESTO DE FUNCIONES MANTENIDAS DE v7.9) ---
-        function prepareNewStudent() {
-            isEditing = false; originalDoc = null;
-            document.getElementById('form-title').innerText = "NUEVO INTEGRANTE";
-            document.getElementById('btn-save-student').innerText = "GUARDAR REGISTRO";
-            document.getElementById('btn-save-student').classList.remove('bg-blue-600');
-            document.getElementById('btn-save-student').classList.add('bg-slate-900');
-            document.getElementById('btn-del-student').classList.add('hidden');
-            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')");
-            document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
-            document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
-            let df = document.getElementById('add-fecha_nacimiento');
-            df.type = 'text'; 
-            document.getElementById('acudiente-box').classList.add('hidden');
-            nav('screen-form-student');
-        }
-
-        function openDirectory() { nav('screen-directory'); }
-
-        function setDirSection(sec) {
-            currentDirSection = sec;
-            document.querySelectorAll('.dirtab-btn').forEach(b => { b.classList.remove('active-tab', 'text-slate-900'); b.classList.add('text-slate-300'); });
-            document.getElementById(`dirtab-${sec}`).classList.add('active-tab', 'text-slate-900');
-            document.getElementById(`dirtab-${sec}`).classList.remove('text-slate-300');
-            filterDirectory();
         }
 
         function toggleAcudiente() { const box = document.getElementById('acudiente-box'); if(box.classList.contains('hidden')) { box.classList.remove('hidden'); } else { box.classList.add('hidden'); document.getElementById('add-acudiente-nombre').value = ''; document.getElementById('add-acudiente-telefono').value = ''; } }
@@ -597,6 +618,77 @@
             filtered.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', {sensitivity: 'base'}));
             if(filtered.length === 0) return alert("LISTA VACÍA");
             let msg = `🎓 *LISTADO GRADO ${grado}* \n${session.banda.toUpperCase()}\n\n`;
+            filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`; });
+            const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+
+        // --- LISTAS POR PROCESO (NUEVA FUNCIONALIDAD) ---
+        function openProcessList() {
+            const sel = document.getElementById('filter-proceso-list-select');
+            if(session.config.proceso) {
+                sel.innerHTML = `<option disabled selected>SELECCIONE...</option>` + session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
+            }
+            document.getElementById('process-list-container').innerHTML = "";
+            document.getElementById('btn-process-wa').classList.add('hidden');
+            nav('screen-process-list');
+        }
+
+        function renderProcessList() {
+            const proceso = document.getElementById('filter-proceso-list-select').value;
+            const box = document.getElementById('process-list-container');
+            const btnWA = document.getElementById('btn-process-wa');
+            box.innerHTML = "";
+            if(!session.master) return;
+            let filtered = session.master.filter(m => m.proceso === proceso);
+            
+            // ORDENAR POR INSTRUMENTO (SCORE)
+            filtered.sort((a, b) => {
+                const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
+                const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
+                if (idxA !== -1 && idxB !== -1) {
+                    if (idxA !== idxB) return idxA - idxB;
+                    return a.apellidos.localeCompare(b.apellidos);
+                }
+                if (idxA === -1) return 1;
+                if (idxB === -1) return -1;
+                return 0;
+            });
+
+            if(filtered.length === 0) {
+                box.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-10 font-bold uppercase">NO HAY ESTUDIANTES EN ${proceso}</p>`;
+                btnWA.classList.add('hidden');
+                return;
+            }
+            filtered.forEach(m => {
+                const item = document.createElement('div');
+                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
+                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento}</p></div><div class="bg-slate-100 text-slate-500 text-[9px] font-bold px-2 py-1 rounded-lg uppercase">${m.grado}</div>`;
+                box.appendChild(item);
+            });
+            btnWA.classList.remove('hidden');
+        }
+
+        function generateProcessWA() {
+            const proceso = document.getElementById('filter-proceso-list-select').value;
+            if(!proceso) return;
+            let filtered = session.master.filter(m => m.proceso === proceso);
+            
+            // ORDENAR POR INSTRUMENTO (SCORE) PARA EL REPORTE TAMBIÉN
+            filtered.sort((a, b) => {
+                const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
+                const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
+                if (idxA !== -1 && idxB !== -1) {
+                    if (idxA !== idxB) return idxA - idxB;
+                    return a.apellidos.localeCompare(b.apellidos);
+                }
+                if (idxA === -1) return 1;
+                if (idxB === -1) return -1;
+                return 0;
+            });
+
+            if(filtered.length === 0) return alert("LISTA VACÍA");
+            let msg = `🎼 *LISTADO OFICIAL - ${proceso}* \n${session.banda.toUpperCase()}\n\n`;
             filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`; });
             const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
