@@ -2,13 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATRIL DIGITAL v6.6</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ATRIL DIGITAL</title>
+    
+    <!-- PWA META TAGS -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ATRIL DIGITAL">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
-        body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; -webkit-tap-highlight-color: transparent; }
         .hidden { display: none !important; }
         .flex { display: flex !important; }
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
@@ -52,14 +61,15 @@
     <!-- PANTALLA LOGIN -->
     <div id="screen-login" class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-sm text-center border border-slate-100">
-            <img src="https://github.com/pandemiaproducciones/Atril-Digital/blob/main/logo.png?raw=true" class="w-24 mx-auto mb-6">
+            <img src="https://github.com/pandemiaproducciones/atril-app/blob/main/logo.png?raw=true" class="w-40 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v6.6</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v8.5</span>
             </div>
-            <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase">SISTEMA INTEGRAL DE BANDAS</p>
+            <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase text-balance">SISTEMA INTEGRAL DE AGRUPACIONES</p>
             <div class="space-y-3">
-                <input type="text" id="user-input" placeholder="USUARIO" class="w-full p-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase">
+                <!-- Se eliminó 'uppercase' para permitir escritura normal -->
+                <input type="text" id="user-input" placeholder="USUARIO" class="w-full p-4 bg-slate-50 rounded-xl font-semibold text-[15px]">
                 <input type="password" id="pass-input" placeholder="CONTRASEÑA" class="w-full p-4 bg-slate-50 rounded-xl text-2xl tracking-widest text-center">
                 <button onclick="loginProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[15px] active:scale-95 transition-transform">INGRESAR</button>
             </div>
@@ -69,12 +79,11 @@
 
     <!-- PANTALLA MENÚ PRINCIPAL -->
     <div id="screen-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <div class="flex justify-between items-end mb-10 mt-6">
-            <div>
-                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">BANDA SINFÓNICA</p>
-                <h2 id="display-band-name" class="text-xl font-bold uppercase leading-none">---</h2>
+        <div class="flex justify-between items-start mb-10 mt-6">
+            <div class="w-full">
+                <h2 id="display-band-name" class="font-bold uppercase leading-none text-slate-900">---</h2>
             </div>
-            <button onclick="logout()" class="border-2 border-red-500 text-red-500 px-4 py-2 rounded-xl text-[11px] font-bold uppercase">SALIR</button>
+            <button onclick="logout()" class="border-2 border-red-500 text-red-500 px-4 py-2 rounded-xl text-[11px] font-bold uppercase whitespace-nowrap ml-4">SALIR</button>
         </div>
         
         <button onclick="nav('screen-activity-menu')" class="w-full bg-white p-6 rounded-2xl shadow-sm border flex justify-between items-center">
@@ -96,61 +105,19 @@
         </button>
     </div>
 
-    <!-- SUB-MENÚ ASISTENCIA -->
-    <div id="screen-activity-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">ASISTENCIA</h2>
-        
-        <button onclick="nav('screen-activity')" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center">
-            <span class="font-bold text-[15px] uppercase">TOMAR ASISTENCIA +</span>
-            <span class="text-2xl">📝</span>
-        </button>
-        
-        <button onclick="nav('screen-stats-filter')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center">
-            <span class="font-bold text-[15px] uppercase text-slate-700">ESTADÍSTICAS DE ASISTENCIA</span>
-            <span class="text-2xl">📊</span>
-        </button>
-    </div>
-
-    <!-- SUB-MENÚ ESTUDIANTES -->
-    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
-        
-        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center">
-            <span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span>
-            <span class="text-2xl">📝</span>
-        </button>
-        
-        <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center">
-            <span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span>
-            <span class="text-2xl">📂</span>
-        </button>
-
-        <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center">
-            <span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span>
-            <span class="text-2xl">🎓</span>
-        </button>
-    </div>
-
     <!-- PANTALLA LISTAS POR GRADOS -->
     <div id="screen-grade-list" class="hidden p-6 max-w-md mx-auto pb-32">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
             <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
             <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">LISTAS POR GRADOS</h2>
-            
             <div class="bg-white p-6 rounded-3xl shadow-sm border mb-4">
                  <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block tracking-widest">SELECCIONE EL GRADO</label>
                  <select id="filter-grado-select" onchange="renderGradeList()" class="input-std"></select>
             </div>
         </div>
-
         <div id="grade-list-container" class="space-y-3"></div>
-
         <div id="btn-grade-wa" class="fixed bottom-0 left-0 w-full p-6 bg-white/90 border-t hidden">
-            <button onclick="generateGradeWA()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[12px] shadow-lg active:scale-95 transition-transform">
-                ENVIAR LISTA POR WHATSAPP 📲
-            </button>
+            <button onclick="generateGradeWA()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[12px] shadow-lg active:scale-95 transition-transform">ENVIAR LISTA POR WHATSAPP 📲</button>
         </div>
     </div>
 
@@ -162,17 +129,15 @@
             <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">PROCESO</label><select id="stat-proceso" class="input-std"></select></div>
             <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">MES A CONSULTAR</label>
                 <select id="stat-mes" class="input-std">
-                    <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option>
-                    <option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
-                    <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option>
-                    <option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
+                    <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option><option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
+                    <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option><option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
                 </select>
             </div>
             <button onclick="getReport()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[14px]">GENERAR REPORTE</button>
         </div>
     </div>
 
-    <!-- REPORTE ESTADÍSTICAS (ACTUALIZADO SIN %) -->
+    <!-- REPORTE ESTADÍSTICAS -->
     <div id="screen-stats-report" class="hidden min-h-screen pb-20">
         <div class="bg-white p-6 sticky top-0 z-20 shadow-sm border-b">
             <div class="flex justify-between items-center mb-4">
@@ -183,6 +148,23 @@
             <p id="report-mes-text" class="text-[11px] font-bold text-slate-400 uppercase mt-1">---</p>
         </div>
         <div id="stats-container" class="p-6 space-y-3"></div>
+    </div>
+
+    <!-- SUB-MENÚ ASISTENCIA -->
+    <div id="screen-activity-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">ASISTENCIA</h2>
+        <button onclick="nav('screen-activity')" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">TOMAR ASISTENCIA +</span><span class="text-2xl">📝</span></button>
+        <button onclick="nav('screen-stats-filter')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">ESTADÍSTICAS DE ASISTENCIA</span><span class="text-2xl">📊</span></button>
+    </div>
+
+    <!-- SUB-MENÚ ESTUDIANTES -->
+    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
+        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
+        <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
+        <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span><span class="text-2xl">🎓</span></button>
     </div>
 
     <!-- SUB-MENÚ INVENTARIO -->
@@ -209,25 +191,25 @@
         <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
             <h2 id="form-inv-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INSTRUMENTO</h2>
             <div><select id="inv-instrumento-select" onchange="checkOtroInst()" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase mb-2"></select><input type="text" id="inv-instrumento-input" placeholder="Escriba el nombre del instrumento..." class="hidden input-std"></div>
-            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-marca" placeholder="Marca" class="input-std"><input type="text" id="inv-modelo" placeholder="Modelo" class="input-std"></div>
-            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-serial" placeholder="Serial (Fábrica)" class="input-std border-slate-300"><input type="text" id="inv-codigo" placeholder="Código Interno" class="input-std"></div>
-            <input type="text" id="inv-color" placeholder="Color / Acabado" class="input-std">
+            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-marca" placeholder="MARCA" class="input-std"><input type="text" id="inv-modelo" placeholder="MODELO" class="input-std"></div>
+            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-serial" placeholder="SERIAL (FÁBRICA)" class="input-std border-slate-300"><input type="text" id="inv-codigo" placeholder="CÓDIGO INTERNO" class="input-std"></div>
+            <input type="text" id="inv-color" placeholder="COLOR / ACABADO" class="input-std">
             <select id="inv-condicion" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
             <select id="inv-estado" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
             <select id="inv-origen" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <textarea id="inv-accesorios" placeholder="Accesorios (Boquilla, Estuche...)" class="input-std h-24"></textarea>
-            <textarea id="inv-observaciones" placeholder="Observaciones Generales" class="input-std h-24"></textarea>
+            <textarea id="inv-accesorios" placeholder="ACCESORIOS (BOQUILLA, ESTUCHE...)" class="input-std h-24"></textarea>
+            <textarea id="inv-observaciones" placeholder="OBSERVACIONES GENERALES" class="input-std h-24"></textarea>
             <button id="btn-save-inv" onclick="saveInstrument()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR ACTIVO</button>
             <button id="btn-del-inv" onclick="deleteInstrument()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ACTIVO 🗑️</button>
         </div>
     </div>
 
-    <!-- PANTALLA DIRECTORIO -->
+    <!-- PANTALLA DIRECTORIO (MODIFICADA v8.5) -->
     <div id="screen-directory" class="hidden p-6 max-w-md mx-auto pb-20">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2">
             <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
             <h2 class="text-lg font-bold uppercase text-slate-900 mb-4">BUSCAR ESTUDIANTE</h2>
-            <input type="text" id="search-input" onkeyup="filterDirectory()" placeholder="Nombre o Instrumento..." class="w-full bg-white border border-slate-200 rounded-xl font-semibold text-[15px] shadow-sm mb-4 p-4">
+            <input type="text" id="search-input" onkeyup="filterDirectory()" placeholder="NOMBRE O INSTRUMENTO..." class="w-full bg-white border border-slate-200 rounded-xl font-semibold text-[15px] shadow-sm mb-4 p-4">
             <div class="flex gap-4 overflow-x-auto no-scrollbar text-[12px] font-bold uppercase border-b pb-2 mb-2">
                 <button onclick="setDirSection('TODOS')" id="dirtab-TODOS" class="dirtab-btn active-tab whitespace-nowrap">TODOS</button>
                 <button onclick="setDirSection('Maderas')" id="dirtab-Maderas" class="dirtab-btn text-slate-300 whitespace-nowrap">Maderas</button>
@@ -244,13 +226,13 @@
         <button id="btn-back-student" onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
         <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
             <h2 id="form-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INTEGRANTE</h2>
-            <input type="text" id="add-nombres" placeholder="Nombres" class="input-std">
-            <input type="text" id="add-apellidos" placeholder="Apellidos" class="input-std">
-            <input type="tel" id="add-telefono" placeholder="Teléfono Estudiante" class="input-std">
-            <input type="text" id="add-eps" placeholder="EPS / Salud" class="input-std">
+            <input type="text" id="add-nombres" placeholder="NOMBRES" class="input-std">
+            <input type="text" id="add-apellidos" placeholder="APELLIDOS" class="input-std">
+            <input type="tel" id="add-telefono" placeholder="TELÉFONO ESTUDIANTE" class="input-std">
+            <input type="text" id="add-eps" placeholder="EPS / SALUD" class="input-std">
             <div class="grid grid-cols-2 gap-2">
-                <div class="flex flex-col"><label class="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-tighter">DOCUMENTO</label><input type="tel" id="add-documento" placeholder="Número" class="input-std"></div>
-                <div class="flex flex-col"><label class="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-tighter">FECHA NACIMIENTO</label><input type="text" id="add-fecha_nacimiento" placeholder="dd/mm/aaaa" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" class="input-std uppercase"></div>
+                <div class="flex flex-col"><label class="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-tighter">DOCUMENTO</label><input type="tel" id="add-documento" placeholder="NÚMERO" class="input-std"></div>
+                <div class="flex flex-col"><label class="text-[10px] font-bold text-slate-400 mb-1 uppercase tracking-tighter">FECHA NACIMIENTO</label><input type="text" id="add-fecha_nacimiento" placeholder="DD/MM/AAAA" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" class="input-std uppercase"></div>
             </div>
             <select id="add-proceso" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
             <select id="add-instrumento" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
@@ -258,8 +240,8 @@
             <button onclick="toggleAcudiente()" class="w-full text-center text-[11px] font-bold text-slate-400 uppercase tracking-widest py-2 hover:text-slate-600 transition-colors mt-2">+ ¿AGREGAR ACUDIENTE?</button>
             <div id="acudiente-box" class="hidden space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100 fade-in">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">DATOS DEL ACUDIENTE</p>
-                <input type="text" id="add-acudiente-nombre" placeholder="Nombre Acudiente" class="input-std">
-                <input type="tel" id="add-acudiente-telefono" placeholder="Teléfono Acudiente" class="input-std">
+                <input type="text" id="add-acudiente-nombre" placeholder="NOMBRE ACUDIENTE" class="input-std">
+                <input type="tel" id="add-acudiente-telefono" placeholder="TELÉFONO ACUDIENTE" class="input-std">
             </div>
             <button id="btn-save-student" onclick="saveStudent()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR REGISTRO</button>
             <button id="btn-del-student" onclick="deleteStudent()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ESTUDIANTE 🗑️</button>
@@ -286,7 +268,7 @@
         <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-6">
             <h2 class="text-lg font-bold uppercase text-slate-900">DATOS DE LA JORNADA</h2>
             <input type="date" id="event-date" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px]">
-            <select id="event-type" onchange="toggleEventDesc()" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"><option value="Ensayo">ENSAYO</option><option value="Presentación">PRESENTACIÓN</option></select>
+            <select id="event-type" onchange="toggleEventDesc()" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"><option value="ENSAYO">ENSAYO</option><option value="PRESENTACIÓN">PRESENTACIÓN</option></select>
             <div id="event-desc-box" class="hidden"><input type="text" id="event-desc" placeholder="NOMBRE DEL EVENTO" class="w-full p-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"></div>
             <button onclick="prepareProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px]">TOMAR ASISTENCIA</button>
         </div>
@@ -312,7 +294,7 @@
         <div class="bg-white p-6 sticky top-0 z-20 shadow-sm border-b">
             <div class="flex justify-between items-center mb-4">
                 <button onclick="nav('screen-process')" class="text-slate-400 font-bold text-[12px] uppercase">← ATRÁS</button>
-                <span id="counter" class="text-[11px] bg-slate-100 text-slate-500 px-3 py-1 rounded-full font-bold uppercase">0 Marcados</span>
+                <span id="counter" class="text-[11px] bg-slate-100 text-slate-500 px-3 py-1 rounded-full font-bold uppercase">0 MARCADOS</span>
             </div>
             <p id="info-header" class="font-bold text-[13px] uppercase mb-4 text-slate-400"></p>
             <div id="family-tabs" class="flex gap-4 overflow-x-auto no-scrollbar text-[12px] font-bold uppercase border-t pt-4">
@@ -330,11 +312,23 @@
         </div>
     </div>
 
+    <!-- SCRIPT DE REGISTRO SERVICE WORKER -->
     <script>
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwpdHttIY9SWkliI5PVzsw-jS5b8-t6_IyS55hcmBWm2I4J1dJUCm1Iwm4EvrctlDRz7g/exec";
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW registrado', reg))
+                    .catch(err => console.log('SW error', err));
+            });
+        }
+    </script>
+
+    <script>
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwRViK2PrI5uUDCMmY-yMk5HYK2NrnWTi0NJnh9yA5MdYwOtt8S4S8yLgGgaePJHQbGrA/exec";
+        const VER = "v8.5"; // VERSIÓN ACTUALIZADA
         
-        let session = JSON.parse(localStorage.getItem('atril_v66')) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
-        let record = JSON.parse(localStorage.getItem('atril_rec_v66')) || {};
+        let session = JSON.parse(localStorage.getItem('atril_' + VER)) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
+        let record = JSON.parse(localStorage.getItem('atril_rec_' + VER)) || {};
         let editingCell = null;
         let isEditing = false;
         let originalDoc = null;
@@ -357,7 +351,7 @@
 
         function nav(id) {
             session.current = id;
-            localStorage.setItem('atril_v66', JSON.stringify(session));
+            localStorage.setItem('atril_' + VER, JSON.stringify(session));
             document.querySelectorAll('body > div').forEach(d => { if(d.id !== 'loader') d.classList.add('hidden'); d.classList.remove('flex'); });
             const target = document.getElementById(id);
             target.classList.remove('hidden');
@@ -384,7 +378,6 @@
             if(!u || !p) return;
             loader(true, "VERIFICANDO...");
             try {
-                await new Promise(r => setTimeout(r, 100));
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
                 const d = await r.json();
                 if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; loader(true, "DESCARGANDO DATOS..."); await fetchData(); } 
@@ -396,7 +389,7 @@
             try {
                 const r = await fetch(`${MOTOR_URL}?action=getDataInicial&sheetId=${session.sheetId}`);
                 const d = await r.json();
-                if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_v66', JSON.stringify(session)); restore(); nav('screen-menu'); } 
+                if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_' + VER, JSON.stringify(session)); restore(); nav('screen-menu'); } 
                 else { alert("ERROR DE DATOS: " + (d.error || 'Desconocido')); restore(); nav('screen-menu'); }
             } catch(e) { console.error(e); alert("SIN CONEXIÓN: SE USARÁN DATOS GUARDADOS"); restore(); nav('screen-menu'); }
             loader(false);
@@ -404,7 +397,21 @@
 
         function restore() {
             if(!session.config) return; 
-            document.getElementById('display-band-name').innerText = session.banda || "---";
+            
+            // LÓGICA DINAMISMO VISUAL (MANTENIDA DE TU VERSIÓN ESTABLE)
+            const nombre = session.banda || "---";
+            const palabras = nombre.split(" ");
+            let htmlName = "";
+            
+            if (palabras.length <= 2) {
+                htmlName = `<span class="text-xl leading-tight block">${nombre}</span>`;
+            } else {
+                const linea1 = palabras.slice(0, 2).join(" ");
+                const linea2 = palabras.slice(2).join(" ");
+                htmlName = `<span class="text-[13px] text-slate-400 block mb-1 font-medium tracking-wide uppercase">${linea1}</span><span class="text-xl leading-tight block font-bold">${linea2}</span>`;
+            }
+            document.getElementById('display-band-name').innerHTML = htmlName;
+
             if(session.config.proceso && session.config.proceso.length > 0) {
                 document.getElementById('process-buttons').innerHTML = session.config.proceso.map(p => `<button onclick="initAt('${p}')" class="w-full p-6 bg-white rounded-2xl shadow-sm border font-bold text-left uppercase text-[13px] text-slate-700">${p}</button>`).join('');
                 ['proceso','instrumento','grado'].forEach(k => {
@@ -428,7 +435,73 @@
             loadSelect('inv-origen', session.config.origen, 'ORIGEN / PROPIEDAD');
         }
 
-        // --- GESTIÓN ESTUDIANTES ---
+        // --- DIRECTORIO MEJORADO (NUEVO v8.5) ---
+        function filterDirectory() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const list = document.getElementById('directory-list');
+            list.innerHTML = "";
+            if(!session.master) return;
+            let filtered = session.master.filter(m => (m.nombres + " " + m.apellidos + " " + m.instrumento).toLowerCase().includes(q));
+            if (currentDirSection !== 'TODOS') { filtered = filtered.filter(m => { const miFamilia = Object.keys(SECCIONES).find(key => SECCIONES[key].includes(String(m.instrumento).toLowerCase())); return miFamilia === currentDirSection; }); }
+            filtered.sort((a, b) => { const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase()); const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase()); if (idxA !== -1 && idxB !== -1) { if (idxA !== idxB) return idxA - idxB; return a.nombres.localeCompare(b.nombres); } if (idxA === -1) return 1; if (idxB === -1) return -1; });
+            if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON RESULTADOS</p>`; return; }
+            
+            filtered.forEach(m => {
+                const item = document.createElement('div');
+                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
+                // ESTRUCTURA DE TARJETA CON DOBLE BOTÓN
+                item.innerHTML = `
+                    <div class="flex-1">
+                        <p class="font-bold text-[13px] text-slate-800">${m.nombres} ${m.apellidos}</p>
+                        <p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="shareStudentWA(event, ${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-green-50 text-green-600 rounded-xl border border-green-100 active:scale-90 transition-transform">📲</button>
+                        <button onclick="loadStudentForEdit(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl border border-slate-100 active:scale-90 transition-transform">✎</button>
+                    </div>`;
+                list.appendChild(item);
+            });
+        }
+
+        // --- NUEVA FUNCIÓN WHATSAPP ---
+        function shareStudentWA(event, m) {
+            event.stopPropagation();
+            const text = `👤 *FICHA TÉCNICA - ATRIL DIGITAL*\n\n` +
+                `*ESTUDIANTE:* ${m.nombres} ${m.apellidos}\n` +
+                `*DOCUMENTO:* ${m.documento}\n` +
+                `*TELÉFONO:* ${m.telefono}\n` +
+                `*INSTRUMENTO:* ${m.instrumento}\n` +
+                `*GRADO:* ${m.grado}\n` +
+                `*EPS:* ${m.eps}\n\n` +
+                `👨‍👩‍👧 *DATOS ACUDIENTE*\n` +
+                `*NOMBRE:* ${m.acudiente || 'N/A'}\n` +
+                `*TELÉFONO:* ${m.telefono_acud || 'N/A'}\n\n` +
+                `_Reporte generado por: ${session.banda.toUpperCase()}_`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function loadStudentForEdit(m) {
+            isEditing = true; originalDoc = m.documento;
+            document.getElementById('form-title').innerText = "EDITAR ESTUDIANTE";
+            const btn = document.getElementById('btn-save-student');
+            btn.innerText = "ACTUALIZAR DATOS";
+            btn.classList.remove('bg-slate-900'); btn.classList.add('bg-blue-600');
+            document.getElementById('btn-del-student').classList.remove('hidden'); 
+            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-directory')");
+            document.getElementById('add-nombres').value = m.nombres; document.getElementById('add-apellidos').value = m.apellidos;
+            document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-eps').value = m.eps;
+            document.getElementById('add-documento').value = m.documento;
+            let df = document.getElementById('add-fecha_nacimiento');
+            let rawDate = m.fecha_nacimiento ? String(m.fecha_nacimiento).replace(/'/g, '').trim() : "";
+            if(rawDate.includes('T') && rawDate.length > 10) rawDate = rawDate.split('T')[0];
+            df.type = 'text'; df.value = rawDate;
+            document.getElementById('add-proceso').value = m.proceso; document.getElementById('add-instrumento').value = m.instrumento; document.getElementById('add-grado').value = m.grado;
+            document.getElementById('add-acudiente-nombre').value = m.acudiente; document.getElementById('add-acudiente-telefono').value = m.telefono_acud;
+            if(m.acudiente || m.telefono_acud) document.getElementById('acudiente-box').classList.remove('hidden'); else document.getElementById('acudiente-box').classList.add('hidden');
+            nav('screen-form-student');
+        }
+
+        // --- (RESTO DE FUNCIONES MANTENIDAS DE v7.9) ---
         function prepareNewStudent() {
             isEditing = false; originalDoc = null;
             document.getElementById('form-title').innerText = "NUEVO INTEGRANTE";
@@ -453,45 +526,6 @@
             document.getElementById(`dirtab-${sec}`).classList.add('active-tab', 'text-slate-900');
             document.getElementById(`dirtab-${sec}`).classList.remove('text-slate-300');
             filterDirectory();
-        }
-
-        function filterDirectory() {
-            const q = document.getElementById('search-input').value.toLowerCase();
-            const list = document.getElementById('directory-list');
-            list.innerHTML = "";
-            if(!session.master) return;
-            let filtered = session.master.filter(m => (m.nombres + " " + m.apellidos + " " + m.instrumento).toLowerCase().includes(q));
-            if (currentDirSection !== 'TODOS') { filtered = filtered.filter(m => { const miFamilia = Object.keys(SECCIONES).find(key => SECCIONES[key].includes(String(m.instrumento).toLowerCase())); return miFamilia === currentDirSection; }); }
-            filtered.sort((a, b) => { const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase()); const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase()); if (idxA !== -1 && idxB !== -1) { if (idxA !== idxB) return idxA - idxB; return a.nombres.localeCompare(b.nombres); } if (idxA === -1) return 1; if (idxB === -1) return -1; });
-            if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON RESULTADOS</p>`; return; }
-            filtered.forEach(m => {
-                const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform";
-                item.onclick = () => loadStudentForEdit(m);
-                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.nombres} ${m.apellidos}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p></div><div class="text-slate-300">✎</div>`;
-                list.appendChild(item);
-            });
-        }
-
-        function loadStudentForEdit(m) {
-            isEditing = true; originalDoc = m.documento;
-            document.getElementById('form-title').innerText = "EDITAR ESTUDIANTE";
-            const btn = document.getElementById('btn-save-student');
-            btn.innerText = "ACTUALIZAR DATOS";
-            btn.classList.remove('bg-slate-900'); btn.classList.add('bg-blue-600');
-            document.getElementById('btn-del-student').classList.remove('hidden'); 
-            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-directory')");
-            document.getElementById('add-nombres').value = m.nombres; document.getElementById('add-apellidos').value = m.apellidos;
-            document.getElementById('add-telefono').value = m.telefono; document.getElementById('add-eps').value = m.eps;
-            document.getElementById('add-documento').value = m.documento;
-            let df = document.getElementById('add-fecha_nacimiento');
-            let rawDate = m.fecha_nacimiento ? String(m.fecha_nacimiento).replace(/'/g, '').trim() : "";
-            if(rawDate.includes('T') && rawDate.length > 10) rawDate = rawDate.split('T')[0];
-            df.type = 'text'; df.value = rawDate;
-            document.getElementById('add-proceso').value = m.proceso; document.getElementById('add-instrumento').value = m.instrumento; document.getElementById('add-grado').value = m.grado;
-            document.getElementById('add-acudiente-nombre').value = m.acudiente; document.getElementById('add-acudiente-telefono').value = m.telefono_acud;
-            if(m.acudiente || m.telefono_acud) document.getElementById('acudiente-box').classList.remove('hidden'); else document.getElementById('acudiente-box').classList.add('hidden');
-            nav('screen-form-student');
         }
 
         function toggleAcudiente() { const box = document.getElementById('acudiente-box'); if(box.classList.contains('hidden')) { box.classList.remove('hidden'); } else { box.classList.add('hidden'); document.getElementById('add-acudiente-nombre').value = ''; document.getElementById('add-acudiente-telefono').value = ''; } }
@@ -561,7 +595,7 @@
             if(!grado) return;
             let filtered = session.master.filter(m => m.grado === grado);
             filtered.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', {sensitivity: 'base'}));
-            if(filtered.length === 0) return alert("Lista vacía");
+            if(filtered.length === 0) return alert("LISTA VACÍA");
             let msg = `🎓 *LISTADO GRADO ${grado}* \n${session.banda.toUpperCase()}\n\n`;
             filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`; });
             const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
@@ -635,7 +669,7 @@
         async function saveInstrument() {
             let instName = document.getElementById('inv-instrumento-select').value;
             if (instName === "OTRO") instName = document.getElementById('inv-instrumento-input').value;
-            if (!instName) return alert("Falta el Instrumento");
+            if (!instName) return alert("FALTA EL INSTRUMENTO");
             const d = {
                 codigo: document.getElementById('inv-codigo').value, instrumento: instName,
                 marca: document.getElementById('inv-marca').value, modelo: document.getElementById('inv-modelo').value,
@@ -646,7 +680,7 @@
             };
             loader(true, isEditing ? "ACTUALIZANDO..." : "GUARDANDO...");
             const payload = { action: isEditing ? 'editInstrumento' : 'addInstrumento', sheetId: session.sheetId, datos: d, originalSerial: originalSerial, originalCodigo: originalCodigo, originalInstrumento: originalRasgos.inst, originalMarca: originalRasgos.marca, originalModelo: originalRasgos.modelo };
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) }); const res = await r.json(); if(res.success) { alert(isEditing ? "ACTIVO ACTUALIZADO" : "ACTIVO GUARDADO"); await fetchData(); nav('screen-inventory-menu'); } else { alert("ERROR: No se pudo guardar/editar"); } } catch(e) { alert("ERROR DE CONEXIÓN"); }
+            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) }); const res = await r.json(); if(res.success) { alert(isEditing ? "ACTIVO ACTUALIZADO" : "ACTIVO GUARDADO"); await fetchData(); nav('screen-inventory-menu'); } else { alert("ERROR: NO SE PUDO GUARDAR/EDITAR"); } } catch(e) { alert("ERROR DE CONEXIÓN"); }
             loader(false);
         }
 
@@ -679,9 +713,9 @@
                 }
             }
         }
-        function openGradoModal() { if (!session.config.grado || session.config.grado.length === 0) return alert("No hay grados configurados"); document.getElementById('modal-grupo').classList.remove('hidden'); let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); document.getElementById('lista-grados-modal').innerHTML = html; }
+        function openGradoModal() { if (!session.config.grado || session.config.grado.length === 0) return alert("NO HAY GRADOS CONFIGURADOS"); document.getElementById('modal-grupo').classList.remove('hidden'); let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); document.getElementById('lista-grados-modal').innerHTML = html; }
         function setGrado(v) { const cell = document.getElementById(`cell-${editingCell.h}-${editingCell.d}`); if(v === '') { cell.innerText = ""; } else { if(cell.innerText.trim() !== "") { if(!cell.innerText.includes(v)) cell.innerText += " / " + v; } else { cell.innerText = v; } } document.getElementById('modal-grupo').classList.add('hidden'); }
-        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_v66', JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("Error al guardar"); } loader(false); }
+        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_' + VER, JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("ERROR AL GUARDAR"); } loader(false); }
 
         // --- ASISTENCIA & ESTADÍSTICAS ---
         function restoreStatsFilter() {
@@ -708,7 +742,7 @@
                     renderReportCards(d.stats, d.totalEventos, proc);
                     nav('screen-stats-report');
                 }
-            } catch(e) { alert("Error al obtener estadísticas"); }
+            } catch(e) { alert("ERROR AL OBTENER ESTADÍSTICAS"); }
             loader(false);
         }
 
@@ -720,7 +754,7 @@
                 const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
                 return idxA - idxB;
             });
-            if(filtrados.length === 0) { box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">No hay estudiantes en este proceso</p>`; return; }
+            if(filtrados.length === 0) { box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">NO HAY ESTUDIANTES EN ESTE PROCESO</p>`; return; }
             
             filtrados.forEach(m => {
                 const nombreCompleto = `${m.nombres} ${m.apellidos}`;
@@ -745,9 +779,9 @@
         function prepareProcess() {
             session.date = document.getElementById('event-date').value;
             session.type = document.getElementById('event-type').value;
-            session.act = (session.type === 'Ensayo' ? 'ENSAYO' : document.getElementById('event-desc').value).toUpperCase();
+            session.act = (session.type === 'ENSAYO' ? 'ENSAYO' : document.getElementById('event-desc').value).toUpperCase();
             if(!session.date || !session.act) return alert("FALTAN DATOS");
-            if(!session.config.proceso || session.config.proceso.length === 0) return alert("Error: No se cargaron los procesos. Reinicia sesión.");
+            if(!session.config.proceso || session.config.proceso.length === 0) return alert("ERROR: NO SE CARGARON LOS PROCESOS. REINICIA SESIÓN.");
             nav('screen-process');
         }
         function initAt(p) { session.process = p; document.getElementById('info-header').innerText = `${p} • ${session.act}`; nav('screen-list'); renderList('TODOS'); }
@@ -766,19 +800,19 @@
                 card.innerHTML = `<div class="mb-3"><p class="font-bold text-[13px] text-slate-800">${n}</p><p class="text-[10px] font-bold text-slate-400 mt-1 uppercase">${m.instrumento} • ${m.grado}</p></div><div class="grid grid-cols-4 gap-1">${['PRESENTE','AUSENTE','RETARDO','EXCUSA'].map(st => `<button onclick="mark('${n}','${st}')" class="btn-status border ${s === st ? getCol(st) : 'bg-slate-50 text-slate-400 border-slate-50'}">${st}</button>`).join('')}</div>`;
                 box.appendChild(card);
             });
-            document.getElementById('counter').innerText = `${Object.keys(record).length} Marcados`;
+            document.getElementById('counter').innerText = `${Object.keys(record).length} MARCADOS`;
         }
-        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_v66', JSON.stringify(record)); renderList(activeSection); }
+        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_' + VER, JSON.stringify(record)); renderList(activeSection); }
         function getCol(s) { return { 'PRESENTE': 'bg-slate-900 text-white border-slate-900', 'AUSENTE': 'bg-red-50 text-red-600 border-red-100', 'RETARDO': 'bg-amber-50 text-amber-600 border-amber-100', 'EXCUSA': 'bg-blue-50 text-blue-600 border-blue-100'}[s]; }
         async function finalize() {
             if(!Object.keys(record).length) return alert("NO HAY MARCACIONES");
             loader(true, "GUARDANDO...");
             const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: session.type, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_v66'); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
+            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_' + VER); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
             loader(false);
         }
         function generateWAReport() {
-            if(Object.keys(record).length === 0) return alert("No has marcado asistencia aún.");
+            if(Object.keys(record).length === 0) return alert("NO HAS MARCADO ASISTENCIA AÚN.");
             let ausentes = []; let retardos = [];
             for (const [nombre, estado] of Object.entries(record)) {
                 let estudiante = session.master.find(m => `${m.nombres} ${m.apellidos}` === nombre);
@@ -786,7 +820,7 @@
                 if (estado === 'AUSENTE') ausentes.push(`${nombre} (${inst})`);
                 if (estado === 'RETARDO') retardos.push(`${nombre} (${inst})`);
             }
-            if(ausentes.length === 0 && retardos.length === 0) return alert("No hay ausentes ni retardos para reportar.");
+            if(ausentes.length === 0 && retardos.length === 0) return alert("NO HAY AUSENTES NI RETARDOS PARA REPORTAR.");
             const fechaParts = session.date.split('-'); const fechaFormato = `${fechaParts[2]}/${fechaParts[1]}/${fechaParts[0]}`;
             let msg = `📅 REPORTE ASISTENCIA ${session.banda.toUpperCase()}\nProceso: ${session.process}\nFecha: ${fechaFormato}\n\n`;
             if(ausentes.length > 0) { msg += `🔴 *AUSENTES:*\n`; ausentes.forEach((a, i) => msg += `${i+1}. ${a}\n`); msg += `\n`; }
@@ -794,8 +828,10 @@
             const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
         }
-        function toggleEventDesc() { document.getElementById('event-desc-box').classList.toggle('hidden', document.getElementById('event-type').value !== 'Presentación'); }
+        function toggleEventDesc() { document.getElementById('event-desc-box').classList.toggle('hidden', document.getElementById('event-type').value !== 'PRESENTACIÓN'); }
+        function loader(v,t) { document.getElementById('loader').classList.toggle('hidden', !v); document.getElementById('loader-text').innerText = t || "CARGANDO..."; }
         function logout() { localStorage.clear(); location.reload(); }
+        function setDirSection(s) { currentDirSection = s; document.querySelectorAll('.dirtab-btn').forEach(b => b.classList.remove('active-tab')); document.getElementById('dirtab-'+s).classList.add('active-tab'); filterDirectory(); }
     </script>
 </body>
 </html>
