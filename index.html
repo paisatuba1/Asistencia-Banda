@@ -19,8 +19,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
         body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; -webkit-tap-highlight-color: transparent; }
         .hidden { display: none !important; }
-        /* FORZAR CENTRADO DEL CARGADOR */
-        #loader { display: flex; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: rgba(255,255,255,0.95); }
         .flex { display: flex !important; }
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -54,10 +52,11 @@
 </head>
 <body>
 
-    <!-- CARGADOR (CSS PURO APLICADO PARA CENTRAR) -->
-    <div id="loader" class="hidden">
-        <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
-        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">INICIANDO...</p>
+    <!-- CARGADOR (CORREGIDO PARA CENTRADO PERFECTO) -->
+    <div id="loader" class="hidden fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center h-screen w-screen overflow-hidden">
+        <img src="https://github.com/pandemiaproducciones/atril-app/blob/main/logo.png?raw=true" class="w-20 mb-6 animate-pulse">
+        <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-10 w-10 mb-4"></div>
+        <p id="loader-text" class="text-[10px] font-bold uppercase tracking-widest text-slate-400">CARGANDO...</p>
     </div>
 
     <!-- PANTALLA LOGIN -->
@@ -106,6 +105,17 @@
         </button>
     </div>
 
+    <!-- SUB-MENÚ ESTUDIANTES -->
+    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
+        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
+        <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
+        <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span><span class="text-2xl">🎓</span></button>
+        <!-- NUEVO BOTÓN PARA LISTAS POR PROCESO -->
+        <button onclick="nav('screen-process-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR PROCESO</span><span class="text-2xl">📚</span></button>
+    </div>
+
     <!-- PANTALLA LISTAS POR GRADOS -->
     <div id="screen-grade-list" class="hidden p-6 max-w-md mx-auto pb-32">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
@@ -122,14 +132,14 @@
         </div>
     </div>
 
-    <!-- PANTALLA LISTAS POR PROCESO (NUEVO v8.6) -->
+    <!-- PANTALLA LISTAS POR PROCESO (NUEVA) -->
     <div id="screen-process-list" class="hidden p-6 max-w-md mx-auto pb-32">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
             <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
             <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">LISTAS POR PROCESO</h2>
             <div class="bg-white p-6 rounded-3xl shadow-sm border mb-4">
                  <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block tracking-widest">SELECCIONE EL PROCESO</label>
-                 <select id="filter-proceso-list-select" onchange="renderProcessList()" class="input-std"></select>
+                 <select id="filter-proceso-select" onchange="renderProcessList()" class="input-std"></select>
             </div>
         </div>
         <div id="process-list-container" class="space-y-3"></div>
@@ -173,16 +183,6 @@
         <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">ASISTENCIA</h2>
         <button onclick="nav('screen-activity')" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">TOMAR ASISTENCIA +</span><span class="text-2xl">📝</span></button>
         <button onclick="nav('screen-stats-filter')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">ESTADÍSTICAS DE ASISTENCIA</span><span class="text-2xl">📊</span></button>
-    </div>
-
-    <!-- SUB-MENÚ ESTUDIANTES -->
-    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
-        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
-        <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
-        <button onclick="openProcessList()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR PROCESO</span><span class="text-2xl">🎼</span></button>
-        <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span><span class="text-2xl">🎓</span></button>
     </div>
 
     <!-- SUB-MENÚ INVENTARIO -->
@@ -343,7 +343,7 @@
 
     <script>
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwRViK2PrI5uUDCMmY-yMk5HYK2NrnWTi0NJnh9yA5MdYwOtt8S4S8yLgGgaePJHQbGrA/exec";
-        const VER = "v8.6"; // ACTUALIZADO PARA V8.6
+        const VER = "v8.6"; // VERSIÓN ACTUALIZADA
         
         let session = JSON.parse(localStorage.getItem('atril_' + VER)) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_' + VER)) || {};
@@ -383,7 +383,7 @@
             if(id === 'screen-inventory-list') filterInventory();
             if(id === 'screen-stats-filter') restoreStatsFilter();
             if(id === 'screen-grade-list') openGradeList();
-            if(id === 'screen-process-list') openProcessList();
+            if(id === 'screen-process-list') openProcessList(); // NUEVO
         }
 
         function loader(v, t) {
@@ -397,7 +397,6 @@
             if(!u || !p) return;
             loader(true, "VERIFICANDO...");
             try {
-                await new Promise(r => setTimeout(r, 100));
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
                 const d = await r.json();
                 if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; loader(true, "DESCARGANDO DATOS..."); await fetchData(); } 
@@ -418,7 +417,7 @@
         function restore() {
             if(!session.config) return; 
             
-            // LÓGICA DINAMISMO VISUAL NOMBRE AGRUPACIÓN
+            // LÓGICA DINAMISMO VISUAL
             const nombre = session.banda || "---";
             const palabras = nombre.split(" ");
             let htmlName = "";
@@ -455,33 +454,7 @@
             loadSelect('inv-origen', session.config.origen, 'ORIGEN / PROPIEDAD');
         }
 
-        // --- GESTIÓN ESTUDIANTES ---
-        function prepareNewStudent() {
-            isEditing = false; originalDoc = null;
-            document.getElementById('form-title').innerText = "NUEVO INTEGRANTE";
-            document.getElementById('btn-save-student').innerText = "GUARDAR REGISTRO";
-            document.getElementById('btn-save-student').classList.remove('bg-blue-600');
-            document.getElementById('btn-save-student').classList.add('bg-slate-900');
-            document.getElementById('btn-del-student').classList.add('hidden');
-            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')");
-            document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
-            document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
-            let df = document.getElementById('add-fecha_nacimiento');
-            df.type = 'text'; 
-            document.getElementById('acudiente-box').classList.add('hidden');
-            nav('screen-form-student');
-        }
-
-        function openDirectory() { nav('screen-directory'); }
-
-        function setDirSection(sec) {
-            currentDirSection = sec;
-            document.querySelectorAll('.dirtab-btn').forEach(b => { b.classList.remove('active-tab', 'text-slate-900'); b.classList.add('text-slate-300'); });
-            document.getElementById(`dirtab-${sec}`).classList.add('active-tab', 'text-slate-900');
-            document.getElementById(`dirtab-${sec}`).classList.remove('text-slate-300');
-            filterDirectory();
-        }
-
+        // --- DIRECTORIO MEJORADO ---
         function filterDirectory() {
             const q = document.getElementById('search-input').value.toLowerCase();
             const list = document.getElementById('directory-list');
@@ -491,11 +464,10 @@
             if (currentDirSection !== 'TODOS') { filtered = filtered.filter(m => { const miFamilia = Object.keys(SECCIONES).find(key => SECCIONES[key].includes(String(m.instrumento).toLowerCase())); return miFamilia === currentDirSection; }); }
             filtered.sort((a, b) => { const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase()); const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase()); if (idxA !== -1 && idxB !== -1) { if (idxA !== idxB) return idxA - idxB; return a.nombres.localeCompare(b.nombres); } if (idxA === -1) return 1; if (idxB === -1) return -1; });
             if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON RESULTADOS</p>`; return; }
+            
             filtered.forEach(m => {
                 const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform";
-                item.onclick = () => loadStudentForEdit(m);
-                // DIRECTORIO: Botones diferenciados
+                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
                 item.innerHTML = `
                     <div class="flex-1">
                         <p class="font-bold text-[13px] text-slate-800">${m.nombres} ${m.apellidos}</p>
@@ -503,7 +475,7 @@
                     </div>
                     <div class="flex gap-2">
                         <button onclick="shareStudentWA(event, ${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-green-50 text-green-600 rounded-xl border border-green-100 active:scale-90 transition-transform">📲</button>
-                        <div class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl border border-slate-100">✎</div>
+                        <button onclick="loadStudentForEdit(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl border border-slate-100 active:scale-90 transition-transform">✎</button>
                     </div>`;
                 list.appendChild(item);
             });
@@ -512,14 +484,11 @@
         function shareStudentWA(event, m) {
             event.stopPropagation();
             const text = `👤 *FICHA TÉCNICA - ATRIL DIGITAL*\n\n` +
-                `*NOMBRES:* ${m.nombres}\n` +
-                `*APELLIDOS:* ${m.apellidos}\n` +
+                `*ESTUDIANTE:* ${m.nombres} ${m.apellidos}\n` +
                 `*DOCUMENTO:* ${m.documento}\n` +
                 `*TELÉFONO:* ${m.telefono}\n` +
                 `*INSTRUMENTO:* ${m.instrumento}\n` +
-                `*PROCESO:* ${m.proceso}\n` +
                 `*GRADO:* ${m.grado}\n` +
-                `*FECHA NAC:* ${m.fecha_nacimiento}\n` +
                 `*EPS:* ${m.eps}\n\n` +
                 `👨‍👩‍👧 *DATOS ACUDIENTE*\n` +
                 `*NOMBRE:* ${m.acudiente || 'N/A'}\n` +
@@ -548,6 +517,25 @@
             if(m.acudiente || m.telefono_acud) document.getElementById('acudiente-box').classList.remove('hidden'); else document.getElementById('acudiente-box').classList.add('hidden');
             nav('screen-form-student');
         }
+
+        // --- (RESTO DE FUNCIONES ESTÁNDAR) ---
+        function prepareNewStudent() {
+            isEditing = false; originalDoc = null;
+            document.getElementById('form-title').innerText = "NUEVO INTEGRANTE";
+            document.getElementById('btn-save-student').innerText = "GUARDAR REGISTRO";
+            document.getElementById('btn-save-student').classList.remove('bg-blue-600');
+            document.getElementById('btn-save-student').classList.add('bg-slate-900');
+            document.getElementById('btn-del-student').classList.add('hidden');
+            document.getElementById('btn-back-student').setAttribute('onclick', "nav('screen-student-menu')");
+            document.querySelectorAll('#screen-form-student input').forEach(i => i.value = "");
+            document.querySelectorAll('#screen-form-student select').forEach(s => s.selectedIndex = 0);
+            let df = document.getElementById('add-fecha_nacimiento');
+            df.type = 'text'; 
+            document.getElementById('acudiente-box').classList.add('hidden');
+            nav('screen-form-student');
+        }
+
+        function openDirectory() { nav('screen-directory'); }
 
         function toggleAcudiente() { const box = document.getElementById('acudiente-box'); if(box.classList.contains('hidden')) { box.classList.remove('hidden'); } else { box.classList.add('hidden'); document.getElementById('add-acudiente-nombre').value = ''; document.getElementById('add-acudiente-telefono').value = ''; } }
         async function saveStudent() {
@@ -605,325 +593,4 @@
             filtered.forEach(m => {
                 const item = document.createElement('div');
                 item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
-                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p></div><div class="bg-slate-100 text-slate-500 text-[9px] font-bold px-2 py-1 rounded-lg uppercase">${m.grado}</div>`;
-                box.appendChild(item);
-            });
-            btnWA.classList.remove('hidden');
-        }
-
-        function generateGradeWA() {
-            const grado = document.getElementById('filter-grado-select').value;
-            if(!grado) return;
-            let filtered = session.master.filter(m => m.grado === grado);
-            filtered.sort((a, b) => a.apellidos.localeCompare(b.apellidos, 'es', {sensitivity: 'base'}));
-            if(filtered.length === 0) return alert("LISTA VACÍA");
-            let msg = `🎓 *LISTADO GRADO ${grado}* \n${session.banda.toUpperCase()}\n\n`;
-            filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`; });
-            const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
-        }
-
-        // --- LISTAS POR PROCESO (NUEVA FUNCIONALIDAD) ---
-        function openProcessList() {
-            const sel = document.getElementById('filter-proceso-list-select');
-            if(session.config.proceso) {
-                sel.innerHTML = `<option disabled selected>SELECCIONE...</option>` + session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
-            }
-            document.getElementById('process-list-container').innerHTML = "";
-            document.getElementById('btn-process-wa').classList.add('hidden');
-            nav('screen-process-list');
-        }
-
-        function renderProcessList() {
-            const proceso = document.getElementById('filter-proceso-list-select').value;
-            const box = document.getElementById('process-list-container');
-            const btnWA = document.getElementById('btn-process-wa');
-            box.innerHTML = "";
-            if(!session.master) return;
-            let filtered = session.master.filter(m => m.proceso === proceso);
-            
-            // ORDENAR POR INSTRUMENTO (SCORE)
-            filtered.sort((a, b) => {
-                const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
-                const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
-                if (idxA !== -1 && idxB !== -1) {
-                    if (idxA !== idxB) return idxA - idxB;
-                    return a.apellidos.localeCompare(b.apellidos);
-                }
-                if (idxA === -1) return 1;
-                if (idxB === -1) return -1;
-                return 0;
-            });
-
-            if(filtered.length === 0) {
-                box.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-10 font-bold uppercase">NO HAY ESTUDIANTES EN ${proceso}</p>`;
-                btnWA.classList.add('hidden');
-                return;
-            }
-            filtered.forEach(m => {
-                const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
-                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento}</p></div><div class="bg-slate-100 text-slate-500 text-[9px] font-bold px-2 py-1 rounded-lg uppercase">${m.grado}</div>`;
-                box.appendChild(item);
-            });
-            btnWA.classList.remove('hidden');
-        }
-
-        function generateProcessWA() {
-            const proceso = document.getElementById('filter-proceso-list-select').value;
-            if(!proceso) return;
-            let filtered = session.master.filter(m => m.proceso === proceso);
-            
-            // ORDENAR POR INSTRUMENTO (SCORE) PARA EL REPORTE TAMBIÉN
-            filtered.sort((a, b) => {
-                const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
-                const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
-                if (idxA !== -1 && idxB !== -1) {
-                    if (idxA !== idxB) return idxA - idxB;
-                    return a.apellidos.localeCompare(b.apellidos);
-                }
-                if (idxA === -1) return 1;
-                if (idxB === -1) return -1;
-                return 0;
-            });
-
-            if(filtered.length === 0) return alert("LISTA VACÍA");
-            let msg = `🎼 *LISTADO OFICIAL - ${proceso}* \n${session.banda.toUpperCase()}\n\n`;
-            filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`; });
-            const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
-        }
-
-        // --- GESTIÓN INVENTARIO ---
-        function prepareNewInstrument() {
-            isEditing = false; originalSerial = null; originalCodigo = null; originalRasgos = {};
-            document.getElementById('form-inv-title').innerText = "NUEVO INSTRUMENTO";
-            document.getElementById('btn-save-inv').innerText = "GUARDAR ACTIVO";
-            document.getElementById('btn-save-inv').classList.replace('bg-blue-600', 'bg-slate-900');
-            document.getElementById('btn-del-inv').classList.add('hidden');
-            document.querySelectorAll('#screen-form-inventory input, #screen-form-inventory textarea').forEach(i => i.value = "");
-            document.querySelectorAll('#screen-form-inventory select').forEach(s => s.selectedIndex = 0);
-            checkOtroInst();
-            nav('screen-form-inventory');
-        }
-        function checkOtroInst() { const sel = document.getElementById('inv-instrumento-select').value; const inp = document.getElementById('inv-instrumento-input'); if(sel === 'OTRO') inp.classList.remove('hidden'); else inp.classList.add('hidden'); }
-        function openInventoryList() { nav('screen-inventory-list'); }
-        function filterInventory() {
-            const q = document.getElementById('search-inv-input').value.toLowerCase();
-            const list = document.getElementById('inventory-list-container');
-            list.innerHTML = "";
-            if(!session.inventario) return;
-            let filtered = session.inventario.filter(i => (i.instrumento + " " + i.marca + " " + i.codigo + " " + i.serial).toLowerCase().includes(q));
-            if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON ACTIVOS</p>`; return; }
-            filtered.forEach(i => {
-                const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm cursor-pointer active:scale-95 transition-transform";
-                item.onclick = () => loadInstrumentForEdit(i);
-                let dotColor = "bg-slate-300";
-                if(i.estado.includes("Disponible")) dotColor = "bg-green-500";
-                else if(i.estado.includes("Asignado") || i.estado.includes("Préstamo")) dotColor = "bg-red-500";
-                else if(i.estado.includes("Reparación")) dotColor = "bg-amber-500";
-                item.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="font-bold text-[13px] text-slate-900">${i.instrumento}</p>
-                            <p class="text-[10px] font-bold text-slate-500">${i.marca} ${i.modelo}</p>
-                            <p class="text-[9px] font-bold text-slate-300 mt-1 uppercase">S: ${i.serial || 'N/A'} | C: ${i.codigo || 'N/A'}</p>
-                        </div>
-                        <div class="w-3 h-3 rounded-full ${dotColor}"></div>
-                    </div>`;
-                list.appendChild(item);
-            });
-        }
-        function loadInstrumentForEdit(i) {
-            isEditing = true; originalSerial = i.serial; originalCodigo = i.codigo; originalRasgos = { inst: i.instrumento, marca: i.marca, modelo: i.modelo };
-            document.getElementById('form-inv-title').innerText = "EDITAR INSTRUMENTO";
-            const btn = document.getElementById('btn-save-inv');
-            btn.innerText = "ACTUALIZAR ACTIVO";
-            btn.classList.replace('bg-slate-900', 'bg-blue-600');
-            document.getElementById('btn-del-inv').classList.remove('hidden'); 
-            document.getElementById('inv-marca').value = i.marca === "N/A" ? "" : i.marca;
-            document.getElementById('inv-modelo').value = i.modelo === "N/A" ? "" : i.modelo;
-            document.getElementById('inv-serial').value = i.serial === "N/A" ? "" : i.serial;
-            document.getElementById('inv-codigo').value = i.codigo === "N/A" ? "" : i.codigo;
-            document.getElementById('inv-color').value = i.color === "N/A" ? "" : i.color;
-            document.getElementById('inv-accesorios').value = i.accesorios === "N/A" ? "" : i.accesorios;
-            document.getElementById('inv-observaciones').value = i.observaciones === "N/A" ? "" : i.observaciones;
-            document.getElementById('inv-condicion').value = i.condicion;
-            document.getElementById('inv-estado').value = i.estado;
-            document.getElementById('inv-origen').value = i.origen;
-            const sel = document.getElementById('inv-instrumento-select');
-            const exists = [...sel.options].some(o => o.value === i.instrumento);
-            if(exists) { sel.value = i.instrumento; document.getElementById('inv-instrumento-input').classList.add('hidden'); } 
-            else { sel.value = "OTRO"; document.getElementById('inv-instrumento-input').classList.remove('hidden'); document.getElementById('inv-instrumento-input').value = i.instrumento; }
-            nav('screen-form-inventory');
-        }
-        async function saveInstrument() {
-            let instName = document.getElementById('inv-instrumento-select').value;
-            if (instName === "OTRO") instName = document.getElementById('inv-instrumento-input').value;
-            if (!instName) return alert("FALTA EL INSTRUMENTO");
-            const d = {
-                codigo: document.getElementById('inv-codigo').value, instrumento: instName,
-                marca: document.getElementById('inv-marca').value, modelo: document.getElementById('inv-modelo').value,
-                serial: document.getElementById('inv-serial').value, color: document.getElementById('inv-color').value,
-                condicion: document.getElementById('inv-condicion').value, estado: document.getElementById('inv-estado').value,
-                origen: document.getElementById('inv-origen').value, accesorios: document.getElementById('inv-accesorios').value,
-                observaciones: document.getElementById('inv-observaciones').value
-            };
-            loader(true, isEditing ? "ACTUALIZANDO..." : "GUARDANDO...");
-            const payload = { action: isEditing ? 'editInstrumento' : 'addInstrumento', sheetId: session.sheetId, datos: d, originalSerial: originalSerial, originalCodigo: originalCodigo, originalInstrumento: originalRasgos.inst, originalMarca: originalRasgos.marca, originalModelo: originalRasgos.modelo };
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) }); const res = await r.json(); if(res.success) { alert(isEditing ? "ACTIVO ACTUALIZADO" : "ACTIVO GUARDADO"); await fetchData(); nav('screen-inventory-menu'); } else { alert("ERROR: NO SE PUDO GUARDAR/EDITAR"); } } catch(e) { alert("ERROR DE CONEXIÓN"); }
-            loader(false);
-        }
-
-        async function deleteInstrument() {
-            if(!isEditing) return;
-            if(!confirm("⚠️ ¿ESTÁS SEGURO?\n\nEsta acción eliminará el instrumento del inventario y no se puede deshacer.")) return;
-            loader(true, "ELIMINANDO...");
-            try {
-                const payload = { action: 'deleteInstrumento', sheetId: session.sheetId, serial: originalSerial, codigo: originalCodigo, instrumento: originalRasgos.inst };
-                const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify(payload) });
-                const res = await r.json();
-                if(res.success) { alert("ACTIVO ELIMINADO"); await fetchData(); nav('screen-inventory-list'); } 
-                else { alert("ERROR AL ELIMINAR: " + res.error); }
-            } catch(e) { alert("ERROR DE CONEXIÓN"); }
-            loader(false);
-        }
-
-        // --- HORARIO ---
-        function buildHorarioTable() {
-            const hBox = document.getElementById('horario-body'); hBox.innerHTML = "";
-            const numHoras = parseInt(document.getElementById('select-horas').value);
-            for(let h=1; h<=numHoras; h++) {
-                const hc = document.createElement('div'); hc.className="horario-header"; hc.innerText=h; hBox.appendChild(hc);
-                for(let d=0; d<5; d++) {
-                    const cell = document.createElement('div'); cell.className="horario-cell";
-                    cell.id = `cell-${h}-${d}`;
-                    if(session.horario[h-1]) { let diaKey = DIAS_KEYS[d]; if(session.horario[h-1][diaKey]) cell.innerText = session.horario[h-1][diaKey]; }
-                    cell.onclick = () => { editingCell = {h,d}; openGradoModal(); };
-                    hBox.appendChild(cell);
-                }
-            }
-        }
-        function openGradoModal() { if (!session.config.grado || session.config.grado.length === 0) return alert("NO HAY GRADOS CONFIGURADOS"); document.getElementById('modal-grupo').classList.remove('hidden'); let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); document.getElementById('lista-grados-modal').innerHTML = html; }
-        function setGrado(v) { const cell = document.getElementById(`cell-${editingCell.h}-${editingCell.d}`); if(v === '') { cell.innerText = ""; } else { if(cell.innerText.trim() !== "") { if(!cell.innerText.includes(v)) cell.innerText += " / " + v; } else { cell.innerText = v; } } document.getElementById('modal-grupo').classList.add('hidden'); }
-        async function saveHorario() { loader(true, "GUARDANDO..."); const matriz = []; const numHoras = parseInt(document.getElementById('select-horas').value); for(let h=1; h<=numHoras; h++) { let fila = [h]; for(let d=0; d<5; d++) fila.push(document.getElementById(`cell-${h}-${d}`).innerText); matriz.push(fila); } try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); const res = await r.json(); if(res.success) { let newHorario = []; for(let i=0; i<matriz.length; i++) { let row = matriz[i]; newHorario.push({ hora: row[0], lunes: row[1], martes: row[2], miercoles: row[3], jueves: row[4], viernes: row[5] }); } session.horario = newHorario; localStorage.setItem('atril_' + VER, JSON.stringify(session)); alert("HORARIO GUARDADO"); } } catch(e) { alert("ERROR AL GUARDAR"); } loader(false); }
-
-        // --- ASISTENCIA & ESTADÍSTICAS ---
-        function restoreStatsFilter() {
-            const sel = document.getElementById('stat-proceso');
-            if (session.config && session.config.proceso) {
-                sel.innerHTML = session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
-            }
-            document.getElementById('stat-mes').value = new Date().getMonth() + 1;
-        }
-
-        async function getReport() {
-            const proc = document.getElementById('stat-proceso').value;
-            const mes = document.getElementById('stat-mes').value;
-            const mesNombre = document.getElementById('stat-mes').options[document.getElementById('stat-mes').selectedIndex].text;
-            
-            loader(true, "CALCULANDO KARDEX...");
-            try {
-                const r = await fetch(`${MOTOR_URL}?action=getEstadisticas&sheetId=${session.sheetId}&proceso=${encodeURIComponent(proc)}&mes=${mes}`);
-                const d = await r.json();
-                if(d.success) {
-                    document.getElementById('report-title-text').innerText = proc;
-                    document.getElementById('report-mes-text').innerText = mesNombre;
-                    document.getElementById('report-events-count').innerText = `${d.totalEventos} EVENTOS`;
-                    renderReportCards(d.stats, d.totalEventos, proc);
-                    nav('screen-stats-report');
-                }
-            } catch(e) { alert("ERROR AL OBTENER ESTADÍSTICAS"); }
-            loader(false);
-        }
-
-        function renderReportCards(stats, total, proc) {
-            const box = document.getElementById('stats-container'); box.innerHTML = "";
-            let filtrados = session.master.filter(m => String(m.proceso) === String(proc));
-            filtrados.sort((a, b) => {
-                const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
-                const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
-                return idxA - idxB;
-            });
-            if(filtrados.length === 0) { box.innerHTML = `<p class="text-center text-slate-400 font-bold uppercase py-10">NO HAY ESTUDIANTES EN ESTE PROCESO</p>`; return; }
-            
-            filtrados.forEach(m => {
-                const nombreCompleto = `${m.nombres} ${m.apellidos}`;
-                const s = stats[nombreCompleto] || { P: 0, A: 0, R: 0, E: 0 };
-                const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-2xl border border-slate-100 shadow-sm"; 
-                card.innerHTML = `
-                    <div class="mb-3 border-b border-slate-50 pb-2">
-                        <p class="font-bold text-[14px] text-slate-800">${nombreCompleto}</p>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">${m.instrumento}</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 text-[11px] font-bold">
-                        <div class="bg-slate-50 text-slate-900 px-3 py-2 rounded-lg flex justify-between items-center"><span>PRESENTE</span> <span class="text-[14px]">${s.P}</span></div>
-                        <div class="bg-red-50 text-red-600 px-3 py-2 rounded-lg flex justify-between items-center"><span>AUSENTE</span> <span class="text-[14px]">${s.A}</span></div>
-                        <div class="bg-amber-50 text-amber-600 px-3 py-2 rounded-lg flex justify-between items-center"><span>RETARDO</span> <span class="text-[14px]">${s.R}</span></div>
-                        <div class="bg-blue-50 text-blue-600 px-3 py-2 rounded-lg flex justify-between items-center"><span>EXCUSA</span> <span class="text-[14px]">${s.E}</span></div>
-                    </div>`;
-                box.appendChild(card);
-            });
-        }
-
-        function prepareProcess() {
-            session.date = document.getElementById('event-date').value;
-            session.type = document.getElementById('event-type').value;
-            session.act = (session.type === 'ENSAYO' ? 'ENSAYO' : document.getElementById('event-desc').value).toUpperCase();
-            if(!session.date || !session.act) return alert("FALTAN DATOS");
-            if(!session.config.proceso || session.config.proceso.length === 0) return alert("ERROR: NO SE CARGARON LOS PROCESOS. REINICIA SESIÓN.");
-            nav('screen-process');
-        }
-        function initAt(p) { session.process = p; document.getElementById('info-header').innerText = `${p} • ${session.act}`; nav('screen-list'); renderList('TODOS'); }
-        function renderList(secc) {
-            activeSection = secc;
-            document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active-tab'); b.classList.add('text-slate-300'); });
-            document.getElementById(`tab-${secc}`).classList.add('active-tab');
-            const box = document.getElementById('musicos-box'); box.innerHTML = "";
-            if(!session.master) return;
-            let filtered = session.master.filter(m => String(m.proceso) === String(session.process)).sort((a, b) => ORDEN_INST.indexOf(String(a.instrumento).toLowerCase()) - ORDEN_INST.indexOf(String(b.instrumento).toLowerCase()));
-            if (activeSection !== 'TODOS') { filtered = filtered.filter(m => { const miFamilia = Object.keys(SECCIONES).find(key => SECCIONES[key].includes(String(m.instrumento).toLowerCase())); return miFamilia === activeSection; }); }
-            filtered.forEach(m => {
-                const n = `${m.nombres} ${m.apellidos}`; 
-                const s = record[n] || '';
-                const card = document.createElement('div'); card.className = "bg-white p-4 rounded-2xl shadow-sm border";
-                card.innerHTML = `<div class="mb-3"><p class="font-bold text-[13px] text-slate-800">${n}</p><p class="text-[10px] font-bold text-slate-400 mt-1 uppercase">${m.instrumento} • ${m.grado}</p></div><div class="grid grid-cols-4 gap-1">${['PRESENTE','AUSENTE','RETARDO','EXCUSA'].map(st => `<button onclick="mark('${n}','${st}')" class="btn-status border ${s === st ? getCol(st) : 'bg-slate-50 text-slate-400 border-slate-50'}">${st}</button>`).join('')}</div>`;
-                box.appendChild(card);
-            });
-            document.getElementById('counter').innerText = `${Object.keys(record).length} MARCADOS`;
-        }
-        function mark(n, st) { if (record[n] === st) { delete record[n]; } else { record[n] = st; } localStorage.setItem('atril_rec_' + VER, JSON.stringify(record)); renderList(activeSection); }
-        function getCol(s) { return { 'PRESENTE': 'bg-slate-900 text-white border-slate-900', 'AUSENTE': 'bg-red-50 text-red-600 border-red-100', 'RETARDO': 'bg-amber-50 text-amber-600 border-amber-100', 'EXCUSA': 'bg-blue-50 text-blue-600 border-blue-100'}[s]; }
-        async function finalize() {
-            if(!Object.keys(record).length) return alert("NO HAY MARCACIONES");
-            loader(true, "GUARDANDO...");
-            const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: session.type, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
-            try { const r = await fetch(MOTOR_URL, { method: 'POST', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); const res = await r.json(); if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_' + VER); nav('screen-menu'); } } catch(e) { alert("ERROR DE COMUNICACIÓN"); }
-            loader(false);
-        }
-        function generateWAReport() {
-            if(Object.keys(record).length === 0) return alert("NO HAS MARCADO ASISTENCIA AÚN.");
-            let ausentes = []; let retardos = [];
-            for (const [nombre, estado] of Object.entries(record)) {
-                let estudiante = session.master.find(m => `${m.nombres} ${m.apellidos}` === nombre);
-                let inst = estudiante ? estudiante.instrumento : "";
-                if (estado === 'AUSENTE') ausentes.push(`${nombre} (${inst})`);
-                if (estado === 'RETARDO') retardos.push(`${nombre} (${inst})`);
-            }
-            if(ausentes.length === 0 && retardos.length === 0) return alert("NO HAY AUSENTES NI RETARDOS PARA REPORTAR.");
-            const fechaParts = session.date.split('-'); const fechaFormato = `${fechaParts[2]}/${fechaParts[1]}/${fechaParts[0]}`;
-            let msg = `📅 REPORTE ASISTENCIA ${session.banda.toUpperCase()}\nProceso: ${session.process}\nFecha: ${fechaFormato}\n\n`;
-            if(ausentes.length > 0) { msg += `🔴 *AUSENTES:*\n`; ausentes.forEach((a, i) => msg += `${i+1}. ${a}\n`); msg += `\n`; }
-            if(retardos.length > 0) { msg += `🟡 *RETARDOS:*\n`; retardos.forEach((r, i) => msg += `${i+1}. ${r}\n`); msg += `\n`; }
-            const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
-        }
-        function toggleEventDesc() { document.getElementById('event-desc-box').classList.toggle('hidden', document.getElementById('event-type').value !== 'PRESENTACIÓN'); }
-        function loader(v,t) { document.getElementById('loader').classList.toggle('hidden', !v); document.getElementById('loader-text').innerText = t || "CARGANDO..."; }
-        function logout() { localStorage.clear(); location.reload(); }
-        function setDirSection(s) { currentDirSection = s; document.querySelectorAll('.dirtab-btn').forEach(b => b.classList.remove('active-tab')); document.getElementById('dirtab-'+s).classList.add('active-tab'); filterDirectory(); }
-    </script>
-</body>
-</html>
+                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p></div>
