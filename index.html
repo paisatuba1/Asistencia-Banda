@@ -19,11 +19,25 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
         body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; -webkit-tap-highlight-color: transparent; }
         .hidden { display: none !important; }
-        /* FORZAR CENTRADO DEL CARGADOR */
-        #loader { display: flex; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background-color: rgba(255,255,255,0.95); }
         .flex { display: flex !important; }
+        
+        /* CARGADOR CENTRADO */
+        #loader { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background-color: rgba(255, 255, 255, 0.95); 
+            z-index: 9999; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
         .loader { border-top-color: #0f172a; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
         .active-tab { border-bottom: 3px solid #0f172a; color: #0f172a; font-weight: 700; }
         .dirtab-btn { transition: all 0.2s; }
         
@@ -54,7 +68,7 @@
 </head>
 <body>
 
-    <!-- CARGADOR (CSS PURO APLICADO PARA CENTRAR) -->
+    <!-- CARGADOR -->
     <div id="loader" class="hidden">
         <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
         <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">INICIANDO...</p>
@@ -66,7 +80,7 @@
             <img src="https://github.com/pandemiaproducciones/atril-app/blob/main/logo.png?raw=true" class="w-40 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v8.6</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v8.7</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase text-balance">SISTEMA INTEGRAL DE AGRUPACIONES</p>
             <div class="space-y-3">
@@ -106,6 +120,32 @@
         </button>
     </div>
 
+    <!-- SUB-MENÚ ESTUDIANTES -->
+    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
+        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
+        <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
+        <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span><span class="text-2xl">🎓</span></button>
+        <button onclick="nav('screen-process-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR PROCESO</span><span class="text-2xl">📜</span></button>
+    </div>
+
+    <!-- PANTALLA LISTAS POR PROCESO (ACTUALIZADA v8.7) -->
+    <div id="screen-process-list" class="hidden p-6 max-w-md mx-auto pb-32">
+        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
+            <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+            <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">LISTAS POR PROCESO</h2>
+            <div class="bg-white p-6 rounded-3xl shadow-sm border mb-4">
+                 <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block tracking-widest">SELECCIONE EL PROCESO</label>
+                 <select id="filter-process-select" onchange="renderProcessList()" class="input-std"></select>
+            </div>
+        </div>
+        <div id="process-list-container" class="space-y-3"></div>
+        <div id="btn-process-wa" class="fixed bottom-0 left-0 w-full p-6 bg-white/90 border-t hidden">
+            <button onclick="generateProcessWA()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[12px] shadow-lg active:scale-95 transition-transform">ENVIAR LISTA POR WHATSAPP 📲</button>
+        </div>
+    </div>
+
     <!-- PANTALLA LISTAS POR GRADOS -->
     <div id="screen-grade-list" class="hidden p-6 max-w-md mx-auto pb-32">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
@@ -122,107 +162,7 @@
         </div>
     </div>
 
-    <!-- PANTALLA LISTAS POR PROCESO (NUEVO v8.6) -->
-    <div id="screen-process-list" class="hidden p-6 max-w-md mx-auto pb-32">
-        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
-            <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
-            <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">LISTAS POR PROCESO</h2>
-            <div class="bg-white p-6 rounded-3xl shadow-sm border mb-4">
-                 <label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block tracking-widest">SELECCIONE EL PROCESO</label>
-                 <select id="filter-proceso-list-select" onchange="renderProcessList()" class="input-std"></select>
-            </div>
-        </div>
-        <div id="process-list-container" class="space-y-3"></div>
-        <div id="btn-process-wa" class="fixed bottom-0 left-0 w-full p-6 bg-white/90 border-t hidden">
-            <button onclick="generateProcessWA()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold uppercase text-[12px] shadow-lg active:scale-95 transition-transform">ENVIAR LISTA POR WHATSAPP 📲</button>
-        </div>
-    </div>
-
-    <!-- PANTALLA FILTRO ESTADÍSTICAS -->
-    <div id="screen-stats-filter" class="hidden p-6 max-w-md mx-auto">
-        <button onclick="nav('screen-activity-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
-        <div class="bg-white p-8 rounded-3xl shadow-xl space-y-6">
-            <h2 class="text-lg font-bold uppercase text-slate-900">CONSULTAR KARDEX</h2>
-            <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">PROCESO</label><select id="stat-proceso" class="input-std"></select></div>
-            <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">MES A CONSULTAR</label>
-                <select id="stat-mes" class="input-std">
-                    <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option><option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
-                    <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option><option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
-                </select>
-            </div>
-            <button onclick="getReport()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[14px]">GENERAR REPORTE</button>
-        </div>
-    </div>
-
-    <!-- REPORTE ESTADÍSTICAS -->
-    <div id="screen-stats-report" class="hidden min-h-screen pb-20">
-        <div class="bg-white p-6 sticky top-0 z-20 shadow-sm border-b">
-            <div class="flex justify-between items-center mb-4">
-                <button onclick="nav('screen-stats-filter')" class="text-slate-400 font-bold text-[12px] uppercase">← ATRÁS</button>
-                <span id="report-events-count" class="text-[10px] bg-slate-100 text-slate-500 px-3 py-1 rounded-full font-bold uppercase">0 EVENTOS</span>
-            </div>
-            <h2 id="report-title-text" class="font-bold text-lg uppercase leading-tight text-slate-900">REPORTE</h2>
-            <p id="report-mes-text" class="text-[11px] font-bold text-slate-400 uppercase mt-1">---</p>
-        </div>
-        <div id="stats-container" class="p-6 space-y-3"></div>
-    </div>
-
-    <!-- SUB-MENÚ ASISTENCIA -->
-    <div id="screen-activity-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">ASISTENCIA</h2>
-        <button onclick="nav('screen-activity')" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">TOMAR ASISTENCIA +</span><span class="text-2xl">📝</span></button>
-        <button onclick="nav('screen-stats-filter')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">ESTADÍSTICAS DE ASISTENCIA</span><span class="text-2xl">📊</span></button>
-    </div>
-
-    <!-- SUB-MENÚ ESTUDIANTES -->
-    <div id="screen-student-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">GESTIÓN ESTUDIANTES</h2>
-        <button onclick="prepareNewStudent()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR ESTUDIANTE +</span><span class="text-2xl">📝</span></button>
-        <button onclick="openDirectory()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">DIRECTORIO ESTUDIANTES</span><span class="text-2xl">📂</span></button>
-        <button onclick="openProcessList()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR PROCESO</span><span class="text-2xl">🎼</span></button>
-        <button onclick="nav('screen-grade-list')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">LISTAS POR GRADOS</span><span class="text-2xl">🎓</span></button>
-    </div>
-
-    <!-- SUB-MENÚ INVENTARIO -->
-    <div id="screen-inventory-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
-        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
-        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">INVENTARIO</h2>
-        <button onclick="prepareNewInstrument()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR INSTRUMENTO +</span><span class="text-2xl">🎺</span></button>
-        <button onclick="openInventoryList()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">VER INVENTARIO</span><span class="text-2xl">📦</span></button>
-    </div>
-
-    <!-- PANTALLA LISTA INVENTARIO -->
-    <div id="screen-inventory-list" class="hidden p-6 max-w-md mx-auto pb-20">
-        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
-            <button onclick="nav('screen-inventory-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
-            <h2 class="text-lg font-bold uppercase text-slate-900 mb-4">BUSCAR ACTIVO</h2>
-            <input type="text" id="search-inv-input" onkeyup="filterInventory()" placeholder="Instrumento, Serial, Código..." class="w-full bg-white border border-slate-200 rounded-xl font-semibold text-[15px] shadow-sm p-4">
-        </div>
-        <div id="inventory-list-container" class="space-y-3 mt-2"></div>
-    </div>
-
-    <!-- PANTALLA FORMULARIO INVENTARIO -->
-    <div id="screen-form-inventory" class="hidden p-6 max-w-md mx-auto pb-20">
-        <button onclick="nav('screen-inventory-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
-        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
-            <h2 id="form-inv-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INSTRUMENTO</h2>
-            <div><select id="inv-instrumento-select" onchange="checkOtroInst()" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase mb-2"></select><input type="text" id="inv-instrumento-input" placeholder="Escriba el nombre del instrumento..." class="hidden input-std"></div>
-            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-marca" placeholder="MARCA" class="input-std"><input type="text" id="inv-modelo" placeholder="MODELO" class="input-std"></div>
-            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-serial" placeholder="SERIAL (FÁBRICA)" class="input-std border-slate-300"><input type="text" id="inv-codigo" placeholder="CÓDIGO INTERNO" class="input-std"></div>
-            <input type="text" id="inv-color" placeholder="COLOR / ACABADO" class="input-std">
-            <select id="inv-condicion" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <select id="inv-estado" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <select id="inv-origen" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
-            <textarea id="inv-accesorios" placeholder="ACCESORIOS (BOQUILLA, ESTUCHE...)" class="input-std h-24"></textarea>
-            <textarea id="inv-observaciones" placeholder="OBSERVACIONES GENERALES" class="input-std h-24"></textarea>
-            <button id="btn-save-inv" onclick="saveInstrument()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR ACTIVO</button>
-            <button id="btn-del-inv" onclick="deleteInstrument()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ACTIVO 🗑️</button>
-        </div>
-    </div>
-
-    <!-- PANTALLA DIRECTORIO -->
+    <!-- DIRECTORIO (MODIFICADO v8.7: TARJETA NO CLICKEABLE) -->
     <div id="screen-directory" class="hidden p-6 max-w-md mx-auto pb-20">
         <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2">
             <button onclick="nav('screen-student-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
@@ -330,6 +270,80 @@
         </div>
     </div>
 
+    <!-- SUB-MENÚ INVENTARIO -->
+    <div id="screen-inventory-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">INVENTARIO</h2>
+        <button onclick="prepareNewInstrument()" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">AGREGAR INSTRUMENTO +</span><span class="text-2xl">🎺</span></button>
+        <button onclick="openInventoryList()" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">VER INVENTARIO</span><span class="text-2xl">📦</span></button>
+    </div>
+
+    <!-- PANTALLA LISTA INVENTARIO -->
+    <div id="screen-inventory-list" class="hidden p-6 max-w-md mx-auto pb-20">
+        <div class="sticky top-0 bg-[#f8fafc] z-10 pt-2 pb-4">
+            <button onclick="nav('screen-inventory-menu')" class="text-slate-400 font-bold mb-4 text-[12px] uppercase tracking-widest">← VOLVER</button>
+            <h2 class="text-lg font-bold uppercase text-slate-900 mb-4">BUSCAR ACTIVO</h2>
+            <input type="text" id="search-inv-input" onkeyup="filterInventory()" placeholder="Instrumento, Serial, Código..." class="w-full bg-white border border-slate-200 rounded-xl font-semibold text-[15px] shadow-sm p-4">
+        </div>
+        <div id="inventory-list-container" class="space-y-3 mt-2"></div>
+    </div>
+
+    <!-- PANTALLA FORMULARIO INVENTARIO -->
+    <div id="screen-form-inventory" class="hidden p-6 max-w-md mx-auto pb-20">
+        <button onclick="nav('screen-inventory-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+        <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 space-y-4">
+            <h2 id="form-inv-title" class="text-lg font-bold uppercase text-slate-900">NUEVO INSTRUMENTO</h2>
+            <div><select id="inv-instrumento-select" onchange="checkOtroInst()" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase mb-2"></select><input type="text" id="inv-instrumento-input" placeholder="Escriba el nombre del instrumento..." class="hidden input-std"></div>
+            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-marca" placeholder="MARCA" class="input-std"><input type="text" id="inv-modelo" placeholder="MODELO" class="input-std"></div>
+            <div class="grid grid-cols-2 gap-2"><input type="text" id="inv-serial" placeholder="SERIAL (FÁBRICA)" class="input-std border-slate-300"><input type="text" id="inv-codigo" placeholder="CÓDIGO INTERNO" class="input-std"></div>
+            <input type="text" id="inv-color" placeholder="COLOR / ACABADO" class="input-std">
+            <select id="inv-condicion" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
+            <select id="inv-estado" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
+            <select id="inv-origen" class="w-full p-3 bg-slate-50 rounded-lg text-[12px] font-semibold uppercase"></select>
+            <textarea id="inv-accesorios" placeholder="ACCESORIOS (BOQUILLA, ESTUCHE...)" class="input-std h-24"></textarea>
+            <textarea id="inv-observaciones" placeholder="OBSERVACIONES GENERALES" class="input-std h-24"></textarea>
+            <button id="btn-save-inv" onclick="saveInstrument()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px] mt-2">GUARDAR ACTIVO</button>
+            <button id="btn-del-inv" onclick="deleteInstrument()" class="hidden w-full bg-red-50 text-red-600 p-4 rounded-xl font-bold uppercase text-[13px] mt-6 border border-red-100">ELIMINAR ACTIVO 🗑️</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA FILTRO ESTADÍSTICAS -->
+    <div id="screen-stats-filter" class="hidden p-6 max-w-md mx-auto">
+        <button onclick="nav('screen-activity-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER</button>
+        <div class="bg-white p-8 rounded-3xl shadow-xl space-y-6">
+            <h2 class="text-lg font-bold uppercase text-slate-900">CONSULTAR KARDEX</h2>
+            <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">PROCESO</label><select id="stat-proceso" class="input-std"></select></div>
+            <div><label class="text-[10px] font-bold text-slate-400 uppercase mb-2 block">MES A CONSULTAR</label>
+                <select id="stat-mes" class="input-std">
+                    <option value="1">ENERO</option><option value="2">FEBRERO</option><option value="3">MARZO</option><option value="4">ABRIL</option><option value="5">MAYO</option><option value="6">JUNIO</option>
+                    <option value="7">JULIO</option><option value="8">AGOSTO</option><option value="9">SEPTIEMBRE</option><option value="10">OCTUBRE</option><option value="11">NOVIEMBRE</option><option value="12">DICIEMBRE</option>
+                </select>
+            </div>
+            <button onclick="getReport()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[14px]">GENERAR REPORTE</button>
+        </div>
+    </div>
+
+    <!-- REPORTE ESTADÍSTICAS -->
+    <div id="screen-stats-report" class="hidden min-h-screen pb-20">
+        <div class="bg-white p-6 sticky top-0 z-20 shadow-sm border-b">
+            <div class="flex justify-between items-center mb-4">
+                <button onclick="nav('screen-stats-filter')" class="text-slate-400 font-bold text-[12px] uppercase">← ATRÁS</button>
+                <span id="report-events-count" class="text-[10px] bg-slate-100 text-slate-500 px-3 py-1 rounded-full font-bold uppercase">0 EVENTOS</span>
+            </div>
+            <h2 id="report-title-text" class="font-bold text-lg uppercase leading-tight text-slate-900">REPORTE</h2>
+            <p id="report-mes-text" class="text-[11px] font-bold text-slate-400 uppercase mt-1">---</p>
+        </div>
+        <div id="stats-container" class="p-6 space-y-3"></div>
+    </div>
+
+    <!-- SUB-MENÚ ASISTENCIA -->
+    <div id="screen-activity-menu" class="hidden p-6 max-w-md mx-auto space-y-4">
+        <button onclick="nav('screen-menu')" class="text-slate-400 font-bold mb-6 text-[12px] uppercase tracking-widest">← VOLVER AL MENÚ</button>
+        <h2 class="text-xl font-bold uppercase text-slate-900 mb-6">ASISTENCIA</h2>
+        <button onclick="nav('screen-activity')" class="w-full bg-slate-900 text-white p-8 rounded-2xl shadow-lg flex justify-between items-center"><span class="font-bold text-[15px] uppercase">TOMAR ASISTENCIA +</span><span class="text-2xl">📝</span></button>
+        <button onclick="nav('screen-stats-filter')" class="w-full bg-white p-8 rounded-2xl shadow-sm border flex justify-between items-center"><span class="font-bold text-[15px] uppercase text-slate-700">ESTADÍSTICAS DE ASISTENCIA</span><span class="text-2xl">📊</span></button>
+    </div>
+
     <!-- SCRIPT DE REGISTRO SERVICE WORKER -->
     <script>
         if ('serviceWorker' in navigator) {
@@ -343,7 +357,7 @@
 
     <script>
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwRViK2PrI5uUDCMmY-yMk5HYK2NrnWTi0NJnh9yA5MdYwOtt8S4S8yLgGgaePJHQbGrA/exec";
-        const VER = "v8.6"; // ACTUALIZADO PARA V8.6
+        const VER = "v8.7"; // VERSIÓN ACTUALIZADA
         
         let session = JSON.parse(localStorage.getItem('atril_' + VER)) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_' + VER)) || {};
@@ -389,7 +403,11 @@
         function loader(v, t) {
             const l = document.getElementById('loader');
             document.getElementById('loader-text').innerText = t || "CARGANDO...";
-            if(v) { l.classList.remove('hidden'); l.classList.add('flex'); } else { l.classList.add('hidden'); l.classList.remove('flex'); }
+            if(v) { 
+                l.classList.remove('hidden'); 
+            } else { 
+                l.classList.add('hidden'); 
+            }
         }
 
         async function loginProcess() {
@@ -397,7 +415,6 @@
             if(!u || !p) return;
             loader(true, "VERIFICANDO...");
             try {
-                await new Promise(r => setTimeout(r, 100));
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`);
                 const d = await r.json();
                 if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; loader(true, "DESCARGANDO DATOS..."); await fetchData(); } 
@@ -418,7 +435,6 @@
         function restore() {
             if(!session.config) return; 
             
-            // LÓGICA DINAMISMO VISUAL NOMBRE AGRUPACIÓN
             const nombre = session.banda || "---";
             const palabras = nombre.split(" ");
             let htmlName = "";
@@ -493,33 +509,29 @@
             if(filtered.length === 0) { list.innerHTML = `<p class="text-center text-slate-400 text-[11px] mt-4 font-bold uppercase">NO SE ENCONTRARON RESULTADOS</p>`; return; }
             filtered.forEach(m => {
                 const item = document.createElement('div');
-                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-95 transition-transform";
-                item.onclick = () => loadStudentForEdit(m);
-                // DIRECTORIO: Botones diferenciados
+                // Se eliminó 'cursor-pointer' y el onclick general para evitar edición accidental
+                item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center transition-transform";
                 item.innerHTML = `
                     <div class="flex-1">
                         <p class="font-bold text-[13px] text-slate-800">${m.nombres} ${m.apellidos}</p>
                         <p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento} • ${m.proceso}</p>
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="shareStudentWA(event, ${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-green-50 text-green-600 rounded-xl border border-green-100 active:scale-90 transition-transform">📲</button>
-                        <div class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl border border-slate-100">✎</div>
+                         <button onclick="shareStudentWA(event, ${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-green-50 text-green-600 rounded-xl border border-green-100 active:scale-90 transition-transform">📲</button>
+                         <button onclick="loadStudentForEdit(${JSON.stringify(m).replace(/"/g, '&quot;')})" class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-400 rounded-xl border border-slate-100 active:scale-90 transition-transform">✎</button>
                     </div>`;
                 list.appendChild(item);
             });
         }
-
+        
         function shareStudentWA(event, m) {
             event.stopPropagation();
             const text = `👤 *FICHA TÉCNICA - ATRIL DIGITAL*\n\n` +
-                `*NOMBRES:* ${m.nombres}\n` +
-                `*APELLIDOS:* ${m.apellidos}\n` +
+                `*ESTUDIANTE:* ${m.nombres} ${m.apellidos}\n` +
                 `*DOCUMENTO:* ${m.documento}\n` +
                 `*TELÉFONO:* ${m.telefono}\n` +
                 `*INSTRUMENTO:* ${m.instrumento}\n` +
-                `*PROCESO:* ${m.proceso}\n` +
                 `*GRADO:* ${m.grado}\n` +
-                `*FECHA NAC:* ${m.fecha_nacimiento}\n` +
                 `*EPS:* ${m.eps}\n\n` +
                 `👨‍👩‍👧 *DATOS ACUDIENTE*\n` +
                 `*NOMBRE:* ${m.acudiente || 'N/A'}\n` +
@@ -623,26 +635,25 @@
             window.open(url, '_blank');
         }
 
-        // --- LISTAS POR PROCESO (NUEVA FUNCIONALIDAD) ---
+        // --- LISTAS POR PROCESO (ACTUALIZADO v8.7: GRADO INCLUIDO EN WA) ---
         function openProcessList() {
-            const sel = document.getElementById('filter-proceso-list-select');
+            const sel = document.getElementById('filter-process-select');
             if(session.config.proceso) {
                 sel.innerHTML = `<option disabled selected>SELECCIONE...</option>` + session.config.proceso.map(p => `<option value="${p}">${p}</option>`).join('');
             }
             document.getElementById('process-list-container').innerHTML = "";
             document.getElementById('btn-process-wa').classList.add('hidden');
-            nav('screen-process-list');
         }
 
         function renderProcessList() {
-            const proceso = document.getElementById('filter-proceso-list-select').value;
+            const proceso = document.getElementById('filter-process-select').value;
             const box = document.getElementById('process-list-container');
             const btnWA = document.getElementById('btn-process-wa');
             box.innerHTML = "";
             if(!session.master) return;
-            let filtered = session.master.filter(m => m.proceso === proceso);
+            let filtered = session.master.filter(m => String(m.proceso) === String(proceso));
             
-            // ORDENAR POR INSTRUMENTO (SCORE)
+            // Ordenar por Instrumento (Score)
             filtered.sort((a, b) => {
                 const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
                 const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
@@ -650,8 +661,6 @@
                     if (idxA !== idxB) return idxA - idxB;
                     return a.apellidos.localeCompare(b.apellidos);
                 }
-                if (idxA === -1) return 1;
-                if (idxB === -1) return -1;
                 return 0;
             });
 
@@ -663,18 +672,17 @@
             filtered.forEach(m => {
                 const item = document.createElement('div');
                 item.className = "bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center";
-                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento}</p></div><div class="bg-slate-100 text-slate-500 text-[9px] font-bold px-2 py-1 rounded-lg uppercase">${m.grado}</div>`;
+                item.innerHTML = `<div><p class="font-bold text-[13px] text-slate-800">${m.apellidos} ${m.nombres}</p><p class="text-[10px] font-bold text-slate-400 mt-0.5 uppercase">${m.instrumento}</p></div><div class="bg-slate-100 text-slate-500 text-[9px] font-bold px-2 py-1 rounded-lg uppercase">${m.proceso}</div>`;
                 box.appendChild(item);
             });
             btnWA.classList.remove('hidden');
         }
 
         function generateProcessWA() {
-            const proceso = document.getElementById('filter-proceso-list-select').value;
+            const proceso = document.getElementById('filter-process-select').value;
             if(!proceso) return;
-            let filtered = session.master.filter(m => m.proceso === proceso);
-            
-            // ORDENAR POR INSTRUMENTO (SCORE) PARA EL REPORTE TAMBIÉN
+            let filtered = session.master.filter(m => String(m.proceso) === String(proceso));
+            // Ordenar por Instrumento
             filtered.sort((a, b) => {
                 const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
                 const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
@@ -682,14 +690,13 @@
                     if (idxA !== idxB) return idxA - idxB;
                     return a.apellidos.localeCompare(b.apellidos);
                 }
-                if (idxA === -1) return 1;
-                if (idxB === -1) return -1;
                 return 0;
             });
 
             if(filtered.length === 0) return alert("LISTA VACÍA");
-            let msg = `🎼 *LISTADO OFICIAL - ${proceso}* \n${session.banda.toUpperCase()}\n\n`;
-            filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento})\n`; });
+            let msg = `📜 *LISTADO OFICIAL - ${proceso}* \n${session.banda.toUpperCase()}\n\n`;
+            // SE AGREGO GRADO AL TEXTO
+            filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento} - ${m.grado || 'S/G'})\n`; });
             const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
         }
@@ -921,9 +928,10 @@
             window.open(url, '_blank');
         }
         function toggleEventDesc() { document.getElementById('event-desc-box').classList.toggle('hidden', document.getElementById('event-type').value !== 'PRESENTACIÓN'); }
-        function loader(v,t) { document.getElementById('loader').classList.toggle('hidden', !v); document.getElementById('loader-text').innerText = t || "CARGANDO..."; }
         function logout() { localStorage.clear(); location.reload(); }
         function setDirSection(s) { currentDirSection = s; document.querySelectorAll('.dirtab-btn').forEach(b => b.classList.remove('active-tab')); document.getElementById('dirtab-'+s).classList.add('active-tab'); filterDirectory(); }
     </script>
 </body>
 </html>
+
+
