@@ -33,27 +33,34 @@
         .btn-status { font-size: 9px; font-weight: 600; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* ESTILOS HORARIO DINÁMICO v8.8 */
+        /* ESTILOS HORARIO DINÁMICO v9.0 */
         .horario-scroll-container { overflow-x: auto; white-space: nowrap; border-radius: 12px; border: 1px solid #cbd5e1; }
         /* Grid de 8 columnas: Hora + 7 días. Anchos fijos para forzar scroll */
         .horario-grid { 
             display: grid; 
-            grid-template-columns: 80px repeat(7, 110px); 
+            grid-template-columns: 80px repeat(7, 120px); 
             gap: 1px; 
             background: #cbd5e1; 
-            min-width: 850px; /* Ancho mínimo para que quepan todos los días */
+            min-width: 920px; 
         }
         .horario-cell { 
-            min-height: 60px; padding: 4px; background: white; font-size: 10.5px; font-weight: 600; color: #334155;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; word-break: break-word; white-space: normal;
+            min-height: 70px; padding: 0; background: white; 
         }
+        /* Input de texto libre (textarea) para el horario */
+        .horario-input {
+            width: 100%; height: 100%; min-height: 70px; border: none !important; 
+            text-align: center; font-size: 11px; font-weight: 600; color: #334155; 
+            background: transparent; padding: 8px; resize: none; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .horario-input:focus { background: #f0f9ff; }
+        
         .horario-header { background: #0f172a; color: white; padding: 12px 0; text-align: center; font-size: 9px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: center;}
         
         /* Input especial para la hora */
         .horario-time-input {
             width: 100%; height: 100%; background: #f1f5f9; text-align: center; border: none !important; font-size: 11px; font-weight: 700; color: #0f172a; padding: 4px;
         }
-        .horario-time-input:focus { background: #e2e8f0; }
 
         .input-std { width: 100%; height: 54px; padding: 0 1rem; background-color: #f8fafc; border-radius: 0.5rem; font-size: 15px; font-weight: 600; display: flex; align-items: center; }
         textarea.input-std { height: auto; padding: 1rem; }
@@ -73,7 +80,7 @@
             <img src="https://github.com/pandemiaproducciones/atril-app/blob/main/logo.png?raw=true" class="w-40 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v8.8</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v9.0</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase text-balance">SISTEMA INTEGRAL DE AGRUPACIONES</p>
             <div class="space-y-3">
@@ -199,7 +206,7 @@
         </div>
     </div>
 
-    <!-- PANTALLA HORARIO (DINÁMICO v8.8) -->
+    <!-- PANTALLA HORARIO (DINÁMICO v9.0) -->
     <div id="screen-horario" class="hidden p-4 w-full h-full pb-32">
         <div class="max-w-4xl mx-auto">
             <div class="flex justify-between items-center mb-6">
@@ -241,15 +248,6 @@
             <select id="event-type" onchange="toggleEventDesc()" class="w-full h-[52px] px-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"><option value="ENSAYO">ENSAYO</option><option value="PRESENTACIÓN">PRESENTACIÓN</option></select>
             <div id="event-desc-box" class="hidden"><input type="text" id="event-desc" placeholder="NOMBRE DEL EVENTO" class="w-full p-4 bg-slate-50 rounded-xl font-semibold text-[15px] uppercase"></div>
             <button onclick="prepareProcess()" class="w-full bg-slate-900 text-white p-4 rounded-xl font-bold uppercase text-[13px]">TOMAR ASISTENCIA</button>
-        </div>
-    </div>
-
-    <!-- MODAL GRUPOS HORARIO -->
-    <div id="modal-grupo" class="hidden fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-6 text-center">
-        <div class="bg-white w-full max-w-xs rounded-3xl p-6">
-            <h3 class="font-bold uppercase text-sm mb-4">ASIGNAR GRADO</h3>
-            <div id="lista-grados-modal" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
-            <button onclick="document.getElementById('modal-grupo').classList.add('hidden')" class="w-full mt-6 bg-slate-100 p-3 rounded-xl font-bold text-xs uppercase text-slate-500">CANCELAR</button>
         </div>
     </div>
 
@@ -368,8 +366,8 @@
     </script>
 
     <script>
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbyTy3N2l-rf-OZwb-i3wnTzQ4stnbdgk_bN5sofgEz9MQJ3374YEHTbDqKFX7nNZzqgmg/exec";
-        const VER = "v8.8"; 
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbzt1OS-jL2WTloOKmI4aRmvkrEEhgDGfrt2BIIk2KGF-4J3XR6WluzlqxQVjdkdg-5FTg/exec";
+        const VER = "v9.0"; 
         
         let session = JSON.parse(localStorage.getItem('atril_' + VER)) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_' + VER)) || {};
@@ -380,7 +378,7 @@
         let currentDirSection = 'TODOS';
         let originalSerial = null; let originalCodigo = null; let originalRasgos = { inst: "", marca: "", modelo: "" };
 
-        // ACTUALIZACIÓN DE DÍAS (v8.8)
+        // ACTUALIZACIÓN DE DÍAS (v9.0)
         const DIAS_KEYS = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
         const SECCIONES = {
             "Maderas": ["flauta", "oboe", "fagot", "clarinete requinto", "clarinete soprano", "clarinete bajo", "saxofon soprano", "saxofon alto", "saxofon tenor", "saxofon baritono"],
@@ -403,7 +401,6 @@
             if(id === 'screen-login') target.classList.add('flex');
             if(id === 'screen-activity') document.getElementById('event-date').value = new Date().toISOString().split('T')[0];
             if(id === 'screen-horario') {
-                // Si el horario está vacío o corrupto, inicializamos con una fila
                 if(!session.horario || session.horario.length === 0) {
                      session.horario = [{hora: "HORA 1"}];
                 }
@@ -431,7 +428,7 @@
             if(!u || !p) return;
             loader(true, "VERIFICANDO...");
             try {
-                // AGREGADO: credentials: 'omit' para evitar error CORS con múltiples cuentas
+                // Se agregó credentials: 'omit' para solucionar problema de cookies múltiples cuentas
                 const r = await fetch(`${MOTOR_URL}?action=login&user=${encodeURIComponent(u)}&pass=${encodeURIComponent(p)}`, { method: 'GET', credentials: 'omit' });
                 const d = await r.json();
                 if(d.success) { session.user = u; session.banda = d.banda; session.sheetId = d.sheetId; loader(true, "DESCARGANDO DATOS..."); await fetchData(); } 
@@ -441,7 +438,6 @@
 
         async function fetchData() {
             try {
-                // AGREGADO: credentials: 'omit'
                 const r = await fetch(`${MOTOR_URL}?action=getDataInicial&sheetId=${session.sheetId}`, { method: 'GET', credentials: 'omit' });
                 const d = await r.json();
                 if (d.success) { session.master = d.integrantes || []; session.inventario = d.inventario || []; session.config = d.config || {}; session.horario = d.horario || []; localStorage.setItem('atril_' + VER, JSON.stringify(session)); restore(); nav('screen-menu'); } 
@@ -592,7 +588,6 @@
             loader(true, isEditing ? "ACTUALIZANDO..." : "GUARDANDO...");
             const payload = { action: isEditing ? 'editEstudiante' : 'addEstudiante', sheetId: session.sheetId, datos: d, originalDocumento: originalDoc };
             try { 
-                // AGREGADO: credentials: 'omit'
                 const r = await fetch(MOTOR_URL, { method: 'POST', credentials: 'omit', body: JSON.stringify(payload) }); 
                 const res = await r.json(); 
                 if(res.success) { alert(isEditing ? "DATOS ACTUALIZADOS" : "REGISTRADO CON ÉXITO"); await fetchData(); nav('screen-student-menu'); } else { alert("ERROR: " + (res.error || "No se pudo guardar")); } 
@@ -605,7 +600,6 @@
             if(!confirm("⚠️ ¿ESTÁS SEGURO?\n\nEsta acción eliminará permanentemente al estudiante y no se puede deshacer.")) return;
             loader(true, "ELIMINANDO...");
             try {
-                // AGREGADO: credentials: 'omit'
                 const r = await fetch(MOTOR_URL, { method: 'POST', credentials: 'omit', body: JSON.stringify({ action: 'deleteEstudiante', sheetId: session.sheetId, documento: originalDoc }) });
                 const res = await r.json();
                 if(res.success) { alert("ESTUDIANTE ELIMINADO"); await fetchData(); nav('screen-directory'); } 
@@ -658,7 +652,7 @@
             window.open(url, '_blank');
         }
 
-        // --- LISTAS POR PROCESO (ACTUALIZADO v8.8) ---
+        // --- LISTAS POR PROCESO (ACTUALIZADO v9.0) ---
         function openProcessList() {
             const sel = document.getElementById('filter-process-select');
             if(session.config.proceso) {
@@ -705,7 +699,6 @@
             const proceso = document.getElementById('filter-process-select').value;
             if(!proceso) return;
             let filtered = session.master.filter(m => String(m.proceso) === String(proceso));
-            // Ordenar por Instrumento
             filtered.sort((a, b) => {
                 const idxA = ORDEN_INST.indexOf(String(a.instrumento).toLowerCase());
                 const idxB = ORDEN_INST.indexOf(String(b.instrumento).toLowerCase());
@@ -718,7 +711,6 @@
 
             if(filtered.length === 0) return alert("LISTA VACÍA");
             let msg = `📜 *LISTADO OFICIAL - ${proceso}* \n${session.banda.toUpperCase()}\n\n`;
-            // SE AGREGO GRADO AL TEXTO (v8.7)
             filtered.forEach((m, i) => { msg += `${i+1}. ${m.apellidos} ${m.nombres} (${m.instrumento} - ${m.grado || 'S/G'})\n`; });
             const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
@@ -803,7 +795,6 @@
             loader(true, isEditing ? "ACTUALIZANDO..." : "GUARDANDO...");
             const payload = { action: isEditing ? 'editInstrumento' : 'addInstrumento', sheetId: session.sheetId, datos: d, originalSerial: originalSerial, originalCodigo: originalCodigo, originalInstrumento: originalRasgos.inst, originalMarca: originalRasgos.marca, originalModelo: originalRasgos.modelo };
             try { 
-                // AGREGADO: credentials: 'omit'
                 const r = await fetch(MOTOR_URL, { method: 'POST', credentials: 'omit', body: JSON.stringify(payload) }); 
                 const res = await r.json(); 
                 if(res.success) { alert(isEditing ? "ACTIVO ACTUALIZADO" : "ACTIVO GUARDADO"); await fetchData(); nav('screen-inventory-menu'); } else { alert("ERROR: NO SE PUDO GUARDAR/EDITAR"); } 
@@ -816,7 +807,6 @@
             if(!confirm("⚠️ ¿ESTÁS SEGURO?\n\nEsta acción eliminará el instrumento del inventario y no se puede deshacer.")) return;
             loader(true, "ELIMINANDO...");
             try {
-                // AGREGADO: credentials: 'omit'
                 const payload = { action: 'deleteInstrumento', sheetId: session.sheetId, serial: originalSerial, codigo: originalCodigo, instrumento: originalRasgos.inst };
                 const r = await fetch(MOTOR_URL, { method: 'POST', credentials: 'omit', body: JSON.stringify(payload) });
                 const res = await r.json();
@@ -826,11 +816,9 @@
             loader(false);
         }
 
-        // --- HORARIO DINÁMICO v8.8 ---
+        // --- HORARIO DINÁMICO v9.0 ---
         function buildHorarioTable() {
             const hBox = document.getElementById('horario-body'); hBox.innerHTML = "";
-            
-            // Iterar sobre las filas guardadas en session.horario
             session.horario.forEach((fila, index) => {
                 // COLUMNA 1: Input para la hora
                 const timeCell = document.createElement('div');
@@ -843,13 +831,16 @@
                 timeCell.appendChild(input);
                 hBox.appendChild(timeCell);
 
-                // COLUMNAS 2-8: Días
+                // COLUMNAS 2-8: Días (TEXTO LIBRE)
                 DIAS_KEYS.forEach((dia, dIndex) => {
                     const cell = document.createElement('div'); 
                     cell.className = "horario-cell";
-                    cell.id = `cell-${index}-${dIndex}`;
-                    if(fila[dia]) cell.innerText = fila[dia];
-                    cell.onclick = () => { editingCell = {h: index, d: dia}; openGradoModal(); };
+                    // Creamos textarea para permitir saltos de línea y texto libre
+                    const area = document.createElement('textarea');
+                    area.className = "horario-input";
+                    area.value = fila[dia] || "";
+                    area.onchange = (e) => { session.horario[index][dia] = e.target.value; };
+                    cell.appendChild(area);
                     hBox.appendChild(cell);
                 });
             });
@@ -867,39 +858,9 @@
             }
         }
 
-        function openGradoModal() { 
-            if (!session.config.grado || session.config.grado.length === 0) return alert("NO HAY GRADOS CONFIGURADOS"); 
-            document.getElementById('modal-grupo').classList.remove('hidden'); 
-            let html = `<button onclick="setGrado('')" class="w-full p-3 bg-red-50 text-red-600 rounded-xl font-bold text-[10px] uppercase">LIMPIAR CELDA</button>`; 
-            session.config.grado.forEach(g => { html += `<button onclick="setGrado('${g}')" class="w-full p-3 bg-slate-50 rounded-xl font-bold text-[10px] uppercase">${g}</button>`; }); 
-            document.getElementById('lista-grados-modal').innerHTML = html; 
-        }
-
-        function setGrado(v) { 
-            // editingCell ahora tiene {h: index, d: diaKey}
-            if(editingCell) {
-                const cell = document.getElementById(`cell-${editingCell.h}-${DIAS_KEYS.indexOf(editingCell.d)}`);
-                if(v === '') { 
-                    session.horario[editingCell.h][editingCell.d] = "";
-                } else {
-                    let current = session.horario[editingCell.h][editingCell.d] || "";
-                    if(current.trim() !== "") {
-                        if(!current.includes(v)) current += " / " + v;
-                    } else {
-                        current = v;
-                    }
-                    session.horario[editingCell.h][editingCell.d] = current;
-                }
-                // Reconstruir visualmente para reflejar cambios
-                buildHorarioTable();
-            }
-            document.getElementById('modal-grupo').classList.add('hidden'); 
-        }
-
         async function saveHorario() { 
             loader(true, "GUARDANDO HORARIO..."); 
-            // Convertir el array de objetos a una matriz para enviar al backend (Google Sheets)
-            // Matriz = [ [Hora, Lun, Mar, Mie, Jue, Vie, Sab, Dom], ... ]
+            // Convertir a matriz
             const matriz = session.horario.map(fila => {
                 return [
                     fila.hora || "",
@@ -914,7 +875,6 @@
             });
 
             try { 
-                // AGREGADO: credentials: 'omit'
                 const r = await fetch(MOTOR_URL, { method: 'POST', credentials: 'omit', body: JSON.stringify({ action: 'saveHorario', sheetId: session.sheetId, datosHorario: matriz })}); 
                 const res = await r.json(); 
                 if(res.success) { 
@@ -941,7 +901,6 @@
             
             loader(true, "CALCULANDO KARDEX...");
             try {
-                // AGREGADO: credentials: 'omit'
                 const r = await fetch(`${MOTOR_URL}?action=getEstadisticas&sheetId=${session.sheetId}&proceso=${encodeURIComponent(proc)}&mes=${mes}`, { method: 'GET', credentials: 'omit' });
                 const d = await r.json();
                 if(d.success) {
@@ -1018,7 +977,6 @@
             loader(true, "GUARDANDO...");
             const data = Object.entries(record).map(([n, e]) => ({ fecha: session.date, tipo_actividad: session.type, nombre_actividad: session.act, proceso: session.process, musico: n, estado: e }));
             try { 
-                // AGREGADO: credentials: 'omit'
                 const r = await fetch(MOTOR_URL, { method: 'POST', credentials: 'omit', body: JSON.stringify({ action: 'saveAsistencia', sheetId: session.sheetId, asistencia: data })}); 
                 const res = await r.json(); 
                 if(res.success) { alert("¡GUARDADO!"); record = {}; localStorage.removeItem('atril_rec_' + VER); nav('screen-menu'); } 
