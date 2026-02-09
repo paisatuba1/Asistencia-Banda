@@ -33,7 +33,7 @@
         .btn-status { font-size: 9px; font-weight: 600; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* NUEVOS ESTILOS HORARIO v8.8 */
+        /* ESTILOS HORARIO DINÁMICO v8.8 */
         .horario-scroll-container { overflow-x: auto; white-space: nowrap; border-radius: 12px; border: 1px solid #cbd5e1; }
         /* Grid de 8 columnas: Hora + 7 días. Anchos fijos para forzar scroll */
         .horario-grid { 
@@ -199,7 +199,7 @@
         </div>
     </div>
 
-    <!-- PANTALLA HORARIO (RENOVADA v8.8) -->
+    <!-- PANTALLA HORARIO (DINÁMICO v8.8) -->
     <div id="screen-horario" class="hidden p-4 w-full h-full pb-32">
         <div class="max-w-4xl mx-auto">
             <div class="flex justify-between items-center mb-6">
@@ -368,7 +368,7 @@
     </script>
 
     <script>
-        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbwRViK2PrI5uUDCMmY-yMk5HYK2NrnWTi0NJnh9yA5MdYwOtt8S4S8yLgGgaePJHQbGrA/exec";
+        const MOTOR_URL = "https://script.google.com/macros/s/AKfycbzLyutvi6fy1KZFeJmqF8tVg9CK8pkML8CJOH5uLOVGAGCrZFkEUVeI9NBxx83e63g8lA/exec";
         const VER = "v8.8"; 
         
         let session = JSON.parse(localStorage.getItem('atril_' + VER)) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
@@ -1027,5 +1027,3 @@
     </script>
 </body>
 </html>
-
-
