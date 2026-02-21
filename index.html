@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ATRIL DIGITAL v12.0</title>
+    <title>ATRIL DIGITAL v12.1</title>
     
     <!-- PWA META TAGS -->
     <meta name="theme-color" content="#0f172a">
@@ -15,6 +15,7 @@
     <link rel="icon" type="image/png" href="icon.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
         body { font-family: 'Montserrat', sans-serif; background-color: #f8fafc; color: #1e293b; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -33,7 +34,7 @@
         .btn-status { font-size: 9px; font-weight: 600; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; transition: 0.2s; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* ESTILOS HORARIO DINÁMICO v12.0 */
+        /* ESTILOS HORARIO DINÁMICO v12.1 */
         .horario-scroll-container { overflow-x: auto; white-space: nowrap; border-radius: 12px; border: 1px solid #cbd5e1; }
         /* Grid de 8 columnas: Hora + 7 días. Anchos fijos para forzar scroll */
         .horario-grid { 
@@ -71,7 +72,7 @@
     <!-- CARGADOR -->
     <div id="loader" class="hidden">
         <div class="loader rounded-full border-4 border-t-4 border-slate-200 h-12 w-12 mb-4"></div>
-        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">INICIANDO v12.0...</p>
+        <p id="loader-text" class="text-[12px] font-bold uppercase tracking-widest text-slate-500">INICIANDO v12.1...</p>
     </div>
 
     <!-- PANTALLA LOGIN -->
@@ -80,7 +81,7 @@
             <img src="https://github.com/pandemiaproducciones/atril-app/blob/main/logo.png?raw=true" class="w-40 mx-auto mb-6">
             <div class="flex items-center justify-center gap-2 mb-1">
                 <h1 class="text-2xl font-bold uppercase tracking-tighter">ATRIL DIGITAL</h1>
-                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v12.0</span>
+                <span class="bg-slate-900 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">v12.1</span>
             </div>
             <p class="text-slate-400 text-[11px] mb-8 font-semibold tracking-widest uppercase text-balance">SISTEMA INTEGRAL DE AGRUPACIONES</p>
             <div class="space-y-3">
@@ -206,12 +207,13 @@
         </div>
     </div>
 
-    <!-- PANTALLA HORARIO (DINÁMICO v12.0) -->
+    <!-- PANTALLA HORARIO (DINÁMICO v12.1) -->
     <div id="screen-horario" class="hidden p-4 w-full h-full pb-32">
         <div class="max-w-4xl mx-auto">
             <div class="flex justify-between items-center mb-6">
                 <button onclick="nav('screen-menu')" class="text-slate-400 font-bold text-[12px] uppercase tracking-widest">← VOLVER</button>
-                <div class="flex gap-2">
+                <div class="flex gap-2 flex-wrap justify-end">
+                    <button onclick="exportarHorarioImg()" class="bg-amber-50 text-amber-600 px-3 py-2 rounded-lg text-[10px] font-bold uppercase border border-amber-100">📸 EXPORTAR</button>
                     <button onclick="addHorarioRow()" class="bg-blue-50 text-blue-600 px-3 py-2 rounded-lg text-[10px] font-bold uppercase border border-blue-100">+ FILA</button>
                     <button onclick="removeHorarioRow()" class="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-[10px] font-bold uppercase border border-red-100">- FILA</button>
                 </div>
@@ -220,7 +222,7 @@
             
             <!-- Contenedor con Scroll Horizontal -->
             <div class="horario-scroll-container">
-                <div class="horario-grid">
+                <div class="horario-grid" id="horario-grid-export">
                     <div class="horario-header">HORA</div>
                     <div class="horario-header">LUNES</div>
                     <div class="horario-header">MARTES</div>
@@ -368,7 +370,7 @@
     <script>
         // URL ACTUALIZADA AL MOTOR RECIENTE (SOBRE-ESCRITURA VÁLIDA)
         const MOTOR_URL = "https://script.google.com/macros/s/AKfycbxXUXNBcmXrYVawUjVOSa7O3O9RM4ne2P_zLJsQe3OlnFOEbzkZ0utr_NO6P3R3lLTxZQ/exec";
-        const VER = "v12.0"; 
+        const VER = "v12.1"; 
         
         let session = JSON.parse(localStorage.getItem('atril_' + VER)) || { user: "", banda: "", sheetId: "", current: "screen-login", master: [], inventario: [], config: {}, horario: [] };
         let record = JSON.parse(localStorage.getItem('atril_rec_' + VER)) || {};
@@ -379,7 +381,7 @@
         let currentDirSection = 'TODOS';
         let originalSerial = null; let originalCodigo = null; let originalRasgos = { inst: "", marca: "", modelo: "" };
 
-        // ACTUALIZACIÓN DE DÍAS (v12.0)
+        // ACTUALIZACIÓN DE DÍAS (v12.1)
         const DIAS_KEYS = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
         const SECCIONES = {
             "Maderas": ["flauta", "oboe", "fagot", "clarinete requinto", "clarinete soprano", "clarinete bajo", "saxofon soprano", "saxofon alto", "saxofon tenor", "saxofon baritono"],
@@ -873,6 +875,25 @@
                 } 
             } catch(e) { alert("ERROR AL GUARDAR"); } 
             loader(false); 
+        }
+
+        // --- EXPORTAR HORARIO COMO IMAGEN (NUEVO v12.1) ---
+        function exportarHorarioImg() {
+            const target = document.getElementById('horario-grid-export');
+            if(!target) return;
+            loader(true, "GENERANDO IMAGEN...");
+            html2canvas(target, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+                const link = document.createElement('a');
+                // Formatea el nombre de la banda para el archivo
+                const nombreBandaArchivo = session.banda ? session.banda.replace(/\s+/g, '_') : 'ATRIL';
+                link.download = `HORARIO_${nombreBandaArchivo}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                loader(false);
+            }).catch(e => {
+                alert("ERROR AL GENERAR LA IMAGEN");
+                loader(false);
+            });
         }
 
         // --- ASISTENCIA & ESTADÍSTICAS ---
